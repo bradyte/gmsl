@@ -5,6 +5,8 @@ import csv
 import time
 import logging
 
+logger = logging.getLogger(__name__)
+
 logging.basicConfig(
     format="%(asctime)s.%(msecs)06d:%(levelname)s:%(message)s",
     datefmt='%H:%M:%S',
@@ -27,7 +29,7 @@ class GMSL2:
 
         read_value = list(read)[0]
 
-        logging.debug(f'Read value:  0x{read_value:02X} from register: 0x{register_address:04X}')
+        logger.debug(f'R 0x{self.device_address:02X}:\t0x{register_address:04X}\t0x{read_value:02X}')
         return read_value
 
     def register_write(self, register_address, register_value):
@@ -40,7 +42,7 @@ class GMSL2:
             bus.i2c_rdwr(write)
         time.sleep(0.001)
 
-        logging.debug(f'Wrote value: 0x{register_value:02X} to register:   0x{register_address:04X}')
+        logger.debug(f'W 0x{self.device_address:02X}:\t0x{register_address:04X}\t0x{register_address:02X}')
 
     def cpp_register_write(self, cpp_file):
         with open(cpp_file) as csvfile:
@@ -52,7 +54,7 @@ class GMSL2:
                     if num_bytes == 0:
                         delay = int(row[1], 0)
                         time.sleep(0.001 * delay)
-                        print(f'delayed {delay}ms ...')
+                        logging.info(f'delayed {delay}ms ...')
                     else:
                         addr = int(row[1], 0) >> 1
                         msb = int(row[2], 0)
@@ -72,8 +74,6 @@ class GMSL2:
                             bus.i2c_rdwr(write, read)
                         time.sleep(0.001)
                         read_value = list(read)[0]
-                        # if print_reg:
-                        #     print(f'Wrote Register: 0x{((msb << 8) + lsb):04x} Value: 0x{read_value:02x}')
 
                 except IndexError:  # ignore blank lines
                     pass
@@ -109,10 +109,8 @@ def main():
 
     gmsl2.register_read(0x0019)  # read and print register value
 
-
     # cpp_file = 'AD-GMSLCAMRPI-ADP_717_724.cpp'
     # gmsl2.cpp_register_write(cpp_file)  # read in cpp file
 
 if __name__ == "__main__":
     main()
-

@@ -1,6 +1,5 @@
 from gmsl2 import GMSL2
 import time
-import datetime
 import logging
 
 gmsl2_ser = GMSL2(0x80)
