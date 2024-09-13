@@ -8,10 +8,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 logging.basicConfig(
-    format="%(asctime)s.%(msecs)06d:%(levelname)s:%(message)s",
+    format="[%(asctime)s.%(msecs)06d] %(levelname)s\t- %(message)s",
     datefmt='%H:%M:%S',
     level=logging.DEBUG
                     )
+
 
 class GMSL2:
     def __init__(self, device_address):
@@ -29,7 +30,7 @@ class GMSL2:
 
         read_value = list(read)[0]
 
-        logger.debug(f'R 0x{self.device_address:02X}:\t0x{register_address:04X}\t0x{read_value:02X}')
+        logger.debug(f"[device: 0x{self.device_address:02X}]{'read ':>8}addr: 0x{register_address:04X} value: 0x{read_value:02X}")
         return read_value
 
     def register_write(self, register_address, register_value):
@@ -42,7 +43,7 @@ class GMSL2:
             bus.i2c_rdwr(write)
         time.sleep(0.001)
 
-        logger.debug(f'W 0x{self.device_address:02X}:\t0x{register_address:04X}\t0x{register_address:02X}')
+        logger.debug(f"[device: 0x{self.device_address:02X}]{'write ':>8}addr: 0x{register_address:04X} value: 0x{register_value:02X}")
 
     def cpp_register_write(self, cpp_file):
         with open(cpp_file) as csvfile:

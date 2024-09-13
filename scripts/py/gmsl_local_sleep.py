@@ -17,12 +17,13 @@ logging.info('Going to sleep.')
 time.sleep(1)
 logging.info('Waking up.')
 
-logging.info('Dummy Transaction')
+logging.info('Perform a dummy I2C/UART transaction.')
 try:
     gmsl2_ser.register_read(0x0000)
 except OSError:
-    logging.debug('OSError occured')
+    logging.debug('OSError occured.')
     pass
+logging.info('Waiting 5ms.')
 time.sleep(0.005)
 
 logging.info('Write SLEEP = 0 to remote device.')
@@ -31,7 +32,12 @@ gmsl2_ser.register_write(0x0010, 0x51)  # Write SLEEP = 0 to remote device.
 logging.info('Write RESET_LINK = 0 to local device.')
 gmsl2_ser.register_write(0x0010, 0x11)  # Write RESET_LINK = 0 to local device.
 
-while not (gmsl2_ser.is_locked()):
+
+while (1):
+    lock_status = gmsl2_ser.is_locked()
+    logging.info(f' ...checking lock status: LOCK = {lock_status}')
+    if(lock_status):
+        break
     time.sleep(0.001)
-    logging.info(f' ...checking lock status: LOCK = {gmsl2_ser.is_locked()}')
+    
 
