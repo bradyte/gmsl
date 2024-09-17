@@ -1,4 +1,5 @@
 import os
+import sys
 
 vtt_dir = ".\\vtt_files"
 scripts_dir = ".\\scripts"
@@ -24,11 +25,13 @@ def create_script(input_file, output_file):
                     except IndexError:
                         pass
 
+if not os.path.exists(vtt_dir):  # if it can find the vtt folder
+    print("Cannot find *.vtt folder. Exiting program...")
+    sys.exit(0)
+
 if not os.path.exists(scripts_dir):  # if you don't have a output folder
     os.makedirs(scripts_dir)
 
-if not os.path.exists(vtt_dir):  # if you don't have a output folder
-    print("Cannot find *.vtt folder")
 
 for file in os.listdir(vtt_dir):
     input_file_path = os.path.join(vtt_dir, file)
