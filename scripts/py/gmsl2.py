@@ -8,7 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 logging.basicConfig(
-    format="[%(asctime)s.%(msecs)06d] %(levelname)s\t- %(message)s",
+    format="[%(asctime)s.%(msecs)d] %(levelname)s\t- %(message)s",
     datefmt='%H:%M:%S',
     level=logging.DEBUG
                     )
@@ -16,9 +16,9 @@ logging.basicConfig(
 
 class GMSL2:
     def __init__(self, device_address):
-        self.device_address = device_address >> 1  # convert to 7-bit notation
-        self.device_id = self.register_read(0x0D)
-        self.device_revision = self.register_read(0x0E)
+        self.device_id = None
+        self.device_revision = None
+        self.device_address = device_address >> 1  # convert to 7-bit notation      
 
     def register_read(self, register_address):
         write = i2c_msg.write(self.device_address, self._convert_16bit(register_address))
@@ -91,6 +91,8 @@ class GMSL2:
         return bool(self.register_read(0x0013) & 0x08)
 
     def device_info(self):
+        self.device_id = self.register_read(0x0D)
+        self.device_revision = self.register_read(0x0E)
         print(
             f'GMSL device info:\n'
             f'------------------------------------\n'
@@ -105,9 +107,9 @@ def main():
     # gmsl2.device_info()  # get info on GMSL device
 
     register_value = gmsl2.register_read(0x0000)  # read register, return value
-    
-    gmsl2.register_write(0x0019, 0xAA)  # write to register with value
+    print(f'Register value is: 0x{register_value:2X}')
 
+    gmsl2.register_write(0x0019, 0xAA)  # write to register with value
     gmsl2.register_read(0x0019)  # read and print register value
 
     # cpp_file = 'AD-GMSLCAMRPI-ADP_717_724.cpp'
