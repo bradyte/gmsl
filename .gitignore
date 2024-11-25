@@ -2,3 +2,6 @@
 *.mp4
 # avoid large number of frames
 *.jpeg
+
+# avoid pdfs
+*.pdf

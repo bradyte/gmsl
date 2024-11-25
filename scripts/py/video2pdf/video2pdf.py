@@ -11,8 +11,6 @@ import img2pdf
 class VIDEO2PDF:
     VTT_ITEMS = 4
     CUE_ID, TS_START, TEXT1, TEXT2 = range(VTT_ITEMS)
-    FRAME_FOLDER_LOCATION = 'frames'
-    OUTPUT_FOLDER_LOCATION = 'output'
 
     def __init__(self, video_file, vtt_file) -> None:
         self.video = cv2.VideoCapture(video_file)
@@ -20,11 +18,29 @@ class VIDEO2PDF:
         self.processed_vtt = []
         self.total_frames = self.video.get(cv2.CAP_PROP_FRAME_COUNT)
         self.fps = self.video.get(cv2.CAP_PROP_FPS)
+        self.script_file = None
+        self.output_pdf_file = None
+        self.frames_folder = None
+        self._folder_check()
         self.process_vtt()
+
+    def _folder_check(self):
+        output_folder = 'output'
+        frames_folder = 'frames'
+
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+
+        if not os.path.exists(frames_folder):
+            os.makedirs(frames_folder)
+
+        self.output_pdf_file = os.path.join(output_folder, 'output.pdf')
+        self.script_file = os.path.join(output_folder, 'script.txt')
+        self.frames_folder = frames_folder
 
     def process_vtt(self):
         with open(self.vtt_file, 'r') as inp:  # read in the VTT file
-            with open('script.txt', 'w') as outp:  # create a script file
+            with open(self.script_file, 'w') as outp:  # create a script file
                 lines = inp.readlines()
                 for idx, line in enumerate(lines):  # grab line number and line string  
                     buf = []               
@@ -57,38 +73,41 @@ class VIDEO2PDF:
             cv2.imwrite(f'frame.jpeg', frame)
             self.add_subtitle('frame.jpeg', frame_index)
         else:
-            cv2.imwrite(f'frames/{frame_name}.jpeg', frame)
-            self.add_subtitle(f'frames/{frame_name}.jpeg', frame_index)
+            frame_path = os.path.join(self.frames_folder, f'{frame_name}.jpeg')
+            cv2.imwrite(frame_path, frame)
+            self.add_subtitle(frame_path, frame_index)
 
     def add_subtitle(self, frame, frame_index):
             image = cv2.imread(frame)
-            bordered_image = cv2.copyMakeBorder(image, 0, 120, 0, 0, cv2.BORDER_CONSTANT, value=(255, 255, 255))
+            bordered_image = cv2.copyMakeBorder(image, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+            bordered_image = cv2.copyMakeBorder(bordered_image, 0, 120, 0, 0, cv2.BORDER_CONSTANT, value=(255, 255, 255))
             height, width, _ = bordered_image.shape
             
             font = cv2.FONT_HERSHEY_SIMPLEX
-            font_scale = 1
+            font_scale = 1.5
             color = (0, 0, 0)  # Blue color in BGR
             thickness = 2
 
             text = self.processed_vtt[frame_index][self.TEXT1]
-            position = (int(width * 0.05), int(height * 0.95))
-            cv2.putText(bordered_image, text, position, font, font_scale, color, thickness)
+            position = (int(width * 0.02), int(height * 0.96))
+            cv2.putText(bordered_image, text, position, font, font_scale, color, thickness, cv2.LINE_AA)
+            position = (int(width * 0.95), int(height * 0.96))
+            cv2.putText(bordered_image, str(frame_index), position, font, font_scale, color, thickness, cv2.LINE_AA)
             cv2.imwrite(frame, bordered_image)
 
-    def grab_frames(self, frame_name=None):
+    def grab_frames(self, frame_name='frame'):
         for i in range(len(self.processed_vtt)):
-            self.grab_frame(i, f'frame_{i}')
+            self.grab_frame(i, f'{frame_name}_{i}')
 
     def video_close(self):
         self.video.release()
         cv2.destroyAllWindows
 
     def create_pdf(self):
-        frames_file_loc = './frames'
         self.grab_frames()
-        with open("output.pdf", "wb") as f:
-            files = [f"{frames_file_loc}/{x}" for x in os.listdir(f"{frames_file_loc}") if x.endswith(".jpeg")]
-            files.sort(key=lambda x: int(re.sub(fr'{frames_file_loc}/frame_(\d+)\.jpeg', r'\1', x)))
+        with open(self.output_pdf_file, 'wb') as f:
+            files = [f"{self.frames_folder}/{x}" for x in os.listdir(f'{self.frames_folder}') if x.endswith('.jpeg')]
+            files.sort(key=lambda x: int(re.sub(fr'{self.frames_folder}/frame_(\d+)\.jpeg', r'\1', x)))  # TODO check file path
             f.write(img2pdf.convert(files))
 
     def _process_timestamp(self, timestamp):  
@@ -99,11 +118,10 @@ class VIDEO2PDF:
         return frame_number
 
 def main():
-    video_file = 'GMSL200D_GPIO_Rev_A_1280x720.mp4'
+    video_file = 'GMSL200D - GPIO rev a.mp4'
     vtt_file = 'GMSL200D - GPIO rev a-en-US.vtt'
     v2p = VIDEO2PDF(video_file, vtt_file)
     # v2p.grab_frame(frame_index=50)
-    
     v2p.create_pdf()
     v2p.video_close()
 
