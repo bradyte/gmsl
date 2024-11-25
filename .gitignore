@@ -1,2 +1,4 @@
 # avoid large video files
 *.mp4
+# avoid large number of frames
+*.jpeg
