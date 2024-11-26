@@ -15,11 +15,13 @@ class VIDEO2PDF:
 
     def __init__(self, video_file, vtt_file) -> None:
         self.video = cv2.VideoCapture(video_file)
-        self.course_name = video_file.rsplit('.', 1)[0]
-        self.vtt_file = vtt_file
-        self.processed_vtt = []
         self.total_frames = self.video.get(cv2.CAP_PROP_FRAME_COUNT)
         self.fps = self.video.get(cv2.CAP_PROP_FPS)
+        self.frame_width = self.video.get(cv2.CAP_PROP_FRAME_WIDTH)
+        self.frame_height = self.video.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        self.course_name = video_file.rsplit('.', 1)[0]  # remove extenstion from file name
+        self.vtt_file = vtt_file
+        self.processed_vtt = []
         self.script_file = None
         self.output_pdf_file = None
         self.frames_folder = None
@@ -84,6 +86,7 @@ class VIDEO2PDF:
 
     def add_subtitle(self, frame, frame_index):
             image = cv2.imread(frame)
+
             bordered_image = cv2.copyMakeBorder(image, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=(0, 0, 0))
             bordered_image = cv2.copyMakeBorder(bordered_image, 0, 120, 0, 0, cv2.BORDER_CONSTANT, value=(255, 255, 255))
             height, width, _ = bordered_image.shape
@@ -92,12 +95,14 @@ class VIDEO2PDF:
             font_scale = 1.5
             color = (0, 0, 0)  # Blue color in BGR
             thickness = 2
-
-            text = self.processed_vtt[frame_index][self.TEXT1]
+            subtitle = [self.processed_vtt[frame_index][self.TS_START][3:8], self.processed_vtt[frame_index][self.TEXT1]]
+            text = " - ".join(subtitle)
             position = (int(width * 0.02), int(height * 0.96))
             cv2.putText(bordered_image, text, position, font, font_scale, color, thickness, cv2.LINE_AA)
+            
             position = (int(width * 0.95), int(height * 0.96))
             cv2.putText(bordered_image, str(frame_index), position, font, font_scale, color, thickness, cv2.LINE_AA)
+            
             cv2.imwrite(frame, bordered_image)
 
     def video_close(self):
@@ -117,7 +122,6 @@ class VIDEO2PDF:
                 for frame_jpeg in frame_jpegs:
                     os.remove(frame_jpeg)
 
-
     def _process_timestamp(self, timestamp):  
         ts_list = timestamp.split(':')  # assumes VTT format 'HH:MM:SS.MSEC'
         ts_list_floats = [float(i) for i in ts_list]  # convert to floating point numbers
@@ -125,12 +129,12 @@ class VIDEO2PDF:
         frame_number = round(self.fps * (hours * 3600 + minutes * 60 + seconds))
         return frame_number
 
-def main(video_file=None, vtt_file=None):
+def main():
     video_file, vtt_file = 'GMSL200D - GPIO rev a.mp4', 'GMSL200D - GPIO rev a-en-US.vtt'
     # video_file, vtt_file = sys.argv[1], sys.argv[2]
     v2p = VIDEO2PDF(video_file, vtt_file)
     # v2p.grab_frame(frame_index=4, frame_tuning=-15)
-    # v2p.create_pdf(create_frames=True, clean_frames_folder=True)
+    v2p.create_pdf(create_frames=True, clean_frames_folder=True)
     v2p.video_close()
 
 if __name__ == "__main__":
