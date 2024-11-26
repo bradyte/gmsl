@@ -1,5 +1,6 @@
 import cv2
 import os
+import sys
 import re
 import img2pdf
 
@@ -68,17 +69,18 @@ class VIDEO2PDF:
         print(f'{self.vtt_file} processed.')
         print(f'{self.script_file} generated.')
 
-    def grab_frame(self, frame_index, frame_name=None):
-        frame_number = self._process_timestamp(self.processed_vtt[frame_index][1])
+    def grab_frame(self, frame_index, frame_tuning=0):
+        frame_number = self._process_timestamp(self.processed_vtt[frame_index][1]) + frame_tuning
         self.video.set(1, frame_number)
         success, frame = self.video.read()
-        if frame_name == None:
-            cv2.imwrite(f'frame.jpeg', frame)
-            self.add_subtitle('frame.jpeg', frame_index)
-        else:
-            frame_path = os.path.join(self.frames_folder, f'{frame_name}.jpeg')
-            cv2.imwrite(frame_path, frame)
-            self.add_subtitle(frame_path, frame_index)
+
+        frame_path = os.path.join(self.frames_folder, f'frame_{frame_index}.jpeg')
+        cv2.imwrite(frame_path, frame)
+        self.add_subtitle(frame_path, frame_index)
+
+    def grab_frames(self):
+        for frame_index in range(len(self.processed_vtt)):
+            self.grab_frame(frame_index)
 
     def add_subtitle(self, frame, frame_index):
             image = cv2.imread(frame)
@@ -98,23 +100,20 @@ class VIDEO2PDF:
             cv2.putText(bordered_image, str(frame_index), position, font, font_scale, color, thickness, cv2.LINE_AA)
             cv2.imwrite(frame, bordered_image)
 
-    def grab_frames(self, frame_name='frame'):
-        for i in range(len(self.processed_vtt)):
-            self.grab_frame(i, f'{frame_name}_{i}')
-
     def video_close(self):
         self.video.release()
         cv2.destroyAllWindows
 
-    def create_pdf(self, clean_frames_folder=False):
+    def create_pdf(self, create_frames=True, clean_frames_folder=False):
         print('Creating jpegs from frames...')
-        self.grab_frames()
+        if create_frames:  # create frames if none exist, set to false when editting individual frames
+            self.grab_frames()
         with open(self.output_pdf_file, 'wb') as f:
             frame_jpegs = [f"{self.frames_folder}/{x}" for x in os.listdir(f'{self.frames_folder}') if x.endswith('.jpeg')]
             frame_jpegs.sort(key=lambda x: int(re.sub(fr'{self.frames_folder}/frame_(\d+)\.jpeg', r'\1', x)))  # TODO check file path
             print(f'Converting jpegs to {self.output_pdf_file}')
             f.write(img2pdf.convert(frame_jpegs))
-            if clean_frames_folder:
+            if clean_frames_folder:  # delete all frames from frame folder
                 for frame_jpeg in frame_jpegs:
                     os.remove(frame_jpeg)
 
@@ -126,12 +125,12 @@ class VIDEO2PDF:
         frame_number = round(self.fps * (hours * 3600 + minutes * 60 + seconds))
         return frame_number
 
-def main():
-    video_file = 'GMSL200D - GPIO rev a.mp4'
-    vtt_file = 'GMSL200D - GPIO rev a-en-US.vtt'
+def main(video_file=None, vtt_file=None):
+    video_file, vtt_file = 'GMSL200D - GPIO rev a.mp4', 'GMSL200D - GPIO rev a-en-US.vtt'
+    # video_file, vtt_file = sys.argv[1], sys.argv[2]
     v2p = VIDEO2PDF(video_file, vtt_file)
-    # v2p.grab_frame(frame_index=50)
-    v2p.create_pdf(clean_frames_folder=True)
+    # v2p.grab_frame(frame_index=4, frame_tuning=-15)
+    # v2p.create_pdf(create_frames=True, clean_frames_folder=True)
     v2p.video_close()
 
 if __name__ == "__main__":
