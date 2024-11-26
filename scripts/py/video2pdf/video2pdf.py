@@ -14,6 +14,7 @@ class VIDEO2PDF:
 
     def __init__(self, video_file, vtt_file) -> None:
         self.video = cv2.VideoCapture(video_file)
+        self.course_name = video_file.rsplit('.', 1)[0]
         self.vtt_file = vtt_file
         self.processed_vtt = []
         self.total_frames = self.video.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -34,8 +35,8 @@ class VIDEO2PDF:
         if not os.path.exists(frames_folder):
             os.makedirs(frames_folder)
 
-        self.output_pdf_file = os.path.join(output_folder, 'output.pdf')
-        self.script_file = os.path.join(output_folder, 'script.txt')
+        self.output_pdf_file = os.path.join(output_folder, f'{self.course_name}.pdf')
+        self.script_file = os.path.join(output_folder, f'{self.course_name}_script.txt')
         self.frames_folder = frames_folder
 
     def process_vtt(self):
@@ -64,6 +65,8 @@ class VIDEO2PDF:
                             buf.pop()  # remove the redundant line of text after joining
                         self.processed_vtt.append(buf)
                         outp.write(f'{buf[self.TS_START][3:8]}\t{buf[self.TEXT1]}\n')  # write to the script file
+        print(f'{self.vtt_file} processed.')
+        print(f'{self.script_file} generated.')
 
     def grab_frame(self, frame_index, frame_name=None):
         frame_number = self._process_timestamp(self.processed_vtt[frame_index][1])
@@ -103,12 +106,18 @@ class VIDEO2PDF:
         self.video.release()
         cv2.destroyAllWindows
 
-    def create_pdf(self):
+    def create_pdf(self, clean_frames_folder=False):
+        print('Creating jpegs from frames...')
         self.grab_frames()
         with open(self.output_pdf_file, 'wb') as f:
-            files = [f"{self.frames_folder}/{x}" for x in os.listdir(f'{self.frames_folder}') if x.endswith('.jpeg')]
-            files.sort(key=lambda x: int(re.sub(fr'{self.frames_folder}/frame_(\d+)\.jpeg', r'\1', x)))  # TODO check file path
-            f.write(img2pdf.convert(files))
+            frame_jpegs = [f"{self.frames_folder}/{x}" for x in os.listdir(f'{self.frames_folder}') if x.endswith('.jpeg')]
+            frame_jpegs.sort(key=lambda x: int(re.sub(fr'{self.frames_folder}/frame_(\d+)\.jpeg', r'\1', x)))  # TODO check file path
+            print(f'Converting jpegs to {self.output_pdf_file}')
+            f.write(img2pdf.convert(frame_jpegs))
+            if clean_frames_folder:
+                for frame_jpeg in frame_jpegs:
+                    os.remove(frame_jpeg)
+
 
     def _process_timestamp(self, timestamp):  
         ts_list = timestamp.split(':')  # assumes VTT format 'HH:MM:SS.MSEC'
@@ -122,7 +131,7 @@ def main():
     vtt_file = 'GMSL200D - GPIO rev a-en-US.vtt'
     v2p = VIDEO2PDF(video_file, vtt_file)
     # v2p.grab_frame(frame_index=50)
-    v2p.create_pdf()
+    v2p.create_pdf(clean_frames_folder=True)
     v2p.video_close()
 
 if __name__ == "__main__":
