@@ -11,7 +11,7 @@ logging.basicConfig(
     level=logging.INFO
                     )
 
-class GMSLSPELLCHECK:
+class GMSLSpellCheck:
     MAX_VTT_ITEMS = 4
     CUE_ID, TIMESTAMP, TEXT1, TEXT2 = range(MAX_VTT_ITEMS)  # use the newline as 0 offset
     CAPTION_LENGTH = 32
@@ -124,7 +124,7 @@ class GMSLSPELLCHECK:
 
 def main():
     vtt_file = 'GMSL200D - GPIO rev a-en-US.vtt'
-    sc = GMSLSPELLCHECK(vtt_file)
+    sc = GMSLSpellCheck(vtt_file)
     sc.spellcheck()
 
 if __name__ == "__main__":
