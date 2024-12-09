@@ -12,18 +12,29 @@ logging.basicConfig(
                     )
 
 class GMSLSpellCheck:
+    """
+    The main spellcheck class to read in the file and create a cleaned
+        VTT file based off of the caption_library.csv file.
+
+    :param vtt_file: this is the main vtt_file intended for spellchecking
+    :returns: creates a new spellchecked file under the same name with a
+        spellcheck suffix
+    :raises IndexError: when peeking lines at the end of file
+    """
     MAX_VTT_ITEMS = 4
     CUE_ID, TIMESTAMP, TEXT1, TEXT2 = range(MAX_VTT_ITEMS)  # use the newline as 0 offset
     CAPTION_LENGTH = 32
 
     def __init__(self, vtt_file) -> None:
         self.vtt_file = vtt_file
-        self.vtt_lines = None
+        self.vtt_file_name = vtt_file.rsplit('.', 1)[0]  # grab the file name only, remove extension
+        self.vtt_lines = None  # raw text lines of the VTT file
         self.new_vtt_lines = ['WEBVTT\n', '\n']  # empty vtt file structure
         self.processed_vtt = []  # contains array of vtt chunks in list format
         self.vtt_num_chunks = 0
         self.vtt_sentences = []  # contains concatenated sentences
         self.gmsl_dictionary = self._create_gmsl_dictionary('caption_library.csv')
+
         self.parse_vtt()
         self.unzip_sentences()
         self.spellcheck()
@@ -67,9 +78,11 @@ class GMSLSpellCheck:
                 sentence = self.processed_vtt[chunk_index][self.TEXT1]
             
             try:  # handle peeking the end of the file
-                while(((self.processed_vtt[chunk_index+1][self.CUE_ID]).strip())[-1:] != '0'):  # while the cue id indicates there is more sentence
+                # while the cue id indicates there is more sentence
+                while(((self.processed_vtt[chunk_index+1][self.CUE_ID]).strip())[-1:] != '0'):
                     chunk_index += 1  # update the chunk index to next block of text
-                    if self.processed_vtt[chunk_index][self.TEXT2]:  # if there is a second line of text
+                    # if there is a second line of text
+                    if self.processed_vtt[chunk_index][self.TEXT2]:  
                         sentence = ' '.join((sentence, self.processed_vtt[chunk_index][self.TEXT1], self.processed_vtt[chunk_index][self.TEXT2]))
                     else:
                         sentence = ' '.join((sentence, self.processed_vtt[chunk_index][self.TEXT1]))
@@ -81,12 +94,13 @@ class GMSLSpellCheck:
 
 
     def spellcheck(self):
-        keys = list(self.gmsl_dictionary.keys())
-
         for idx, sentence in enumerate(self.vtt_sentences):
-            for key in keys:
-                if re.search(r"\b" + re.escape(key) + r"\b", sentence[1]):
-                    logger.info(f'{sentence[0].strip()} Replacing {key} => {self.gmsl_dictionary[key]}')
+            # grab all the incorrect words in the dicitionary
+            for key in list(self.gmsl_dictionary.keys()):
+                # compare the exact spelling of the incorrect word to the sentence
+                if re.search(r"\b" + re.escape(key) + r"\b", sentence[1]):  
+                    logger.info(f"[{sentence[0].split('-')[0]}]:Replacing {key} => {self.gmsl_dictionary[key]}")
+                    # replace the incorrect word with the dictionary word
                     self.vtt_sentences[idx][1] = re.sub(r"\b" + re.escape(key) + r"\b", self.gmsl_dictionary[key], self.vtt_sentences[idx][1])
 
 
@@ -99,7 +113,7 @@ class GMSLSpellCheck:
             else:
                 self.new_vtt_lines.append('\n')
 
-        with open('new_vtt.vtt', 'w') as outp:
+        with open(f'{self.vtt_file_name}_spellcheck.vtt', 'w') as outp:
             outp.writelines(self.new_vtt_lines)
 
     def zip_sentences(self):
@@ -124,6 +138,7 @@ class GMSLSpellCheck:
 
 def main():
     vtt_file = 'GMSL200D - GPIO rev a-en-US.vtt'
+    # vtt_file =  sys.argv[1]
     sc = GMSLSpellCheck(vtt_file)
     sc.spellcheck()
 
