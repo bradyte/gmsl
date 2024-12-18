@@ -1,0 +1,1020 @@
+WEBVTT
+
+2e199699-271d-45d2-a747-edd2b2ed0795-0
+00:00:07.310 --> 00:00:10.876
+We've talked about how GMSL
+serializers and deserializers
+
+2e199699-271d-45d2-a747-edd2b2ed0795-1
+00:00:10.876 --> 00:00:14.750
+for display applications differ
+from those designed for camera
+
+2e199699-271d-45d2-a747-edd2b2ed0795-2
+00:00:14.750 --> 00:00:15.550
+applications.
+
+b2101bdc-ba38-4556-817b-497d5291eca2-0
+00:00:16.070 --> 00:00:21.542
+Well, now it's time to take a
+look at a real part, the
+
+b2101bdc-ba38-4556-817b-497d5291eca2-1
+00:00:21.542 --> 00:00:24.510
+MAX96751 HDMI to GMSL2
+Serializer.
+
+c51749a1-b3ef-47aa-9e32-257a9fecb856-0
+00:00:26.000 --> 00:00:31.230
+The MAX96751 has to perform
+three jobs to convert an HDMI
+
+c51749a1-b3ef-47aa-9e32-257a9fecb856-1
+00:00:31.230 --> 00:00:34.600
+stream into a stream of GMSL
+packets.
+
+103a8c68-2c35-4020-9a31-15b92916d982-0
+00:00:35.200 --> 00:00:36.840
+First, it's a Serializer.
+
+e8e6f81f-b115-4c6e-8769-8827c0056141-0
+00:00:37.080 --> 00:00:41.665
+That is, it terminates the TMDS
+interfaces that comprise the
+
+e8e6f81f-b115-4c6e-8769-8827c0056141-1
+00:00:41.665 --> 00:00:46.475
+HDMI interface, decodes the bit
+streams, and converts them to a
+
+e8e6f81f-b115-4c6e-8769-8827c0056141-2
+00:00:46.475 --> 00:00:48.280
+simple stream of pixels.
+
+29f5cd35-6d36-4032-848f-4eac6b203db5-0
+00:00:48.760 --> 00:00:52.802
+Then it must repackage those
+pixels into GMSL2 packets ready
+
+29f5cd35-6d36-4032-848f-4eac6b203db5-1
+00:00:52.802 --> 00:00:55.280
+for transmission to the
+Deserializer.
+
+d3a899b9-9b0c-4478-a8f8-8bdea85777dc-0
+00:00:56.600 --> 00:01:00.603
+2nd, in some applications at
+least, it has to pretend to be a
+
+d3a899b9-9b0c-4478-a8f8-8bdea85777dc-1
+00:01:00.603 --> 00:01:01.960
+display of some type.
+
+af0610d6-f713-4735-a0ab-d08a6c7097f7-0
+00:01:02.640 --> 00:01:08.198
+You see, originally HDMI was
+meant to connect a video source
+
+af0610d6-f713-4735-a0ab-d08a6c7097f7-1
+00:01:08.198 --> 00:01:13.210
+at first ADVD player or a Blu-
+ray player to a display, usually
+
+af0610d6-f713-4735-a0ab-d08a6c7097f7-2
+00:01:13.210 --> 00:01:16.400
+ATV set in the HDMI world.
+
+98fa8d85-293d-402a-b4a4-bf247580a172-0
+00:01:16.640 --> 00:01:20.831
+The display tells the source
+what kind of resolution and
+
+98fa8d85-293d-402a-b4a4-bf247580a172-1
+00:01:20.831 --> 00:01:25.538
+frame rate it can support, and
+the source adjusts its output to
+
+98fa8d85-293d-402a-b4a4-bf247580a172-2
+00:01:25.538 --> 00:01:28.480
+accommodate whatever the display
+needs.
+
+97646494-585b-4268-b505-e22227c6ea14-0
+00:01:29.040 --> 00:01:32.658
+So we have to tell the video
+source a bit of a white lie,
+
+97646494-585b-4268-b505-e22227c6ea14-1
+00:01:32.658 --> 00:01:36.526
+that the Serializer is actually
+a display, and we're going to
+
+97646494-585b-4268-b505-e22227c6ea14-2
+00:01:36.526 --> 00:01:38.960
+talk about that more in just a
+moment.
+
+b340b280-69f2-477c-8fe0-5777c6368e7a-0
+00:01:40.160 --> 00:01:44.000
+Third, the Serializer has to
+handle a few special cases.
+
+3ab04cff-23fe-42d2-ad37-d1b331683cff-0
+00:01:44.520 --> 00:01:48.720
+See HDMI can send two video
+streams on the same cable, side
+
+3ab04cff-23fe-42d2-ad37-d1b331683cff-1
+00:01:48.720 --> 00:01:52.080
+by side, line interleaved or
+pixel interleaved.
+
+29e408a9-4dba-42e8-8012-d8ff3b60ead1-0
+00:01:52.640 --> 00:01:57.092
+And most cases the Serializer
+will decode the two images and
+
+29e408a9-4dba-42e8-8012-d8ff3b60ead1-1
+00:01:57.092 --> 00:01:59.720
+send them over separate GMSL
+pipes.
+
+6f2df2e6-f573-4a0e-a83b-390c1dfa8743-0
+00:02:01.080 --> 00:02:02.520
+OK, that's the big picture.
+
+34f597b1-42ca-4f22-a092-382b53541777-0
+00:02:02.960 --> 00:02:07.368
+Now let's drill down into the
+block diagram, fresh from the
+
+34f597b1-42ca-4f22-a092-382b53541777-1
+00:02:07.368 --> 00:02:09.720
+data sheet and over on the left.
+
+b331fdef-94dc-4343-8cc6-f7c798f0fb7e-0
+00:02:10.040 --> 00:02:15.414
+That's the HDMI interface, a set
+of buffers, a serial to parallel
+
+b331fdef-94dc-4343-8cc6-f7c798f0fb7e-1
+00:02:15.414 --> 00:02:20.544
+converter, a clock recovery PLL,
+and the TMDS decoder and HDMI
+
+b331fdef-94dc-4343-8cc6-f7c798f0fb7e-2
+00:02:20.544 --> 00:02:21.440
+controller.
+
+356bf378-dbbd-45a6-a35b-ee8ac8a126fe-0
+00:02:22.440 --> 00:02:27.115
+Now what comes out of this block
+is a fully decoded video stream
+
+356bf378-dbbd-45a6-a35b-ee8ac8a126fe-1
+00:02:27.115 --> 00:02:29.920
+and potentially audio samples as
+well.
+
+aef13488-8d26-4e1d-9441-ba043e9d803d-0
+00:02:31.080 --> 00:02:34.731
+Going down the left side, we
+find the rest of the HDMI
+
+aef13488-8d26-4e1d-9441-ba043e9d803d-1
+00:02:34.731 --> 00:02:37.320
+interface starting with the DDC
+logic.
+
+fd5f2e36-b979-4285-acae-a841f33d780b-0
+00:02:37.560 --> 00:02:41.755
+That's the display data channel,
+and that's how the HDMI source
+
+fd5f2e36-b979-4285-acae-a841f33d780b-1
+00:02:41.755 --> 00:02:44.640
+finds out what kind of display
+is attached.
+
+b4a5991a-ce56-4ee2-9e15-c768b2468433-0
+00:02:45.800 --> 00:02:49.369
+Now this is where we need to
+pause to talk about the edit
+
+b4a5991a-ce56-4ee2-9e15-c768b2468433-1
+00:02:49.369 --> 00:02:49.800
+tables.
+
+ec43de92-d8a6-4fd6-ac76-87333b166e66-0
+00:02:50.000 --> 00:02:53.400
+That's extended display
+identification data.
+
+db7bd2aa-952d-46ec-a57c-a0d62f00fd32-0
+00:02:54.280 --> 00:02:56.120
+The edit mechanism works like
+this.
+
+40eb5546-d8b9-4a6b-bd77-4092381cbdc5-0
+00:02:56.680 --> 00:03:00.872
+When a display is attached to an
+HDMI source, the source can read
+
+40eb5546-d8b9-4a6b-bd77-4092381cbdc5-1
+00:03:00.872 --> 00:03:04.746
+the display's edit tables to
+determine its capabilities, its
+
+40eb5546-d8b9-4a6b-bd77-4092381cbdc5-2
+00:03:04.746 --> 00:03:08.367
+horizontal and vertical
+resolution, its video frame rate
+
+40eb5546-d8b9-4a6b-bd77-4092381cbdc5-3
+00:03:08.367 --> 00:03:11.480
+capabilities, supported pixel
+clocks, and so on.
+
+69a3613d-aabf-43b8-9773-98e9b2e63a25-0
+00:03:12.320 --> 00:03:14.400
+In the consumer space, that's a
+great thing.
+
+c11aec50-2da9-4002-aea6-c6639b18e80c-0
+00:03:14.560 --> 00:03:18.127
+It means you don't have to
+program your set-top box to tell
+
+c11aec50-2da9-4002-aea6-c6639b18e80c-1
+00:03:18.127 --> 00:03:21.160
+it what kind of display the
+device is attached to.
+
+19e2e0e7-f7c0-4cdc-8f45-e6999f4eafb3-0
+00:03:21.440 --> 00:03:26.416
+But you don't generally find the
+MAX96751 being used in the
+
+19e2e0e7-f7c0-4cdc-8f45-e6999f4eafb3-1
+00:03:26.416 --> 00:03:27.640
+consumer space.
+
+d0417f7a-2fd4-437d-9773-b9db718b368a-0
+00:03:28.160 --> 00:03:31.913
+It's designed more for closely
+engineered applications like
+
+d0417f7a-2fd4-437d-9773-b9db718b368a-1
+00:03:31.913 --> 00:03:34.040
+automotive or industrial
+systems.
+
+7f39fe4e-00a5-44f7-ad59-d9a88fc00c84-0
+00:03:34.400 --> 00:03:38.770
+And that means, in many cases at
+least, the HDMI source is a
+
+7f39fe4e-00a5-44f7-ad59-d9a88fc00c84-1
+00:03:38.770 --> 00:03:42.997
+system on chip that already
+knows what kind of displays at
+
+7f39fe4e-00a5-44f7-ad59-d9a88fc00c84-2
+00:03:42.997 --> 00:03:44.000
+the other end.
+
+f8e88019-950d-419e-8953-358ef2a31830-0
+00:03:44.120 --> 00:03:46.680
+It doesn't need the HDMI sync to
+tell it.
+
+3746474e-032f-4f57-abde-362c9d837b61-0
+00:03:47.360 --> 00:03:50.800
+In those systems, there's no
+need for the edit information.
+
+6f0bb4ff-ee24-4ecc-8c6f-20d1dddf1c91-0
+00:03:50.920 --> 00:03:54.657
+Once the HDMI link is
+established, the HDMI source
+
+6f0bb4ff-ee24-4ecc-8c6f-20d1dddf1c91-1
+00:03:54.657 --> 00:03:59.054
+will begin sending data at what
+it knows is the appropriate
+
+6f0bb4ff-ee24-4ecc-8c6f-20d1dddf1c91-2
+00:03:59.054 --> 00:04:00.960
+resolution and frame rate.
+
+511125ee-13ac-46c0-b2e9-b3d03379e843-0
+00:04:01.320 --> 00:04:05.875
+But in some applications, the
+HDMI source may still expect
+
+511125ee-13ac-46c0-b2e9-b3d03379e843-1
+00:04:05.875 --> 00:04:10.816
+edit information, and that's why
+the MAX96751 contains a block of
+
+511125ee-13ac-46c0-b2e9-b3d03379e843-2
+00:04:10.816 --> 00:04:15.680
+registers to contain the edit
+table if the source needs it.
+
+e328a311-8b94-40d1-b688-04c7a77be848-0
+00:04:16.600 --> 00:04:20.378
+Now you'll need to program the
+table if it's needed when the
+
+e328a311-8b94-40d1-b688-04c7a77be848-1
+00:04:20.378 --> 00:04:23.600
+Serializer powers up, and we'll
+see how that works.
+
+7a62c4a4-26bb-4c27-b7c0-901a3f344c73-0
+00:04:23.600 --> 00:04:28.220
+When we look at the example,
+skipping the control channel for
+
+7a62c4a4-26bb-4c27-b7c0-901a3f344c73-1
+00:04:28.220 --> 00:04:32.840
+just a moment, we find the power
+up sense and the HPD buffer.
+
+576f661a-3ce5-4532-a4b9-750392e8567c-0
+00:04:32.960 --> 00:04:35.440
+HPD is hot plug detect.
+
+c878f3f3-f2ea-494c-ad0f-344e69b03250-0
+00:04:36.320 --> 00:04:41.400
+All HDMI sources provide 5 Volt
+power on one of the pins.
+
+cdb3c384-fb40-43ea-b8d7-1de97633e2b6-0
+00:04:41.920 --> 00:04:46.763
+The MAX96751 senses this and
+returns an indication that power
+
+cdb3c384-fb40-43ea-b8d7-1de97633e2b6-1
+00:04:46.763 --> 00:04:51.452
+has been detected on another
+pin, the hot plug detect or HPD
+
+cdb3c384-fb40-43ea-b8d7-1de97633e2b6-2
+00:04:51.452 --> 00:04:51.760
+pin.
+
+97a317c9-7d02-4553-a80d-b306270052de-0
+00:04:53.600 --> 00:04:57.240
+Now moving right, we come to a
+watermark generator.
+
+5ce5d17d-1ac3-4ca0-bc87-7e2670838c88-0
+00:04:57.320 --> 00:04:59.520
+We've talked about watermarking
+before.
+
+a89ddb91-78c5-4822-828a-9d8b16069080-0
+00:04:59.760 --> 00:05:03.370
+It's a method to insert a
+pattern in the video stream to
+
+a89ddb91-78c5-4822-828a-9d8b16069080-1
+00:05:03.370 --> 00:05:07.233
+ensure that the video isn't
+frozen, repeating the same frame
+
+a89ddb91-78c5-4822-828a-9d8b16069080-2
+00:05:07.233 --> 00:05:08.120
+over and over.
+
+7f6ae9cf-d8f3-4a32-b9e5-2432ef4eccff-0
+00:05:08.760 --> 00:05:12.616
+The possibly watermarked video,
+the audio from the HDMI
+
+7f6ae9cf-d8f3-4a32-b9e5-2432ef4eccff-1
+00:05:12.616 --> 00:05:16.956
+interface, and the control data
+bound for the Deserializer are
+
+7f6ae9cf-d8f3-4a32-b9e5-2432ef4eccff-2
+00:05:16.956 --> 00:05:19.159
+all delivered to a set of Fifos.
+
+a46acec7-de45-4d74-b831-12953d79edf4-0
+00:05:20.360 --> 00:05:24.913
+Now Speaking of audio, the audio
+interface block is represented
+
+a46acec7-de45-4d74-b831-12953d79edf4-1
+00:05:24.913 --> 00:05:28.897
+just below all this logic and
+you can see there are two
+
+a46acec7-de45-4d74-b831-12953d79edf4-2
+00:05:28.897 --> 00:05:29.679
+interfaces.
+
+9de6f5b3-505c-4ab5-b6fe-6ea6f5e0c44e-0
+00:05:29.920 --> 00:05:36.682
+The audio block contains 2 I
+Square S interfaces, an ingress
+
+9de6f5b3-505c-4ab5-b6fe-6ea6f5e0c44e-1
+00:05:36.682 --> 00:05:43.777
+interface represented by the WS,
+SCK and SD pins, and an egress
+
+9de6f5b3-505c-4ab5-b6fe-6ea6f5e0c44e-2
+00:05:43.777 --> 00:05:49.319
+interface carried on the
+WSORSCKOR and SDOR pins.
+
+e762ec02-2631-4074-9862-6ac9670cc609-0
+00:05:49.840 --> 00:05:54.423
+the OR suffix indicates that
+these signals are carried over
+
+e762ec02-2631-4074-9862-6ac9670cc609-1
+00:05:54.423 --> 00:05:58.320
+reverse, that is, over the GMSL2
+reverse channel.
+
+d9b36606-c560-4397-8eb8-c0dc941b72ad-0
+00:05:59.280 --> 00:06:03.259
+From the deserializers point of
+view, you have a full duplex
+
+d9b36606-c560-4397-8eb8-c0dc941b72ad-1
+00:06:03.259 --> 00:06:07.433
+audio channel in addition to the
+audio that comes over the HDMI
+
+d9b36606-c560-4397-8eb8-c0dc941b72ad-2
+00:06:07.433 --> 00:06:07.759
+link.
+
+b87c0d33-1a4d-4f0b-b4f7-5b5e6b801253-0
+00:06:09.680 --> 00:06:13.355
+Moving to the upper right, now
+we find some blocks that ought
+
+b87c0d33-1a4d-4f0b-b4f7-5b5e6b801253-1
+00:06:13.355 --> 00:06:16.320
+to be pretty familiar, the GMSL2
+protocol chain.
+
+98d92b7e-2e1e-48a2-b239-2e3abf0cf177-0
+00:06:16.960 --> 00:06:21.402
+The block labeled GMSL2 protocol
+contains the packetizer and
+
+98d92b7e-2e1e-48a2-b239-2e3abf0cf177-1
+00:06:21.402 --> 00:06:25.921
+packet scheduler, and whatever
+emerges from this block gets
+
+98d92b7e-2e1e-48a2-b239-2e3abf0cf177-2
+00:06:25.921 --> 00:06:30.134
+scrambled, encoded, serialized,
+and passed to the CML
+
+98d92b7e-2e1e-48a2-b239-2e3abf0cf177-3
+00:06:30.134 --> 00:06:31.360
+transmitter.
+
+46db394e-47f5-4b6b-bd4d-53ea2163529b-0
+00:06:31.440 --> 00:06:33.640
+Hey, nothing we haven't seen
+before.
+
+a60bd082-09fe-47d1-a13d-d192c6acb712-0
+00:06:35.280 --> 00:06:39.179
+Below these blocks you'll find
+the reverse channel receivers,
+
+a60bd082-09fe-47d1-a13d-d192c6acb712-1
+00:06:39.179 --> 00:06:42.890
+kind of a mini Deserializer that
+manages just audio in the
+
+a60bd082-09fe-47d1-a13d-d192c6acb712-2
+00:06:42.890 --> 00:06:43.960
+control channels.
+
+c844d95a-8c3e-476f-8da6-076d4802972f-0
+00:06:44.360 --> 00:06:47.657
+As the packets are decoded,
+they're routed to the
+
+c844d95a-8c3e-476f-8da6-076d4802972f-1
+00:06:47.657 --> 00:06:51.746
+appropriate blocks, some to the
+device control block, some to
+
+c844d95a-8c3e-476f-8da6-076d4802972f-2
+00:06:51.746 --> 00:06:55.769
+the audio block, and some to the
+control channel block to be
+
+c844d95a-8c3e-476f-8da6-076d4802972f-3
+00:06:55.769 --> 00:06:59.462
+potentially passed to an
+external interface, Isquare C,
+
+c844d95a-8c3e-476f-8da6-076d4802972f-4
+00:06:59.462 --> 00:07:00.320
+UART, or spy.
+
+eb2bc3ef-88fd-498e-b4f8-f0c9f83cd741-0
+00:07:01.520 --> 00:07:04.840
+You know, that's one of the nice
+things about GMSL2.
+
+857d5174-4b96-49e0-aa46-8e0873d35d0d-0
+00:07:05.160 --> 00:07:09.617
+Every link is full duplex for
+control and status information
+
+857d5174-4b96-49e0-aa46-8e0873d35d0d-1
+00:07:09.617 --> 00:07:10.640
+and for audio.
+
+481ef333-7e73-4006-a64a-d54020630cb0-0
+00:07:12.640 --> 00:07:16.373
+Finally, in the lower right
+corner is the error detection
+
+481ef333-7e73-4006-a64a-d54020630cb0-1
+00:07:16.373 --> 00:07:20.171
+block, and it contains the line
+monitor pins and the error
+
+481ef333-7e73-4006-a64a-d54020630cb0-2
+00:07:20.171 --> 00:07:20.880
+output pin.
+
+46139a6a-e11b-44a2-b8f7-49037e0eeac3-0
+00:07:22.720 --> 00:07:27.166
+Now we're ready to talk about
+configuration, and here I have
+
+46139a6a-e11b-44a2-b8f7-49037e0eeac3-1
+00:07:27.166 --> 00:07:29.280
+good news and more good news.
+
+4abaf849-ab9f-4bbb-acc7-d0afe7e66fc8-0
+00:07:30.160 --> 00:07:33.274
+The good news is that to get a
+link going between the
+
+4abaf849-ab9f-4bbb-acc7-d0afe7e66fc8-1
+00:07:33.274 --> 00:07:36.792
+Serializer and the Deserializer
+in single video link mode is
+
+4abaf849-ab9f-4bbb-acc7-d0afe7e66fc8-2
+00:07:36.792 --> 00:07:37.600
+pretty simple.
+
+2470f2bf-a993-47d7-b0ef-020b4b48a28c-0
+00:07:38.040 --> 00:07:42.309
+You just set the power up
+configuration pins as you need
+
+2470f2bf-a993-47d7-b0ef-020b4b48a28c-1
+00:07:42.309 --> 00:07:45.680
+and the GMSL link should just
+become active.
+
+09f5442a-ba0c-45f3-9349-4292ec6947e8-0
+00:07:46.520 --> 00:07:51.152
+A few register rights and the
+HDMI link will activate as well,
+
+09f5442a-ba0c-45f3-9349-4292ec6947e8-1
+00:07:51.152 --> 00:07:53.800
+and you'll be passing active
+video.
+
+174fc24a-521f-41ba-a7e1-926fd3b3f627-0
+00:07:55.280 --> 00:07:59.193
+Now, if it seems to you as
+though I'm being a little bit
+
+174fc24a-521f-41ba-a7e1-926fd3b3f627-1
+00:07:59.193 --> 00:08:02.832
+vague describing the
+configuration of the HDMI port,
+
+174fc24a-521f-41ba-a7e1-926fd3b3f627-2
+00:08:02.832 --> 00:08:07.158
+well, you're right, because if
+you look at the register table,
+
+174fc24a-521f-41ba-a7e1-926fd3b3f627-3
+00:08:07.158 --> 00:08:08.600
+it's pretty daunting.
+
+f8b460ee-8122-4bc6-b003-49814f3bd53a-0
+00:08:09.440 --> 00:08:13.625
+There are hundreds of registers,
+many that demand settings for
+
+f8b460ee-8122-4bc6-b003-49814f3bd53a-1
+00:08:13.625 --> 00:08:17.280
+which there isn't really a clear
+best way to set them.
+
+1f36e860-9609-4f0f-831a-d8f9a5bab46a-0
+00:08:18.200 --> 00:08:20.920
+That's where the more good news
+comes in.
+
+57dab503-b460-4786-912d-5812a6161e50-0
+00:08:21.360 --> 00:08:24.574
+ADI has a configuration tool
+that will set all those
+
+57dab503-b460-4786-912d-5812a6161e50-1
+00:08:24.574 --> 00:08:28.152
+registers for you, and all you
+have to do is describe your
+
+57dab503-b460-4786-912d-5812a6161e50-2
+00:08:28.152 --> 00:08:31.852
+configuration and the tool will
+figure out the best register
+
+57dab503-b460-4786-912d-5812a6161e50-3
+00:08:31.852 --> 00:08:34.399
+settings and generate a
+programming file.
+
+90dded8d-38b2-4d95-9cf8-1274315f046b-0
+00:08:35.280 --> 00:08:37.520
+Getting the configuration tool
+is easy.
+
+0202fac1-2853-4d02-b8e0-c166f6256e80-0
+00:08:37.960 --> 00:08:42.666
+On the landing page of every
+GMSL2-part you'll find a link
+
+0202fac1-2853-4d02-b8e0-c166f6256e80-1
+00:08:42.666 --> 00:08:44.640
+for tools and simulations.
+
+07fc8ae8-e002-4e73-9bab-f7dec95b216b-0
+00:08:45.240 --> 00:08:49.600
+Follow that link and you'll find
+the GMSL Configuration tool.
+
+49a3241a-7843-4cf2-83d5-51fac0062806-0
+00:08:50.800 --> 00:08:54.376
+When you run the configuration
+tool, you can select your
+
+49a3241a-7843-4cf2-83d5-51fac0062806-1
+00:08:54.376 --> 00:08:57.200
+Serializer and Deserializer
+components here.
+
+00e4daeb-c856-4bb1-9c3f-626cb76c6a86-0
+00:08:57.800 --> 00:09:02.529
+To configure the display setup,
+choose Tools, Video Config, then
+
+00e4daeb-c856-4bb1-9c3f-626cb76c6a86-1
+00:09:02.529 --> 00:09:04.640
+Display Config from the menu.
+
+b83bc087-d678-42f7-aa23-85cb17265670-0
+00:09:05.520 --> 00:09:09.066
+Here you can provide details
+about how you want the system to
+
+b83bc087-d678-42f7-aa23-85cb17265670-1
+00:09:09.066 --> 00:09:11.240
+handle aspects of the display
+stream.
+
+dc25c8a3-cea2-4f78-b36f-9bb4155273cc-0
+00:09:11.480 --> 00:09:14.840
+Then export a script file for
+programming the part.
+
+4a7787dd-2f35-4e0a-ba16-37a0e09864cf-0
+00:09:16.120 --> 00:09:18.760
+Let's dissect one of those
+programming files.
+
+b367ca4f-56f7-4cf8-a383-7fae2d697b18-0
+00:09:19.040 --> 00:09:22.824
+What I'm showing you here comes
+from the actual output of the
+
+b367ca4f-56f7-4cf8-a383-7fae2d697b18-1
+00:09:22.824 --> 00:09:26.120
+configuration tool for a known
+working configuration.
+
+b47a8959-4c5b-4560-a916-78428fe62994-0
+00:09:27.720 --> 00:09:32.285
+First, we disable line fault
+reporting on the negative output
+
+b47a8959-4c5b-4560-a916-78428fe62994-1
+00:09:32.285 --> 00:09:34.200
+pin in the evaluation kit.
+
+d5bb30e7-2816-4426-8303-182622b31422-0
+00:09:34.320 --> 00:09:39.081
+We connect using coax cable and
+we don't need to error check the
+
+d5bb30e7-2816-4426-8303-182622b31422-1
+00:09:39.081 --> 00:09:39.960
+coax shield.
+
+f6d05330-ad01-4f16-b7bd-1f428cb4bc10-0
+00:09:40.400 --> 00:09:46.191
+So we turn off error detection
+on SIO A minus by writing the
+
+f6d05330-ad01-4f16-b7bd-1f428cb4bc10-1
+00:09:46.191 --> 00:09:48.280
+value 0 to register 4.
+
+c86a90bf-4623-4d6d-a699-d260a1a40f97-0
+00:09:49.960 --> 00:09:53.200
+The next set of lines loads the
+heated table.
+
+ff8518f0-34cd-4684-b256-1a9a562f65c2-0
+00:09:53.880 --> 00:09:57.480
+Now the HDMI source might never
+ask for that.
+
+b078bd2d-25b5-444a-8f00-5a1e6c76d860-0
+00:09:57.760 --> 00:10:01.048
+For example, if it's your own
+SoC connecting to the
+
+b078bd2d-25b5-444a-8f00-5a1e6c76d860-1
+00:10:01.048 --> 00:10:04.400
+Serializer, you already know the
+display parameters.
+
+70c2080e-bde4-4e94-88c2-89cb24993700-0
+00:10:04.680 --> 00:10:09.400
+Nevertheless, if the HDMI source
+needs it, well, here it is.
+
+2338057e-90ce-4db9-9a89-2d7a3bf89a77-0
+00:10:10.400 --> 00:10:14.604
+That sequence begins by
+deasserting the power detect
+
+2338057e-90ce-4db9-9a89-2d7a3bf89a77-1
+00:10:14.604 --> 00:10:15.160
+signal.
+
+48b2ae9e-36a4-45b6-92bc-1c79ec3c1d99-0
+00:10:15.160 --> 00:10:22.952
+That's performed by writing zero
+to the RXHDC control register at
+
+48b2ae9e-36a4-45b6-92bc-1c79ec3c1d99-1
+00:10:22.952 --> 00:10:24.960
+address hex 20F5.
+
+1515c4c6-5d76-4038-8ff8-5904e7804b6c-0
+00:10:26.240 --> 00:10:30.668
+Then we write the bytes of the
+eded table to the set of
+
+1515c4c6-5d76-4038-8ff8-5904e7804b6c-1
+00:10:30.668 --> 00:10:33.120
+registers starting at hex 2E00.
+
+f5370c3d-29c9-47e7-b84f-e1b52322793d-0
+00:10:33.360 --> 00:10:37.886
+Now in our case, we're going to
+write these registers all the
+
+f5370c3d-29c9-47e7-b84f-e1b52322793d-1
+00:10:37.886 --> 00:10:39.200
+way up to two EFF.
+
+634eaeac-251c-4897-ad72-fa605cf34e19-0
+00:10:39.400 --> 00:10:43.743
+That is, we're writing the full
+complement of 256 register
+
+634eaeac-251c-4897-ad72-fa605cf34e19-1
+00:10:43.743 --> 00:10:44.480
+addresses.
+
+4014129e-aa04-4e6e-8bae-cc03361d4026-0
+00:10:45.160 --> 00:10:51.040
+And then finally we write a one
+to register hex 20F5.
+
+1137d418-6024-4301-ae7a-d29b719aca3b-0
+00:10:51.360 --> 00:10:56.505
+Now that tells the HDMI source
+that surprise power has finally
+
+1137d418-6024-4301-ae7a-d29b719aca3b-1
+00:10:56.505 --> 00:11:01.160
+been detected and a new device
+has just been plugged in.
+
+37516c5e-11f5-4ce6-a798-2ece108a4352-0
+00:11:01.360 --> 00:11:05.929
+And now I mean, if it wants, the
+HDMI source can read the EDID
+
+37516c5e-11f5-4ce6-a798-2ece108a4352-1
+00:11:05.929 --> 00:11:10.499
+table over the DDC channel and
+configure itself for the chosen
+
+37516c5e-11f5-4ce6-a798-2ece108a4352-2
+00:11:10.499 --> 00:11:11.079
+display.
+
+519875be-0dfb-444a-af9c-42c398dfdbd0-0
+00:11:12.880 --> 00:11:16.560
+And how do you get the EDID
+table data?
+
+593aea01-9760-45f9-b6c9-2f6ebb2c3ea7-0
+00:11:17.680 --> 00:11:19.200
+Well, there are several ways.
+
+19b93951-5c82-4ce4-864d-69be37f852c1-0
+00:11:19.560 --> 00:11:24.541
+One sure way is to Snoop the DDC
+channel of an HDMI interface
+
+19b93951-5c82-4ce4-864d-69be37f852c1-1
+00:11:24.541 --> 00:11:29.040
+with similar parameters to the
+display you want to use.
+
+303fec41-8b11-4c91-a92e-5d1a8d0703a3-0
+00:11:30.120 --> 00:11:32.080
+You can also build the table
+yourself.
+
+796ca513-326f-4835-a55b-c38dc357c2b1-0
+00:11:32.320 --> 00:11:36.207
+The DDC information format is
+public, so you can build the
+
+796ca513-326f-4835-a55b-c38dc357c2b1-1
+00:11:36.207 --> 00:11:37.920
+programming file yourself.
+
+86d505db-7801-4b9e-9069-1fe46ea968c5-0
+00:11:38.840 --> 00:11:42.462
+And if you need additional help
+with a step, well, you can
+
+86d505db-7801-4b9e-9069-1fe46ea968c5-1
+00:11:42.462 --> 00:11:44.120
+always contact ADI support.
+
+e74f2a93-817b-45b5-9a63-51b0ba3d76c3-0
+00:11:45.360 --> 00:11:49.506
+Next, because the display in
+this demonstration is a
+
+e74f2a93-817b-45b5-9a63-51b0ba3d76c3-1
+00:11:49.506 --> 00:11:54.201
+relatively low resolution panel,
+we're going to operate the
+
+e74f2a93-817b-45b5-9a63-51b0ba3d76c3-2
+00:11:54.201 --> 00:11:57.800
+interface in the older, slower
+HDMI 1.4 mode.
+
+0cc08556-71d8-4a64-8a0c-63a8522780ad-0
+00:11:58.600 --> 00:12:04.415
+The interface can also run at
+the newer, faster HDMI 2.0 mode,
+
+0cc08556-71d8-4a64-8a0c-63a8522780ad-1
+00:12:04.415 --> 00:12:09.400
+but for this demonstration, HDMI
+1.4 works just fine.
+
+27bc5c0b-4a39-4703-9b25-ca50a3cc6645-0
+00:12:10.840 --> 00:12:15.440
+Now the next few lines we don't
+need to cover in detail.
+
+0cf04266-9d3c-4555-964c-68e29662b636-0
+00:12:15.760 --> 00:12:20.272
+They configure the finer points
+of equalization on the HDMI
+
+0cf04266-9d3c-4555-964c-68e29662b636-1
+00:12:20.272 --> 00:12:25.084
+lanes and really could probably
+have been made part of the HDMI
+
+0cf04266-9d3c-4555-964c-68e29662b636-2
+00:12:25.084 --> 00:12:27.040
+1.4 or two point O switch.
+
+981bf6bb-7b86-4c5d-a0d5-55aa415335bc-0
+00:12:27.760 --> 00:12:31.637
+But for maximum flexibility, our
+engineers left these bits
+
+981bf6bb-7b86-4c5d-a0d5-55aa415335bc-1
+00:12:31.637 --> 00:12:32.360
+accessible.
+
+47ca2006-3d6d-47aa-b10f-1730f2f0b42b-0
+00:12:32.960 --> 00:12:34.400
+You know, just in case.
+
+e8822142-f5a2-46ad-afd9-010c614226e3-0
+00:12:35.160 --> 00:12:40.137
+The HDMI configuration concludes
+by setting the HDMI auto start
+
+e8822142-f5a2-46ad-afd9-010c614226e3-1
+00:12:40.137 --> 00:12:44.882
+bit and now when HDMI video is
+available at the HDMI ingress
+
+e8822142-f5a2-46ad-afd9-010c614226e3-2
+00:12:44.882 --> 00:12:49.160
+port, it should be conveyed to
+the GMSL2 transmitter.
+
+dba4feb2-dc47-41a9-89e5-bb6b7ec44109-0
+00:12:51.320 --> 00:12:56.433
+Now the last thing is to
+configure a couple of GPIO ports
+
+dba4feb2-dc47-41a9-89e5-bb6b7ec44109-1
+00:12:56.433 --> 00:13:00.400
+to be controlled by the host,
+and that's it.
+
+c6b9c3b4-f7b8-4eb0-947a-65f1320c6bed-0
+00:13:01.000 --> 00:13:05.109
+But notice, even though all the
+registers are documented in the
+
+c6b9c3b4-f7b8-4eb0-947a-65f1320c6bed-1
+00:13:05.109 --> 00:13:08.833
+data sheet and you can see
+exactly what the configuration
+
+c6b9c3b4-f7b8-4eb0-947a-65f1320c6bed-2
+00:13:08.833 --> 00:13:12.943
+tool is doing, well, you don't
+really need to dive that deep at
+
+c6b9c3b4-f7b8-4eb0-947a-65f1320c6bed-3
+00:13:12.943 --> 00:13:13.200
+all.
+
+45e405a2-16cb-4e50-b006-19360bedf0e4-0
+00:13:13.960 --> 00:13:18.056
+Get the pin configuration right,
+tell the configuration tool
+
+45e405a2-16cb-4e50-b006-19360bedf0e4-1
+00:13:18.056 --> 00:13:22.488
+exactly what it is you need, and
+just let the computer do all the
+
+45e405a2-16cb-4e50-b006-19360bedf0e4-2
+00:13:22.488 --> 00:13:23.160
+hard work.
+
+37129396-7e4d-4b18-bcdd-5227eb817221-0
+00:13:24.760 --> 00:13:29.354
+Next time we're going to look at
+the MAX96752 display
+
+37129396-7e4d-4b18-bcdd-5227eb817221-1
+00:13:29.354 --> 00:13:30.440
+Deserializer.
+
+f6564e6d-8dfd-4b81-aa77-c011c112824b-0
+00:13:30.960 --> 00:13:31.760
+See you then.
+

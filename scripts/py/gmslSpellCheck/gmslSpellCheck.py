@@ -62,6 +62,7 @@ class GMSLSpellCheck:
                         else:
                             buf.append('')  # else pad the second caption block
                     except IndexError:  # end of file
+                        buf.append('')  # else pad the second caption block
                         logger.debug('[parse_vtt]:IndexError: hit the end of the file')
 
                     self.processed_vtt.append(buf)
@@ -137,7 +138,7 @@ class GMSLSpellCheck:
                 chunk_index += 1
 
 def main():
-    vtt_file = 'GMSL200D - GPIO rev a-en-US.vtt'
+    vtt_file = 'GMSL236A.96751 - MAX96751 Configurations rev a-en-US.vtt'
     # vtt_file =  sys.argv[1]
     sc = GMSLSpellCheck(vtt_file)
     sc.spellcheck()
