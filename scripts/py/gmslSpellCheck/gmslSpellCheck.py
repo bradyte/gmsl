@@ -1,9 +1,14 @@
 import csv
 import re
+import sys
+import os
 import logging
 from textwrap import wrap
 
 logger = logging.getLogger(__name__)
+
+vtt_dir = ".\\vtt_files"
+sc_dir = ".\\spellchecked"
 
 logging.basicConfig(
     format="[%(asctime)s.%(msecs)d] %(levelname)s\t- %(message)s",
@@ -23,11 +28,11 @@ class GMSLSpellCheck:
     """
     MAX_VTT_ITEMS = 4
     CUE_ID, TIMESTAMP, TEXT1, TEXT2 = range(MAX_VTT_ITEMS)  # use the newline as 0 offset
-    CAPTION_LENGTH = 32
+    CAPTION_LENGTH = 33
 
     def __init__(self, vtt_file) -> None:
         self.vtt_file = vtt_file
-        self.vtt_file_name = vtt_file.rsplit('.', 1)[0]  # grab the file name only, remove extension
+        self.vtt_file_name = os.path.basename(vtt_file).rsplit('.', 1)[0]  # grab the file name only, remove extension
         self.vtt_lines = None  # raw text lines of the VTT file
         self.new_vtt_lines = ['WEBVTT\n', '\n']  # empty vtt file structure
         self.processed_vtt = []  # contains array of vtt chunks in list format
@@ -67,7 +72,7 @@ class GMSLSpellCheck:
 
                     self.processed_vtt.append(buf)
         self.vtt_num_chunks = len(self.processed_vtt)
-        logger.info(f'{self.vtt_file} parsed.')
+        logger.info(f'"{self.vtt_file_name}" parsed!')
 
     def unzip_sentences(self):
         chunk_index = 0
@@ -95,6 +100,7 @@ class GMSLSpellCheck:
 
 
     def spellcheck(self):
+        logger.info(f'Spellchecking "{self.vtt_file_name}"...')
         for idx, sentence in enumerate(self.vtt_sentences):
             # grab all the incorrect words in the dicitionary
             for key in list(self.gmsl_dictionary.keys()):
@@ -103,6 +109,8 @@ class GMSLSpellCheck:
                     logger.info(f"[{sentence[0].split('-')[0]}]:Replacing {key} => {self.gmsl_dictionary[key]}")
                     # replace the incorrect word with the dictionary word
                     self.vtt_sentences[idx][1] = re.sub(r"\b" + re.escape(key) + r"\b", self.gmsl_dictionary[key], self.vtt_sentences[idx][1])
+        logger.info(f'Spellcheck of "{self.vtt_file_name}" complete!\n'
+                    '===============================================================================\n')
 
 
     def create_vtt(self):
@@ -114,7 +122,7 @@ class GMSLSpellCheck:
             else:
                 self.new_vtt_lines.append('\n')
 
-        with open(f'{self.vtt_file_name}_spellcheck.vtt', 'w') as outp:
+        with open(os.path.join(sc_dir, f'{self.vtt_file_name}_spellcheck.vtt'), 'w') as outp:
             outp.writelines(self.new_vtt_lines)
 
     def zip_sentences(self):
@@ -138,10 +146,20 @@ class GMSLSpellCheck:
                 chunk_index += 1
 
 def main():
-    vtt_file = 'GMSL236A.96751 - MAX96751 Configurations rev a-en-US.vtt'
-    # vtt_file =  sys.argv[1]
-    sc = GMSLSpellCheck(vtt_file)
-    sc.spellcheck()
+    '''
+    All VTT files should be located in the vtt_files folder.
+    The processed files will end up in the spellchecked folder.
+    '''
+    if not os.path.exists(vtt_dir):  # if it can find the vtt folder
+        logger.warning("Cannot find *.vtt folder. Exiting program...")
+        sys.exit(0)
+
+    if not os.path.exists(sc_dir):  # if you don't have a output folder
+        os.makedirs(sc_dir)
+
+    for file in os.listdir(vtt_dir):
+        input_file_path = os.path.join(vtt_dir, file)
+        GMSLSpellCheck(input_file_path)
 
 if __name__ == "__main__":
     main()

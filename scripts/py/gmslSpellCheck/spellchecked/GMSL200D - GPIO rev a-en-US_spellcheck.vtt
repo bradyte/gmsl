@@ -11,13 +11,12 @@ GPIOs on our block diagram.
 
 8d93c865-a00c-43b8-9d16-460430910d1f-0
 00:00:15.000 --> 00:00:17.500
-This will be on the
-bidirectional communication
+This will be on the bidirectional
+communication channel between the
 
 8d93c865-a00c-43b8-9d16-460430910d1f-1
 00:00:17.500 --> 00:00:20.000
-channel between the Serializer
-and Deserializer.
+Serializer and Deserializer.
 
 6725546c-63e7-4452-b9ef-60516b43e3a3-0
 00:00:21.040 --> 00:00:25.556
@@ -41,12 +40,12 @@ outline the options for GPIO
 
 6725546c-63e7-4452-b9ef-60516b43e3a3-4
 00:00:38.132 --> 00:00:42.231
-configurations such as pull up
-or pull downs, transmit and
+configurations such as pull up or
+pull downs, transmit and receive
 
 6725546c-63e7-4452-b9ef-60516b43e3a3-5
 00:00:42.231 --> 00:00:43.760
-receive IDs, and more.
+IDs, and more.
 
 efdcd7b1-2f7e-4d73-9af1-3a6a5d9fca86-0
 00:00:45.520 --> 00:00:49.001
@@ -65,26 +64,26 @@ commands.
 
 417c685b-3e58-436e-8146-4647129ac783-0
 00:00:56.040 --> 00:00:59.292
-That is where the humble GPIO
-can be the companion to these
+That is where the humble GPIO can
+be the companion to these complex
 
 417c685b-3e58-436e-8146-4647129ac783-1
 00:00:59.292 --> 00:01:00.160
-complex systems.
+systems.
 
 63b2141f-1910-45f7-ba14-c5c68f9028a5-0
 00:01:01.440 --> 00:01:04.755
 In systems with GMSL, the SerDes
-devices can transport this
+devices can transport this signal
 
 63b2141f-1910-45f7-ba14-c5c68f9028a5-1
 00:01:04.755 --> 00:01:08.237
-signal over long distances to
-help a remote sensor communicate
+over long distances to help a
+remote sensor communicate with a
 
 63b2141f-1910-45f7-ba14-c5c68f9028a5-2
 00:01:08.237 --> 00:01:09.840
-with a local microcontroller.
+local microcontroller.
 
 40175009-af2d-49c2-9edb-0dafa8ef40d6-0
 00:01:10.560 --> 00:01:14.007
@@ -102,8 +101,8 @@ Input or Output.
 
 f2a21b84-d01b-4299-a139-40c08504fe6e-0
 00:01:24.000 --> 00:01:27.518
-It's a simple feature that can
-be utilized for purposes of
+It's a simple feature that can be
+utilized for purposes of
 
 f2a21b84-d01b-4299-a139-40c08504fe6e-1
 00:01:27.518 --> 00:01:31.215
@@ -240,13 +239,13 @@ program via registers.
 
 2dde1d76-f2a1-4e71-b58a-4ae4ac24272f-0
 00:02:59.160 --> 00:03:02.938
-A microcontroller can send an
-I2C command over the GMSL link
+A microcontroller can send an I2C
+command over the GMSL link to
 
 2dde1d76-f2a1-4e71-b58a-4ae4ac24272f-1
 00:03:02.938 --> 00:03:06.480
-to remotely control the GPIO on
-the other end of the link.
+remotely control the GPIO on the
+other end of the link.
 
 1bb1e883-dd1b-45f9-a34b-2f7c319dad24-0
 00:03:08.440 --> 00:03:10.600
@@ -284,20 +283,20 @@ output.
 ffdd7579-0e1c-4ea7-b4cb-5fc19594418e-0
 00:03:32.040 --> 00:03:35.030
 However the GPIO cannot be
-configured to be input and
+configured to be input and output
 
 ffdd7579-0e1c-4ea7-b4cb-5fc19594418e-1
 00:03:35.030 --> 00:03:36.360
-output at the same time.
+at the same time.
 
 a4992041-37bb-49e0-95a6-fdbfdf297e80-0
 00:03:37.280 --> 00:03:40.941
-The GPIO signal direction must
-be determined to configure the
+The GPIO signal direction must be
+determined to configure the GPIO
 
 a4992041-37bb-49e0-95a6-fdbfdf297e80-1
 00:03:40.941 --> 00:03:44.426
-GPIO pins as an INPUT on the
+pins as an INPUT on the
 Serializer, an output on the
 
 a4992041-37bb-49e0-95a6-fdbfdf297e80-2
@@ -311,22 +310,21 @@ clarify the transmit TX or
 
 f4359d37-3fb0-4fdc-9705-936ae3dfa72c-1
 00:03:52.146 --> 00:03:56.060
-receive RX nomenclature that
-will be used with the GPI that
+receive RX nomenclature that will
+be used with the GPI that opens
 
 f4359d37-3fb0-4fdc-9705-936ae3dfa72c-2
 00:03:56.060 --> 00:03:57.560
-opens at configuration.
+at configuration.
 
 ecf97c43-2d51-482b-bd28-5895b096efed-0
 00:03:59.400 --> 00:04:03.357
 The GPIO pin enabled as TX will
-transmit its received logic
+transmit its received logic input
 
 ecf97c43-2d51-482b-bd28-5895b096efed-1
 00:04:03.357 --> 00:04:05.600
-input pin state to the GMSL
-link.
+pin state to the GMSL link.
 
 5abd026f-01d7-4fb8-bd8d-063581056c14-0
 00:04:07.320 --> 00:04:11.254
@@ -344,12 +342,12 @@ its local pin.
 
 807db253-534e-4bd3-b48d-f254f1b8d027-0
 00:04:16.880 --> 00:04:21.227
-Remember that the transmit TX
-and receive RX is in reference
+Remember that the transmit TX and
+receive RX is in reference to the
 
 807db253-534e-4bd3-b48d-f254f1b8d027-1
 00:04:21.227 --> 00:04:23.080
-to the internal GMSL link.
+internal GMSL link.
 
 de3d1bcb-276b-407b-b999-d9bf6d450c56-0
 00:04:25.600 --> 00:04:29.549
@@ -391,23 +389,22 @@ devices.
 
 b9d3697d-e888-4a63-8a90-874aa6a9ce49-0
 00:04:53.440 --> 00:04:57.861
-Each GPIO on one side of the
-GMSL link can be mapped to any
+Each GPIO on one side of the GMSL
+link can be mapped to any GPIO on
 
 b9d3697d-e888-4a63-8a90-874aa6a9ce49-1
 00:04:57.861 --> 00:05:02.504
-GPIO on the remote side using a
-5 bit transmit receive ID that
+the remote side using a 5 bit
+transmit receive ID that is
 
 b9d3697d-e888-4a63-8a90-874aa6a9ce49-2
 00:05:02.504 --> 00:05:07.073
-is configurable for up to 32
-unique GPIO mappings to map GPIO
+configurable for up to 32 unique
+GPIO mappings to map GPIO pins
 
 b9d3697d-e888-4a63-8a90-874aa6a9ce49-3
 00:05:07.073 --> 00:05:09.800
-pins together through the GMSL
-link.
+together through the GMSL link.
 
 ea865a2c-1096-4cc7-92e9-793f1a37aff2-0
 00:05:10.120 --> 00:05:14.125
@@ -430,8 +427,8 @@ GPIO numbers.
 
 c2e1cf00-ee1e-4e48-a4b4-d6b6512954b0-0
 00:05:26.280 --> 00:05:30.746
-So GPIO 0 will have a receive
-and transmit ID of hex 0 on both
+So GPIO 0 will have a receive and
+transmit ID of hex 0 on both
 
 c2e1cf00-ee1e-4e48-a4b4-d6b6512954b0-1
 00:05:30.746 --> 00:05:33.440
@@ -450,8 +447,8 @@ on the GMSL device also have
 
 00b29032-3533-4e82-922e-738da9d5982c-1
 00:05:45.698 --> 00:05:49.600
-configurable and optional pull
-up and pull down resistors.
+configurable and optional pull up
+and pull down resistors.
 
 0d17e9c3-e4ab-4a2a-9324-c80723c8acca-0
 00:05:50.440 --> 00:05:53.882
@@ -475,12 +472,12 @@ up and pull down.
 
 99a1caf3-0d37-4642-879e-86b6efba1297-0
 00:06:05.520 --> 00:06:09.005
-In certain applications jitter
-on the GPI of a signal could be
+In certain applications jitter on
+the GPI of a signal could be a
 
 99a1caf3-0d37-4642-879e-86b6efba1297-1
 00:06:09.005 --> 00:06:11.440
-a concern for stricter timing
+concern for stricter timing
 requirements.
 
 430ffd37-3822-4e75-b12d-069e0230957e-0
@@ -504,8 +501,8 @@ order of a few microseconds with
 
 3ab48988-ae34-4883-a917-5f3aa51d577e-1
 00:06:24.229 --> 00:06:27.080
-the benefit of significant
-jitter reduction on the signal.
+the benefit of significant jitter
+reduction on the signal.
 
 39aa898b-08b9-4b23-a971-b2936701af03-0
 00:06:29.520 --> 00:06:35.228
@@ -547,16 +544,16 @@ manually controlled via writing
 fcc3a6bd-4842-42a3-83c3-ba080be56dd1-1
 00:06:59.944 --> 00:07:03.389
 to the device registers to pull
-at logic high or low or to
+at logic high or low or to report
 
 fcc3a6bd-4842-42a3-83c3-ba080be56dd1-2
 00:07:03.389 --> 00:07:05.200
-report back the received state.
+back the received state.
 
 5604576d-78e9-4143-a44d-aaf738efcaed-0
 00:07:06.000 --> 00:07:09.472
-This can be helpful when GPIOs
-on the peripheral devices are
+This can be helpful when GPIOs on
+the peripheral devices are
 
 5604576d-78e9-4143-a44d-aaf738efcaed-1
 00:07:09.472 --> 00:07:09.920
@@ -588,12 +585,11 @@ GPIOs in a GMSL system?
 5c99077f-2e6c-4502-9a4b-d4aa0d1d3754-0
 00:07:27.680 --> 00:07:31.526
 GPIOs can be used for a variety
-of low level commands like
+of low level commands like reset,
 
 5c99077f-2e6c-4502-9a4b-d4aa0d1d3754-1
 00:07:31.526 --> 00:07:34.200
-reset, enable synchronization,
-etcetera.
+enable synchronization, etcetera.
 
 4d15bc41-d2dc-4359-836e-e903bf94f450-0
 00:07:36.520 --> 00:07:39.670
@@ -607,12 +603,12 @@ context of a GMSL link?
 d7ae295d-201e-4da0-909e-0627f62d062b-0
 00:07:42.040 --> 00:07:45.103
 GPIO directions on the GMSL link
-need to be thought of in terms
+need to be thought of in terms of
 
 d7ae295d-201e-4da0-909e-0627f62d062b-1
 00:07:45.103 --> 00:07:48.320
-of the direction that the GPI of
-a signal is travelling.
+the direction that the GPI of a
+signal is travelling.
 
 d1a789af-8e1f-409a-971b-543ddbcb9ac1-0
 00:07:49.080 --> 00:07:53.000
@@ -641,18 +637,18 @@ the received signal.
 
 ef505b4f-39ed-424b-865b-81877a5f6f55-0
 00:08:07.720 --> 00:08:11.867
-How do you explain the methods
-of interfacing with the GPIOs
+How do you explain the methods of
+interfacing with the GPIOs GPIOs
 
 ef505b4f-39ed-424b-865b-81877a5f6f55-1
 00:08:11.867 --> 00:08:16.693
-GPIOs can be received and
-transmitted as low level signals
+can be received and transmitted
+as low level signals going into
 
 ef505b4f-39ed-424b-865b-81877a5f6f55-2
 00:08:16.693 --> 00:08:21.520
-going into and out of the GMSL
-link using I2C communication.
+and out of the GMSL link using
+I2C communication.
 
 4aa8c56a-fc96-45a5-87c9-a242d230f568-0
 00:08:21.960 --> 00:08:25.982

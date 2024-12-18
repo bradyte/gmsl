@@ -1,0 +1,1187 @@
+WEBVTT
+
+793a9b67-9258-41cf-9981-aed14b129a89-0
+00:00:07.980 --> 00:00:12.203
+We've discussed before how GMSL2
+is a purely packet based
+
+793a9b67-9258-41cf-9981-aed14b129a89-1
+00:00:12.203 --> 00:00:13.420
+transport system.
+
+7269f275-6041-4773-bc64-7923bd26f5ae-0
+00:00:13.780 --> 00:00:18.395
+A GM SL2 link operates at a
+fixed bit rate, usually 3 or 6
+
+7269f275-6041-4773-bc64-7923bd26f5ae-1
+00:00:18.395 --> 00:00:22.775
+Gbps, and that bit stream is
+filled with packets, video
+
+7269f275-6041-4773-bc64-7923bd26f5ae-2
+00:00:22.775 --> 00:00:27.156
+packets, audio packets, control
+packets, authentication
+
+7269f275-6041-4773-bc64-7923bd26f5ae-3
+00:00:27.156 --> 00:00:31.615
+packets, synchronization
+packets, or in a pinch, idle
+
+7269f275-6041-4773-bc64-7923bd26f5ae-4
+00:00:31.615 --> 00:00:33.180
+packets.
+
+8cb2def2-66f6-48f8-b67f-7bec6ee89b44-0
+00:00:34.280 --> 00:00:39.833
+The job of the GMSL2 layer in the
+Serializer within is to take all
+
+8cb2def2-66f6-48f8-b67f-7bec6ee89b44-1
+00:00:39.833 --> 00:00:44.866
+these data sources, audio, status
+sync, and of course video, and
+
+8cb2def2-66f6-48f8-b67f-7bec6ee89b44-2
+00:00:44.866 --> 00:00:50.160
+Multiplex them as packets onto
+the GMSL2 stream.
+
+1be9938f-d310-4d63-a7b3-f8b29d39547f-0
+00:00:50.800 --> 00:00:52.720
+It also manages the reverse
+channel.
+
+68788b17-0ee0-494f-8267-68bf25f0e1a7-0
+00:00:52.800 --> 00:00:57.235
+It takes the stream coming from
+the Deserializer in the reverse
+
+68788b17-0ee0-494f-8267-68bf25f0e1a7-1
+00:00:57.235 --> 00:01:01.600
+direction and decodes control
+information, reverse audio, and,
+
+68788b17-0ee0-494f-8267-68bf25f0e1a7-2
+00:01:01.600 --> 00:01:05.689
+well, anything else that's needed
+At the Deserializer, the job is
+
+68788b17-0ee0-494f-8267-68bf25f0e1a7-3
+00:01:05.689 --> 00:01:08.600
+reversed in the forward
+direction.
+
+79e46556-2eb0-4f44-bd61-b26fc8e0d4a9-0
+00:01:08.600 --> 00:01:11.923
+Video, audio, status,
+synchronization, and well,
+
+79e46556-2eb0-4f44-bd61-b26fc8e0d4a9-1
+00:01:11.923 --> 00:01:15.993
+whatever else is sent is sorted
+and sent to the appropriate
+
+79e46556-2eb0-4f44-bd61-b26fc8e0d4a9-2
+00:01:15.993 --> 00:01:20.063
+places, and control and reverse
+audio and other data that's
+
+79e46556-2eb0-4f44-bd61-b26fc8e0d4a9-3
+00:01:20.063 --> 00:01:23.794
+bound for the Serializer is
+packetized and sent on the
+
+79e46556-2eb0-4f44-bd61-b26fc8e0d4a9-4
+00:01:23.794 --> 00:01:24.879
+reverse channel.
+
+b08b4e72-fdb6-47d5-a16a-f823d3f1f099-0
+00:01:26.120 --> 00:01:31.102
+Today I want to focus on that
+part of the Serializer and the
+
+b08b4e72-fdb6-47d5-a16a-f823d3f1f099-1
+00:01:31.102 --> 00:01:36.003
+Deserializer that sits between
+the video interfaces and the
+
+b08b4e72-fdb6-47d5-a16a-f823d3f1f099-2
+00:01:36.003 --> 00:01:37.800
+GMSL2 packet machine.
+
+3a5d1fad-0ad8-4040-b4ad-634cdbed3a16-0
+00:01:38.480 --> 00:01:42.925
+That's the part of the system we
+call the video pipe, and there's
+
+3a5d1fad-0ad8-4040-b4ad-634cdbed3a16-1
+00:01:42.925 --> 00:01:46.360
+a lot more going on in there than
+you might think.
+
+1764c2f8-0a48-465c-8fe6-5dffec297819-0
+00:01:47.560 --> 00:01:49.480
+That makes sense when you think
+about it.
+
+f4558bb7-529f-43eb-8aa2-a78a4019ca92-0
+00:01:49.720 --> 00:01:53.235
+As long as the video is
+packetized, there's not much you
+
+f4558bb7-529f-43eb-8aa2-a78a4019ca92-1
+00:01:53.235 --> 00:01:54.160
+can do with it.
+
+412f0887-7bcd-4c57-bd5b-d11d32bb52b4-0
+00:01:54.800 --> 00:02:00.133
+But once the video is extracted
+from its interface envelope and
+
+412f0887-7bcd-4c57-bd5b-d11d32bb52b4-1
+00:02:00.133 --> 00:02:05.466
+before it's packed into the GMSL2
+envelope, there it is in all its
+
+412f0887-7bcd-4c57-bd5b-d11d32bb52b4-2
+00:02:05.466 --> 00:02:10.799
+pixel by pixel glory, just
+waiting for you to do something.
+
+7af65103-65e1-4a15-9bc9-eccf3eb5dc62-0
+00:02:12.320 --> 00:02:16.972
+Here's a diagram of a Serializer
+Deserializer pair with all the
+
+7af65103-65e1-4a15-9bc9-eccf3eb5dc62-1
+00:02:16.972 --> 00:02:21.480
+GMSL stuff removed, just the
+interfaces and the video pieces.
+
+3c5a2809-bc04-42e7-998e-cafec0a76e6a-0
+00:02:22.200 --> 00:02:26.764
+In this case, the interfaces are
+both CSI-2, and by now you
+
+3c5a2809-bc04-42e7-998e-cafec0a76e6a-1
+00:02:26.764 --> 00:02:29.960
+understand kind of what's going
+on there.
+
+2974c948-6dd5-44ec-b4a1-fe02950637ea-0
+00:02:30.200 --> 00:02:35.675
+a CSI-2 port connects to one or
+more CSI-2 PHY blocks that
+
+2974c948-6dd5-44ec-b4a1-fe02950637ea-1
+00:02:35.675 --> 00:02:39.160
+ultimately feed a CSI-2
+controller.
+
+f58f16d2-df64-482e-82dc-3a3645b5f904-0
+00:02:39.480 --> 00:02:44.088
+It's the controller that finally
+unpacks CSI-2 packets and creates
+
+f58f16d2-df64-482e-82dc-3a3645b5f904-1
+00:02:44.088 --> 00:02:49.008
+the video stream along with
+ancillary information like
+
+f58f16d2-df64-482e-82dc-3a3645b5f904-2
+00:02:49.008 --> 00:02:53.616
+synchronization and passes it
+along the video stream, then
+
+f58f16d2-df64-482e-82dc-3a3645b5f904-3
+00:02:53.616 --> 00:02:55.960
+enters one of the video pipes.
+
+6afe2f17-55eb-4374-8b42-80e8e6dd27b8-0
+00:02:56.440 --> 00:02:58.520
+Something happens in there.
+
+28544fc0-35e6-4143-8bf4-d6d5c3614370-0
+00:02:58.880 --> 00:03:03.778
+It's not just an empty pipe, and
+what comes out is a video
+
+28544fc0-35e6-4143-8bf4-d6d5c3614370-1
+00:03:03.778 --> 00:03:04.360
+stream.
+
+771639b1-4019-4532-a94c-def7441ac993-0
+00:03:05.200 --> 00:03:08.143
+Now, it may be somewhat different
+than what went into the pipe, and
+
+771639b1-4019-4532-a94c-def7441ac993-1
+00:03:08.143 --> 00:03:11.360
+that's what we're going to talk
+about today.
+
+addc1ea1-87d2-4286-b873-66a421b49dc8-0
+00:03:12.680 --> 00:03:17.453
+Then, through the magic of GMSL2,
+the video stream appears on the
+
+addc1ea1-87d2-4286-b873-66a421b49dc8-1
+00:03:17.453 --> 00:03:19.120
+Deserializer side.
+
+ee16ce03-6b59-4b19-b60d-01c37287c973-0
+00:03:19.280 --> 00:03:23.840
+Yes, we know that it's been
+turned into packets and then
+
+ee16ce03-6b59-4b19-b60d-01c37287c973-1
+00:03:23.840 --> 00:03:28.000
+unpacked, but for now, let's
+just consider all that
+
+ee16ce03-6b59-4b19-b60d-01c37287c973-2
+00:03:28.000 --> 00:03:28.880
+technology.
+
+56b2f977-e6cc-4ea9-9267-08dab696df9e-0
+00:03:29.200 --> 00:03:34.536
+Just a wire on the Deserializer
+side, The video stream enters
+
+56b2f977-e6cc-4ea9-9267-08dab696df9e-1
+00:03:34.536 --> 00:03:36.000
+another pipeline.
+
+dd6c7ed0-88cd-49ac-acd7-d78aa6004b85-0
+00:03:36.840 --> 00:03:40.829
+Then after the video stream exits
+the pipeline, it's passed to one
+
+dd6c7ed0-88cd-49ac-acd7-d78aa6004b85-1
+00:03:40.829 --> 00:03:44.620
+or more of the CSI-2 controllers,
+where the video stream is
+
+dd6c7ed0-88cd-49ac-acd7-d78aa6004b85-2
+00:03:44.620 --> 00:03:48.875
+repackaged into CSI-2 packets,
+and then on to the PHY section,
+
+dd6c7ed0-88cd-49ac-acd7-d78aa6004b85-3
+00:03:48.875 --> 00:03:52.400
+and finally out one of the two
+CSI-2 ports.
+
+2428a3ba-efe7-4226-8d32-72f5891fd893-0
+00:03:53.120 --> 00:03:58.509
+Now, what's inside those video
+pipelines and what makes them so
+
+2428a3ba-efe7-4226-8d32-72f5891fd893-1
+00:03:58.509 --> 00:04:01.120
+special that we need 4 of them?
+
+d3e525e1-0c07-4534-af40-5e1e5dfb9446-0
+00:04:02.720 --> 00:04:07.600
+1st, if the pixel stream is
+protected by HTCP encryption, the
+
+d3e525e1-0c07-4534-af40-5e1e5dfb9446-1
+00:04:07.600 --> 00:04:10.040
+stream must be decrypted.
+
+e563fcfe-52ad-40bb-beef-c99e9f3fc9d7-0
+00:04:10.320 --> 00:04:14.508
+And also if the video content
+needs to be protected over the
+
+e563fcfe-52ad-40bb-beef-c99e9f3fc9d7-1
+00:04:14.508 --> 00:04:18.902
+GMSL2 link, it will need to be
+encrypted on the way out of the
+
+e563fcfe-52ad-40bb-beef-c99e9f3fc9d7-2
+00:04:18.902 --> 00:04:19.520
+pipeline.
+
+2417fcf4-369f-4bec-b0bf-b85d5bf41d6d-0
+00:04:19.520 --> 00:04:21.320
+So that's the first thing.
+
+88eb449d-3c22-4c2b-95a1-cb7fca18ee7d-0
+00:04:22.640 --> 00:04:26.747
+The second thing is that
+depending on the kind of signal
+
+88eb449d-3c22-4c2b-95a1-cb7fca18ee7d-1
+00:04:26.747 --> 00:04:31.503
+we're processing, the individual
+bits in each pixel may be wildly
+
+88eb449d-3c22-4c2b-95a1-cb7fca18ee7d-2
+00:04:31.503 --> 00:04:32.440
+out of order.
+
+d2ecf925-2b3c-45b0-b68d-42df21f0cb47-0
+00:04:33.040 --> 00:04:38.259
+What I mean is this, we'd like to
+have everything in a nice RGB 888
+
+d2ecf925-2b3c-45b0-b68d-42df21f0cb47-1
+00:04:38.259 --> 00:04:39.320
+sequence.
+
+1c38ce87-ddde-42f9-91ac-2a0243080e04-0
+00:04:39.320 --> 00:04:44.026
+That is, I'd like to see 8-bits
+for the red subpixel, 8-bits for
+
+1c38ce87-ddde-42f9-91ac-2a0243080e04-1
+00:04:44.026 --> 00:04:48.443
+the green subpixel, and eight
+bits for the blue subpixel, in
+
+1c38ce87-ddde-42f9-91ac-2a0243080e04-2
+00:04:48.443 --> 00:04:49.240
+that order.
+
+44e74ab4-c92b-4f77-a444-fb0cdcb86f2c-0
+00:04:50.120 --> 00:04:52.560
+But some interfaces just don't
+cooperate.
+
+b1d305b5-93e1-452b-8cc8-3662e8e5cf9e-0
+00:04:52.840 --> 00:04:54.800
+I mean, think about OLDI.
+
+0491e530-3e11-4ac0-84e8-478e0d8f194e-0
+00:04:55.120 --> 00:05:00.169
+It delivers 47 bit words per
+pixel time slot, and the bits are
+
+0491e530-3e11-4ac0-84e8-478e0d8f194e-1
+00:05:00.169 --> 00:05:02.480
+just all over creation.
+
+19ade0cc-7861-462f-bc8a-1c520c3dbe85-0
+00:05:03.200 --> 00:05:07.692
+Well, that's why most GMSL2 parts
+include a video crossbar in the
+
+19ade0cc-7861-462f-bc8a-1c520c3dbe85-1
+00:05:07.692 --> 00:05:09.040
+video pipe.
+
+2808541f-4ad4-46c4-896b-e25d718b7758-0
+00:05:09.360 --> 00:05:13.106
+It can reorder the bits of each
+pixel so that what takes place in
+
+2808541f-4ad4-46c4-896b-e25d718b7758-1
+00:05:13.106 --> 00:05:16.080
+the subsequent processing all
+works correctly.
+
+3ca3f6f9-d244-4dd4-8d49-9f81bcb06b11-0
+00:05:17.160 --> 00:05:21.520
+Now we may have a block that adds
+a watermark to the stream.
+
+f372d551-94b6-49ce-8f93-ed95a27c5dd5-0
+00:05:22.200 --> 00:05:23.360
+It works like this.
+
+aaa18ad6-8c44-42eb-adef-dc21dea6d749-0
+00:05:23.600 --> 00:05:28.947
+We can change the value of the
+least significant bit on some of
+
+aaa18ad6-8c44-42eb-adef-dc21dea6d749-1
+00:05:28.947 --> 00:05:33.124
+the pixels to create a
+detectable, robust dynamic
+
+aaa18ad6-8c44-42eb-adef-dc21dea6d749-2
+00:05:33.124 --> 00:05:33.960
+watermark.
+
+8f3dbd1f-1323-47d2-be91-16bea60af8f3-0
+00:05:35.040 --> 00:05:39.160
+Changing the LSB doesn't really
+change the visible picture in any
+
+8f3dbd1f-1323-47d2-be91-16bea60af8f3-1
+00:05:39.160 --> 00:05:43.081
+detectable way, but if for
+whatever reason the picture
+
+8f3dbd1f-1323-47d2-be91-16bea60af8f3-2
+00:05:43.081 --> 00:05:47.003
+freezes and it's getting the same
+frame over and over, the
+
+8f3dbd1f-1323-47d2-be91-16bea60af8f3-3
+00:05:47.003 --> 00:05:51.389
+Deserializer can detect that the
+watermark isn't changing and can
+
+8f3dbd1f-1323-47d2-be91-16bea60af8f3-4
+00:05:51.389 --> 00:05:52.320
+flag an error.
+
+9ac5336f-ce3f-441b-9229-1c81f7670d2a-0
+00:05:52.880 --> 00:05:56.309
+Generating and detecting the
+watermark occurs in the video
+
+9ac5336f-ce3f-441b-9229-1c81f7670d2a-1
+00:05:56.309 --> 00:05:56.600
+pipe.
+
+b51a2a5e-dd9c-4af7-98be-cd71ff98e22e-0
+00:05:58.040 --> 00:06:02.867
+Next comes a block that's a
+little unintuitive, but really
+
+b51a2a5e-dd9c-4af7-98be-cd71ff98e22e-1
+00:06:02.867 --> 00:06:03.440
+useful.
+
+e5f50b90-74c2-4148-8796-01f6f6756742-0
+00:06:03.840 --> 00:06:08.767
+In some HDMI and DSI systems,
+the SoC may generate a single
+
+e5f50b90-74c2-4148-8796-01f6f6756742-1
+00:06:08.767 --> 00:06:13.612
+video stream that consists of
+two video segments presented
+
+e5f50b90-74c2-4148-8796-01f6f6756742-2
+00:06:13.612 --> 00:06:14.680
+side by side.
+
+f3e2e1ff-a581-479e-aaab-ea3802730732-0
+00:06:15.360 --> 00:06:20.847
+In this example, the total frame
+size is 38140 pixels by 1200
+
+f3e2e1ff-a581-479e-aaab-ea3802730732-1
+00:06:20.847 --> 00:06:26.511
+pixels, and hey, that's a very
+wide picture, but it consists of
+
+f3e2e1ff-a581-479e-aaab-ea3802730732-2
+00:06:26.511 --> 00:06:29.520
+two HD video images side by side.
+
+7afa86e3-9dfd-4fa8-aa9b-a665f00faf92-0
+00:06:30.160 --> 00:06:35.922
+By combining the videos in this
+way, the SoC needs only one HDMI
+
+7afa86e3-9dfd-4fa8-aa9b-a665f00faf92-1
+00:06:35.922 --> 00:06:41.152
+or DSI port to send 2 HD video
+streams, but the Serializer needs
+
+7afa86e3-9dfd-4fa8-aa9b-a665f00faf92-2
+00:06:41.152 --> 00:06:46.560
+to split these videos into two
+separate video streams.
+
+9188e4a6-6dd4-4a38-99d5-95fba159e43f-0
+00:06:46.800 --> 00:06:48.800
+And that's what Dual View does.
+
+1707af88-0db7-4f35-a380-55e3de0606cf-0
+00:06:49.160 --> 00:06:53.800
+And it's a really flexible block
+that can split video streams left
+
+1707af88-0db7-4f35-a380-55e3de0606cf-1
+00:06:53.800 --> 00:06:58.141
+right like I'm showing here, or
+pixel interleaved or Lion
+
+1707af88-0db7-4f35-a380-55e3de0606cf-2
+00:06:58.141 --> 00:07:01.360
+interleaved or even asymmetric
+sizes.
+
+2b9caa96-19d7-4357-afd6-0e73aa1c52cf-0
+00:07:02.000 --> 00:07:06.474
+As I said, the Dual view block is
+very flexible, a little
+
+2b9caa96-19d7-4357-afd6-0e73aa1c52cf-1
+00:07:06.474 --> 00:07:11.334
+unintuitive, but can help save
+hardware costs if you only need a
+
+2b9caa96-19d7-4357-afd6-0e73aa1c52cf-2
+00:07:11.334 --> 00:07:12.800
+single interface.
+
+b2dc31bc-29ac-45be-aec6-d4ee3a250c05-0
+00:07:12.800 --> 00:07:18.263
+Back to the SoC, a reasonable
+question is what does it do with
+
+b2dc31bc-29ac-45be-aec6-d4ee3a250c05-1
+00:07:18.263 --> 00:07:23.640
+the two video streams the dual
+view controllers just created?
+
+87ccd2b0-0f0e-4e37-818d-1cae93d3d6aa-0
+00:07:23.640 --> 00:07:26.928
+I mean it looks to me as though
+the video pipe has just one input
+
+87ccd2b0-0f0e-4e37-818d-1cae93d3d6aa-1
+00:07:26.928 --> 00:07:28.080
+and one output.
+
+9de43459-ef99-46c6-8ed1-61af866ba709-0
+00:07:28.480 --> 00:07:32.560
+Well the answer to that question
+is coming up, so don't worry.
+
+2883c2dd-4003-466d-b218-f1f9d44b9e83-0
+00:07:34.720 --> 00:07:37.200
+Next comes alpha channel
+management.
+
+f00c397b-0e32-422c-b59d-82247706ee2a-0
+00:07:37.680 --> 00:07:41.701
+Now the alpha channel in a video
+stream manages the level of
+
+f00c397b-0e32-422c-b59d-82247706ee2a-1
+00:07:41.701 --> 00:07:44.800
+transparency of certain portions
+of the image.
+
+9dff58d3-30f8-46f8-85a0-0ae160131c90-0
+00:07:45.560 --> 00:07:49.460
+For example, if I wanted to
+implement a picture in picture
+
+9dff58d3-30f8-46f8-85a0-0ae160131c90-1
+00:07:49.460 --> 00:07:53.558
+function, I could start with the
+image that I want to overlay
+
+9dff58d3-30f8-46f8-85a0-0ae160131c90-2
+00:07:53.558 --> 00:07:57.525
+down, sample it to the size I
+want, then make the remaining
+
+9dff58d3-30f8-46f8-85a0-0ae160131c90-3
+00:07:57.525 --> 00:08:01.623
+background, let's say black,
+create an alpha mask, then apply
+
+9dff58d3-30f8-46f8-85a0-0ae160131c90-4
+00:08:01.623 --> 00:08:04.400
+the alpha mask to the down
+sampled image.
+
+2cae3c3c-5315-4a4c-939c-841494d93f61-0
+00:08:05.120 --> 00:08:06.240
+This is the result.
+
+f52287f2-92ab-4299-aa70-841723a0bd1c-0
+00:08:06.480 --> 00:08:09.973
+The down sampled image appears
+with a black border in the corner
+
+f52287f2-92ab-4299-aa70-841723a0bd1c-1
+00:08:09.973 --> 00:08:11.840
+of the background image.
+
+33f3c3e5-9ae5-4d02-a1f6-d75e3656c957-0
+00:08:12.880 --> 00:08:17.271
+Since the alpha channel is just
+another video channel along with
+
+33f3c3e5-9ae5-4d02-a1f6-d75e3656c957-1
+00:08:17.271 --> 00:08:21.190
+the color channels, you can
+apply animations in the alpha
+
+33f3c3e5-9ae5-4d02-a1f6-d75e3656c957-2
+00:08:21.190 --> 00:08:25.582
+channel and as long as the video
+stays in the RGB A domain, it's
+
+33f3c3e5-9ae5-4d02-a1f6-d75e3656c957-3
+00:08:25.582 --> 00:08:25.919
+easy.
+
+aeda9fb8-2dcc-43d0-9402-b1eadbb5784b-0
+00:08:27.120 --> 00:08:30.801
+The last element in the video
+pipe is a round of HDCP
+
+aeda9fb8-2dcc-43d0-9402-b1eadbb5784b-1
+00:08:30.801 --> 00:08:35.232
+encryption if it's required,
+and after that it's off to the
+
+aeda9fb8-2dcc-43d0-9402-b1eadbb5784b-2
+00:08:35.232 --> 00:08:39.390
+GMSL2 stage to be cut into
+packets and transmitted down
+
+aeda9fb8-2dcc-43d0-9402-b1eadbb5784b-3
+00:08:39.390 --> 00:08:39.800
+the GMSL chain.
+
+ff738a3e-b944-4c92-b930-a9218f3affe0-0
+00:08:40.080 --> 00:08:44.608
+So you see that everything that
+has to happen to the video stream
+
+ff738a3e-b944-4c92-b930-a9218f3affe0-1
+00:08:44.608 --> 00:08:48.600
+as a video stream happens in the
+video pipe.
+
+db577a8c-b7c2-4798-98b4-66e54b4e3afc-0
+00:08:49.320 --> 00:08:53.996
+The rest of the time the video
+stream is chopped up into
+
+db577a8c-b7c2-4798-98b4-66e54b4e3afc-1
+00:08:53.996 --> 00:08:59.164
+packets, either 36 pixel GMSL
+packets or one single video line
+
+db577a8c-b7c2-4798-98b4-66e54b4e3afc-2
+00:08:59.164 --> 00:09:02.199
+CSI packets or maybe something
+else.
+
+7d6d32ef-1b92-4bf6-a936-a397aee602ca-0
+00:09:03.120 --> 00:09:08.701
+Now the big question is how does
+the video get from its source to
+
+7d6d32ef-1b92-4bf6-a936-a397aee602ca-1
+00:09:08.701 --> 00:09:13.859
+the video pipe and how does the
+video stream from each video pipe
+
+7d6d32ef-1b92-4bf6-a936-a397aee602ca-2
+00:09:13.859 --> 00:09:18.680
+get routed to the correct pipe in
+the Deserializer?
+
+31793aa4-ea31-4112-b312-2adb63ea6d9f-0
+00:09:20.400 --> 00:09:22.920
+Well, that last question is easy
+to answer.
+
+8b477331-6c0c-443f-a613-85b515d6306e-0
+00:09:23.240 --> 00:09:26.937
+On its way out of the video pipe,
+as the stream is packetized,
+
+8b477331-6c0c-443f-a613-85b515d6306e-1
+00:09:26.937 --> 00:09:31.215
+every packet is tagged with a
+stream ID on the Deserializer
+
+8b477331-6c0c-443f-a613-85b515d6306e-2
+00:09:31.215 --> 00:09:32.520
+side.
+
+eb7978a1-ee5f-4e27-98e2-93b13ae8eef7-0
+00:09:32.520 --> 00:09:36.851
+At the input to each receiver
+pipe, you tune into the stream ID
+
+eb7978a1-ee5f-4e27-98e2-93b13ae8eef7-1
+00:09:36.851 --> 00:09:38.840
+that you want to receive.
+
+2e4ae27e-fe4a-4aaf-af27-637594c1f4ee-0
+00:09:39.200 --> 00:09:43.589
+And if 2 receiver pipes tune to
+the same stream ID, well then the
+
+2e4ae27e-fe4a-4aaf-af27-637594c1f4ee-1
+00:09:43.589 --> 00:09:46.280
+stream is effectively duplicated.
+
+1c9fde84-5a41-498a-ab7f-d8003070f7c5-0
+00:09:46.480 --> 00:09:50.980
+And by the way, that's how dual
+view can generate 2 separate
+
+1c9fde84-5a41-498a-ab7f-d8003070f7c5-1
+00:09:50.980 --> 00:09:54.080
+streams from a single side by
+side input.
+
+c718a417-9388-4cd0-915a-282df2aff3c4-0
+00:09:54.640 --> 00:09:59.098
+It just tags the left half and
+the right half with two separate
+
+c718a417-9388-4cd0-915a-282df2aff3c4-1
+00:09:59.098 --> 00:10:03.000
+stream IDs and the Deserializer
+takes care of the rest.
+
+13426523-b7ca-4a1a-b1c1-743c399939e6-0
+00:10:03.920 --> 00:10:07.548
+But the other part, how the video
+stream gets from the source to
+
+13426523-b7ca-4a1a-b1c1-743c399939e6-1
+00:10:07.548 --> 00:10:11.441
+the video pipe, depends strongly
+on what kind of video source it
+
+13426523-b7ca-4a1a-b1c1-743c399939e6-2
+00:10:11.441 --> 00:10:14.079
+is we're talking about.
+
+27dfc956-691f-417d-a318-15fb42f54047-0
+00:10:14.440 --> 00:10:18.337
+If it's something relatively
+simple, like OLDI, then the path
+
+27dfc956-691f-417d-a318-15fb42f54047-1
+00:10:18.337 --> 00:10:19.720
+is also pretty simple.
+
+79655d6c-f6e1-4ac1-9819-2de4931c1f61-0
+00:10:19.880 --> 00:10:22.990
+The traffic lanes are decoded
+into their constituents subpixels
+
+79655d6c-f6e1-4ac1-9819-2de4931c1f61-1
+00:10:22.990 --> 00:10:25.640
+and sent to one of the video
+pipes.
+
+e115513f-9f6e-43ff-9679-6a1d2a5f2403-0
+00:10:26.280 --> 00:10:30.087
+But if it's a more complex input
+arrangement like CSI-2, then
+
+e115513f-9f6e-43ff-9679-6a1d2a5f2403-1
+00:10:30.087 --> 00:10:33.280
+we're dealing with a number of
+interacting factors.
+
+b60cdabe-7ac7-4935-ac26-b3f528d2dfb6-0
+00:10:33.800 --> 00:10:37.263
+The port configuration of the
+Serializer, data type and virtual
+
+b60cdabe-7ac7-4935-ac26-b3f528d2dfb6-1
+00:10:37.263 --> 00:10:41.283
+channel of the incoming video
+stream IDs can be given as
+
+b60cdabe-7ac7-4935-ac26-b3f528d2dfb6-2
+00:10:41.283 --> 00:10:41.840
+examples.
+
+1fc5526d-0c36-4344-b270-04e26ef2fa2c-0
+00:10:42.400 --> 00:10:45.440
+Let's take a CSI-2 Serializer for
+example.
+
+719e2cb6-c46b-4b07-8c07-13d25cf85495-0
+00:10:47.000 --> 00:10:51.988
+This part has a single CSI-2 port
+that can be configured as one by
+
+719e2cb6-c46b-4b07-8c07-13d25cf85495-1
+00:10:51.988 --> 00:10:54.400
+four or as two by two.
+
+78aef401-7f8c-4aff-b568-0e55c0b7038a-0
+00:10:54.400 --> 00:10:58.796
+That is, it can be configured as
+a single port of four lanes or as
+
+78aef401-7f8c-4aff-b568-0e55c0b7038a-1
+00:10:58.796 --> 00:11:00.720
+a pair of two lane ports.
+
+ff0d4e3a-889d-4837-967b-073d167b79ed-0
+00:11:01.080 --> 00:11:04.880
+Now remember, a port is very
+different from a PHY.
+
+7f0b6ab2-fc69-4fcc-b831-5798a47dca36-0
+00:11:05.480 --> 00:11:09.306
+The port consists of a set of
+pins that converts the various
+
+7f0b6ab2-fc69-4fcc-b831-5798a47dca36-1
+00:11:09.306 --> 00:11:13.070
+CSI voltage levels to something
+that the device can handle, while
+
+7f0b6ab2-fc69-4fcc-b831-5798a47dca36-2
+00:11:13.070 --> 00:11:16.960
+a PHY converts the state of the
+pins into a bit stream.
+
+c65f5f33-26ca-4c04-9ec8-f30266fe27cc-0
+00:11:17.320 --> 00:11:21.422
+And that means, for example, AC
+PHY, which has multiple bits
+
+c65f5f33-26ca-4c04-9ec8-f30266fe27cc-1
+00:11:21.422 --> 00:11:25.256
+encoded into more than two
+external levels, is converted
+
+c65f5f33-26ca-4c04-9ec8-f30266fe27cc-2
+00:11:25.256 --> 00:11:27.880
+into a binary stream by the PHY
+block.
+
+332cd43e-dbb6-4e2a-96fa-bc8c820c8357-0
+00:11:29.360 --> 00:11:33.621
+This part for example, there are
+4-5 blocks, but only two are
+
+332cd43e-dbb6-4e2a-96fa-bc8c820c8357-1
+00:11:33.621 --> 00:11:36.920
+actually used, five block one and
+five block 2.
+
+095b6a70-e09d-46c3-8319-c0a11df48a85-0
+00:11:37.920 --> 00:11:42.208
+The stream coming out of the
+five ports consists of CSI-2
+
+095b6a70-e09d-46c3-8319-c0a11df48a85-1
+00:11:42.208 --> 00:11:42.800
+packets.
+
+d7a1bdc7-2bd6-4617-9141-9990da04bed1-0
+00:11:43.080 --> 00:11:47.935
+The CSI controller accepts those
+packets and assigns them to a
+
+d7a1bdc7-2bd6-4617-9141-9990da04bed1-1
+00:11:47.935 --> 00:11:51.480
+pipeline by default, in this case
+Pipeline Z.
+
+cf315820-644c-4516-95c3-49282dfa4094-0
+00:11:52.360 --> 00:11:55.970
+Now the thing to know here is
+that CSI-2 is a complete protocol
+
+cf315820-644c-4516-95c3-49282dfa4094-1
+00:11:55.970 --> 00:12:00.171
+stack and ACSI packet stream can
+contain multiple data types and
+
+cf315820-644c-4516-95c3-49282dfa4094-2
+00:12:00.171 --> 00:12:02.599
+multiple virtual channels.
+
+0399c88f-002f-4ea2-87b7-2743168758ca-0
+00:12:03.160 --> 00:12:07.164
+The pipeline can select which
+data types and which virtual
+
+0399c88f-002f-4ea2-87b7-2743168758ca-1
+00:12:07.164 --> 00:12:11.440
+channels to accept and can even
+convert 1 data type or virtual
+
+0399c88f-002f-4ea2-87b7-2743168758ca-2
+00:12:11.440 --> 00:12:15.580
+channel to another, a kind of
+filter on the front end if you
+
+0399c88f-002f-4ea2-87b7-2743168758ca-3
+00:12:15.580 --> 00:12:15.920
+will.
+
+1bafdde3-9957-4002-aa4b-afc7f456df3f-0
+00:12:16.520 --> 00:12:20.550
+Once the particular data type and
+virtual channel are selected, the
+
+1bafdde3-9957-4002-aa4b-afc7f456df3f-1
+00:12:20.550 --> 00:12:25.251
+rest of the video, IE is just
+dealing with Ixels and OS out at
+
+1bafdde3-9957-4002-aa4b-afc7f456df3f-2
+00:12:25.251 --> 00:12:29.953
+the end, ready to be tagged with
+a stream ID and acketized over in
+
+1bafdde3-9957-4002-aa4b-afc7f456df3f-3
+00:12:29.953 --> 00:12:32.640
+the Deserializer.
+
+82ff2e3d-f67e-461a-88c4-e0792225b92d-0
+00:12:32.840 --> 00:12:36.734
+The pipeline receives the GMSL
+packets that match the program
+
+82ff2e3d-f67e-461a-88c4-e0792225b92d-1
+00:12:36.734 --> 00:12:40.567
+stream ID and processes the video
+stream in, well, something of a
+
+82ff2e3d-f67e-461a-88c4-e0792225b92d-2
+00:12:40.567 --> 00:12:43.079
+reverse order from the
+Serializer.
+
+e0d05182-bb97-467f-bc8b-58cc8208cafc-0
+00:12:43.280 --> 00:12:46.840
+If there's HDCP encryption, the
+stream is decrypted.
+
+5107ac89-65f4-49de-8308-d3d5c56bbecd-0
+00:12:47.400 --> 00:12:50.280
+The alpha channel, if it exists,
+is added back in.
+
+416c6902-4dce-4c43-ba3a-e95c9acfb472-0
+00:12:50.960 --> 00:12:54.400
+Another step that may be taken is
+to remap the colors.
+
+dd32c46c-d48b-4f45-bde0-fdd19a8dfde5-0
+00:12:54.600 --> 00:12:59.388
+Some parts have a color lookup
+table to add, for example, gamma
+
+dd32c46c-d48b-4f45-bde0-fdd19a8dfde5-1
+00:12:59.388 --> 00:13:02.680
+correction to the stream from the
+pipeline.
+
+656b2dbc-93f8-4cef-8408-6a9368ce958e-0
+00:13:02.840 --> 00:13:06.515
+The stream is tagged with the
+appropriate CSI-2 virtual channel
+
+656b2dbc-93f8-4cef-8408-6a9368ce958e-1
+00:13:06.515 --> 00:13:10.651
+number, packetized in the CSI-2
+controller, and passed to the
+
+656b2dbc-93f8-4cef-8408-6a9368ce958e-2
+00:13:10.651 --> 00:13:13.079
+thigh and on out to the port.
+
+c654c240-d963-4e8c-abdc-d937039546c4-0
+00:13:13.560 --> 00:13:17.822
+Now, before we wrap up, let's
+take a look at the block diagram
+
+c654c240-d963-4e8c-abdc-d937039546c4-1
+00:13:17.822 --> 00:13:19.040
+of a typical part.
+
+39fe32d4-1999-47cb-a667-e6c20f326a4c-0
+00:13:19.200 --> 00:13:25.800
+Here's the MAX96717 CSI-2 to
+GMSL2 Serializer.
+
+8b1b60e6-bfa8-4702-9f58-5c070963eeb0-0
+00:13:26.000 --> 00:13:30.520
+It has a single CSI-2 input and a
+single GMSL2 port.
+
+e189b4ca-fa59-46f6-bb9f-a46f758ca6c3-0
+00:13:31.520 --> 00:13:35.760
+So how many video pipes does this
+part contain?
+
+a8306e14-e902-47b0-a1bc-9f9c65bd092e-0
+00:13:37.240 --> 00:13:40.200
+Well, just looking at the block
+diagram, it's not obvious.
+
+f86dec72-3872-4d53-8aaa-95d746cbf8d5-0
+00:13:40.200 --> 00:13:44.835
+I mean there is no block labeled
+video pipeline, but I promise you
+
+f86dec72-3872-4d53-8aaa-95d746cbf8d5-1
+00:13:44.835 --> 00:13:46.160
+it's in there.
+
+be45215a-c309-4b5e-ad63-256434f4f431-0
+00:13:47.320 --> 00:13:48.880
+Let's think about this for a
+moment.
+
+e600213f-bcd2-4bb5-86d8-964147f14d00-0
+00:13:50.240 --> 00:13:56.330
+Out of the CSI-2 interface, the
+signal splits into either a CSI-2
+
+e600213f-bcd2-4bb5-86d8-964147f14d00-1
+00:13:56.330 --> 00:14:00.640
+tunnel block or a CSI-2 to pixel
+stream block.
+
+dbb1a2e9-1ad3-417b-b9b1-b2aeff0321ba-0
+00:14:01.680 --> 00:14:06.240
+Now, if tunneling is engaged, we
+can just stop right there.
+
+266a1437-38b7-4181-965a-a382fb5e56a4-0
+00:14:06.400 --> 00:14:10.234
+There's nothing I can do to the
+video stream because I can't
+
+266a1437-38b7-4181-965a-a382fb5e56a4-1
+00:14:10.234 --> 00:14:12.120
+actually see the video stream.
+
+7fd171a7-986a-4ac2-823f-f43b0292e156-0
+00:14:12.360 --> 00:14:17.568
+It's packed inside a set of CSI-2
+packets, and the rest of the
+
+7fd171a7-986a-4ac2-823f-f43b0292e156-1
+00:14:17.568 --> 00:14:21.040
+GMSL2 protocol just doesn't speak
+CSI-2.
+
+e71fc88d-fe5d-437a-91cb-f58927426029-0
+00:14:21.480 --> 00:14:25.804
+The best I can do is to treat the
+CSI-2 packets as just so much raw
+
+e71fc88d-fe5d-437a-91cb-f58927426029-1
+00:14:25.804 --> 00:14:30.494
+data, package them just as they
+are into GMSL packets, and then
+
+e71fc88d-fe5d-437a-91cb-f58927426029-2
+00:14:30.494 --> 00:14:32.839
+send them on their way.
+
+278a5224-8db6-46f9-8722-368174587db9-0
+00:14:33.840 --> 00:14:38.029
+But if I'm selecting the CSI-2 to
+pixel stream path, well now I can
+
+278a5224-8db6-46f9-8722-368174587db9-1
+00:14:38.029 --> 00:14:41.760
+perform the standard operations
+on the video stream.
+
+4b13faa0-8a26-47bb-96c2-75851a6e069c-0
+00:14:42.320 --> 00:14:45.880
+Now in this part, there isn't
+much machinery in the pipeline.
+
+e8185f08-81a9-4ea6-9119-e99a2b795461-0
+00:14:46.120 --> 00:14:50.604
+There is no dual view, no
+watermarking, and no HDCP
+
+e8185f08-81a9-4ea6-9119-e99a2b795461-1
+00:14:50.604 --> 00:14:52.760
+encryption or decryption.
+
+a9fa5a0b-b7fa-4f3f-bba5-9634cd1bfdc8-0
+00:14:53.320 --> 00:14:57.662
+But there is the ability to
+reassign CSI, two data types and
+
+a9fa5a0b-b7fa-4f3f-bba5-9634cd1bfdc8-1
+00:14:57.662 --> 00:15:02.290
+virtual channels, and there's a
+retiming buffer that ensures the
+
+a9fa5a0b-b7fa-4f3f-bba5-9634cd1bfdc8-2
+00:15:02.290 --> 00:15:05.280
+smooth flow of data through the
+pipeline.
+
+6af2e831-9c8e-4ca0-9cff-0dfd492572ff-0
+00:15:05.640 --> 00:15:08.160
+And for this part, that's all you
+really need.
+
+91a27a56-7e48-438f-a451-d4e4992aa0eb-0
+00:15:09.480 --> 00:15:13.520
+So where exactly does the video
+pipeline logic live?
+
+cefb0c07-f000-484d-b4ea-0d7219f13bc5-0
+00:15:13.520 --> 00:15:14.920
+In the block diagram?
+
+f6e8f191-4d27-4d37-b3ff-db585d754784-0
+00:15:15.680 --> 00:15:21.995
+It's in that block, right in the
+middle, GMSL2 video and control
+
+f6e8f191-4d27-4d37-b3ff-db585d754784-1
+00:15:21.995 --> 00:15:23.240
+data routing.
+
+393169ee-0761-4c5a-b86d-a0b94fb7b688-0
+00:15:24.040 --> 00:15:28.558
+One small part of that little
+rectangle is the video pipeline
+
+393169ee-0761-4c5a-b86d-a0b94fb7b688-1
+00:15:28.558 --> 00:15:32.640
+that operates when the device is
+running in pixel mode.
+
+7ac13460-9726-4c19-bd7c-080c2887428d-0
+00:15:33.360 --> 00:15:36.589
+But that's in addition to all the
+other logic that the data sheet
+
+7ac13460-9726-4c19-bd7c-080c2887428d-1
+00:15:36.589 --> 00:15:39.120
+authors combined into that little
+block.
+
+cc4f7aa3-ab7f-4437-973e-07bd96254976-0
+00:15:39.360 --> 00:15:44.084
+The control information flow, the
+packetizing, the FIFO, the the
+
+cc4f7aa3-ab7f-4437-973e-07bd96254976-1
+00:15:44.084 --> 00:15:47.880
+scheduling, all of that is in
+there as well.
+
+f20655eb-b129-46dd-b778-178851947486-0
+00:15:48.680 --> 00:15:52.577
+But when you're thinking about
+how to configure a GMSL2
+
+f20655eb-b129-46dd-b778-178851947486-1
+00:15:52.577 --> 00:15:56.748
+Serializer or Deserializer, don't
+forget the piece that does so
+
+f20655eb-b129-46dd-b778-178851947486-2
+00:15:56.748 --> 00:16:00.920
+much useful work in the video
+stream, the video pipeline.
+
