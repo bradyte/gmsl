@@ -7,8 +7,8 @@ from textwrap import wrap
 
 logger = logging.getLogger(__name__)
 
-vtt_dir = ".\\vtt_files"
-sc_dir = ".\\spellchecked"
+vtt_dir = "vtt_files"
+sc_dir = "spellchecked"
 
 logging.basicConfig(
     format="[%(asctime)s.%(msecs)d] %(levelname)s\t- %(message)s",
