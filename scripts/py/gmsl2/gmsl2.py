@@ -11,14 +11,14 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(
     format="[%(asctime)s.%(msecs)d] %(levelname)s\t- %(message)s",
     datefmt='%H:%M:%S',
-    level=logging.INFO
+    level=logging.DEBUG
                     )
 
 class GMSL2:
-    """This class is intended to help with simple communication with GMSL based devices.
-    Currently, designed for the Raspberry Pi 4 I2C interface and defaults to I2C bus 1.
-    Registers between devices are fairly unique but the registers in this module are
-    shared between different GMSL devices.
+    """This class is intended to help with simple communication with GMSL based 
+    devices. Currently, designed for the Raspberry Pi 4 I2C interface and 
+    defaults to I2C bus 1. Registers between devices are fairly unique but the
+    registers in this module are shared between different GMSL devices.
 
     :param device_address: the 8-bit I2C GMSL device address
     :type device_address: unsigned char
@@ -26,8 +26,8 @@ class GMSL2:
     :type i2c_bus: int
     """
 
-    """The 'registers' dictionary contains the key-value pair of the register name and
-    16-bit register address taken from the datasheet.
+    """The 'registers' dictionary contains the key-value pair of the register 
+    name and 16-bit register address taken from the datasheet.
     """
     registers = {
         'REG0':  0x0000,
@@ -36,11 +36,12 @@ class GMSL2:
         'CTRL3': 0x0013,
     }
 
-    """The "device_ids" dictionary contains the key-value pair ot the device id
+    """The 'device_ids' dictionary contains the key-value pair ot the device id
     and the device name as a string.    
     """
     device_ids = {
         0xbf: 'MAX96717',
+        0xbe: 'MAX96716A',
     }
 
     def __init__(self, device_address, i2c_bus=1):
@@ -51,47 +52,69 @@ class GMSL2:
         self._check_connection()
 
     def _check_connection(self):
-        self.register_read(self.registers['REG0'])
+        """Checks to see if there is any GMSL device connected
+        """
+        try:
+            self.register_read(self.registers['REG0'])
+            self.device_id = self.register_read(self.registers['REG13'])
+            self.device_revision = self.register_read(self.registers['REG14'])
+            logger.info(f'Device {self.device_ids[self.device_id]} detected at 0x{self.device_address:02x}')
+        except:
+            logger.error('No GMSL device detected. Exiting...')
+            sys.exit(1)
 
     def register_read(self, register_address):
+        """Perform a basic register read at the provided register address.
+
+        :param register_address: the 16-bit register address
+        :type register_address: unsigned int
+        :return: the 8-bit register value
+        :rtype: int
+        """
         write = i2c_msg.write(self.device_address, self._convert_16bit(register_address))
         read = i2c_msg.read(self.device_address, 1)
-        
-        with SMBus(1) as bus:
-            try:
-                bus.i2c_rdwr(write, read)
-            except OSError as e:
-                logger.error(f'Unable to read on the I2C bus: {e}')
-                sys.exit(1)
-            except BlockingIOError as e:
-                logger.error(f'Unable to read on the I2C bus: {e}')
-                sys.exit(1)
-                
-        time.sleep(0.001)
 
+        self._smbus_read_handler(write, read)
         read_value = list(read)[0]
 
-        logger.debug(f"[device: 0x{self.device_address:02X}]{'read ':>8}addr: 0x{register_address:04X} value: 0x{read_value:02X}")
+        logger.debug(f"[device: 0x{self.device_address:02x}]{'read from':>10}"
+                    f" addr: 0x{register_address:04x}"
+                    f" value: 0x{read_value:02x} (0b{read_value:08b})")
         return read_value
+    
+    def register_block_read(self, register_address, offset):
+        """Perform a block read of registers from a starting register address
+        to the end of the offset.
+
+        :param register_address: the 16-bit register address
+        :type register_address: unsigned int
+        :param offset: number of registers to read to
+        :type offset: int
+        :return: the 8-bit register value
+        :rtype: int
+        """
+        block_data = []
+        for i in range(register_address, register_address+offset):
+            block_data.append(self.register_read(i))
+        return block_data
 
     def register_write(self, register_address, register_value):
+        """Perform a basic register write to the provided register address.
+
+        :param register_address: the 16-bit register address
+        :type register_address: unsigned int
+        :param register_value: the 8-bit register value to write
+        :type register_value: unsigned char
+        """
         write_data = self._convert_16bit(register_address)
         write_data.append(register_value)
-        
         write = i2c_msg.write(self.device_address, write_data)
-        
-        with SMBus(1) as bus:
-            try:
-                bus.i2c_rdwr(write)
-            except OSError as e:
-                logger.error(f'Unable to write on the I2C bus: {e}')
-                sys.exit(1)
-            except BlockingIOError as e:
-                logger.error(f'Unable to write on the I2C bus: {e}')
-                sys.exit(1)
-        time.sleep(0.001)
 
-        logger.debug(f"[device: 0x{self.device_address:02X}]{'write ':>8}addr: 0x{register_address:04X} value: 0x{register_value:02X}")
+        self._smbus_write_handler(write)
+
+        logger.debug(f"[device: 0x{self.device_address:02x}]{'write to':>10}"
+                    f" addr: 0x{register_address:04x}"
+                    f" value: 0x{register_value:02x}")
 
     def cpp_register_write(self, cpp_file):
         with open(cpp_file) as csvfile:
@@ -139,8 +162,7 @@ class GMSL2:
         :rtype: list
         """
         register_msb = register_address >> 8
-        register_lsb = register_address & 0xFF
-
+        register_lsb = register_address & 0xff
         return [register_msb, register_lsb]
         
     def is_locked(self):
@@ -152,11 +174,9 @@ class GMSL2:
         return bool(self.register_read(self.registers['CTRL3']) & 0x08)
 
     def device_info(self):
-        """This function simply prints from basic info about the connected device
-        to the terminal.
+        """This function simply prints from basic info about the connected
+        device to the terminal.
         """
-        self.device_id = self.register_read(self.registers['REG13'])
-        self.device_revision = self.register_read(self.registers['REG14'])
         print(
             f'\nGMSL device info:\n'
             f'------------------------------\n'
@@ -166,15 +186,54 @@ class GMSL2:
             f'------------------------------\n'
         )
 
+    def _smbus_read_handler(self, write, read):
+        """Handles performing a read with the SMBus protocol and manages errors.
+
+        :param write: list of concatenated bytes to write
+        :type write: list
+        :param read: buffer for read data
+        :type read: unsigned char
+        """
+        with SMBus(self.i2c_bus) as bus:
+            try:
+                bus.i2c_rdwr(write, read)
+            except OSError as e:
+                logger.error(f'Unable to read on the I2C bus: {e}')
+                sys.exit(1)
+            except BlockingIOError as e:
+                logger.error(f'Unable to read on the I2C bus: {e}')
+                sys.exit(1)    
+        time.sleep(0.001)
+
+    def _smbus_write_handler(self, write):
+        """Handles performing a write with the SMBus protocol and manages errors.
+
+        :param write: list of concatenated bytes to write
+        :type write: list
+        """
+        with SMBus(self.i2c_bus) as bus:
+            try:
+                bus.i2c_rdwr(write)
+            except OSError as e:
+                logger.error(f'Unable to write on the I2C bus: {e}')
+                sys.exit(1)
+            except BlockingIOError as e:
+                logger.error(f'Unable to write on the I2C bus: {e}')
+                sys.exit(1)
+        time.sleep(0.001)
+
 def main():
-    gmsl2 = GMSL2(0x80)  # create GMSL object
+    gmsl2 = GMSL2(0x80, 1)  # create GMSL object
     gmsl2.device_info()  # get info on GMSL device
 
     # register_value = gmsl2.register_read(0x0000)  # read register, return value
     # print(f'Register value is: 0x{register_value:2X}')
 
-    # gmsl2.register_write(0x0019, 0xAA)  # write to register with value
-    # gmsl2.register_read(0x0019)  # read and print register value
+    # register_value = gmsl2.register_read(0x0019)
+    # print(f'Register value is: 0x{register_value:2X}')
+    # gmsl2.register_write(0x0019, 0x55)  # write to register with value
+    # register_value = gmsl2.register_read(0x0019)
+    # print(f'Register value is: 0x{register_value:2X}')
 
     # cpp_file = 'AD-GMSLCAMRPI-ADP_717_724.cpp'
     # gmsl2.cpp_register_write(cpp_file)  # read in cpp file
