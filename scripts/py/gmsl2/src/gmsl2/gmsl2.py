@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(
     format="[%(asctime)s.%(msecs)d] %(levelname)s\t- %(message)s",
     datefmt='%H:%M:%S',
-    level=logging.DEBUG
+    level=logging.INFO
                     )
 
 class GMSL2:
@@ -51,18 +51,6 @@ class GMSL2:
         self.i2c_bus = i2c_bus
         self._check_connection()
 
-    def _check_connection(self):
-        """Checks to see if there is any GMSL device connected
-        """
-        try:
-            self.register_read(self.registers['REG0'])
-            self.device_id = self.register_read(self.registers['REG13'])
-            self.device_revision = self.register_read(self.registers['REG14'])
-            logger.info(f'Device {self.device_ids[self.device_id]} detected at 0x{self.device_address:02x}')
-        except:
-            logger.error('No GMSL device detected. Exiting...')
-            sys.exit(1)
-
     def register_read(self, register_address):
         """Perform a basic register read at the provided register address.
 
@@ -98,73 +86,49 @@ class GMSL2:
             block_data.append(self.register_read(i))
         return block_data
 
-    def register_write(self, register_address, register_value):
+    def register_write(self, register_address, write_value):
         """Perform a basic register write to the provided register address.
 
         :param register_address: the 16-bit register address
         :type register_address: unsigned int
-        :param register_value: the 8-bit register value to write
-        :type register_value: unsigned char
+        :param write_value: the 8-bit register value to write
+        :type write_value: unsigned char
         """
         write_data = self._convert_16bit(register_address)
-        write_data.append(register_value)
+        write_data.append(write_value)
         write = i2c_msg.write(self.device_address, write_data)
 
         self._smbus_write_handler(write)
 
         logger.debug(f"[device: 0x{self.device_address:02x}]{'write to':>10}"
                     f" addr: 0x{register_address:04x}"
-                    f" value: 0x{register_value:02x}")
+                    f" value: 0x{write_value:02x}")
 
     def cpp_register_write(self, cpp_file):
         with open(cpp_file) as csvfile:
             reader = csv.reader(csvfile)
-            for row in reader:
-                try:
-                    val = int(row[0], 0)  # check if the row is a command
-                    num_bytes = val
-                    if num_bytes == 0:
-                        delay = int(row[1], 0)
-                        time.sleep(0.001 * delay)
-                        logging.info(f'delayed {delay}ms ...')
-                    else:
-                        addr = int(row[1], 0) >> 1
-                        msb = int(row[2], 0)
-                        lsb = int(row[3], 0)
-                        write_val = int(row[4], 0)
-                        
-                        write = i2c_msg.write(addr, [msb, lsb, write_val])
+            for i, row in enumerate(reader):
+                if row:  # check if the row is not empty
+                    num_bytes = 0
+                    try:  # try to see if the string element is a number
+                        num_bytes = int(row[0], 0)
+                    except ValueError:  # it's not so continue to the next line
+                        continue
 
-                        with SMBus(1) as bus:
-                            bus.i2c_rdwr(write)
-                        time.sleep(0.001)
+                    match num_bytes:
+                        case 0:
+                            delay = int(row[1], 0)
+                            time.sleep(0.001 * delay)
+                            logging.debug(f'delayed {delay}ms ...')
+                        case 4:
+                            self.device_address = int(row[1], 0) >> 1
+                            register_address = (int(row[2], 0) << 8) + (int(row[3], 0) & 0xff)
+                            write_value = int(row[4], 0)
 
-                        write = i2c_msg.write(addr, [msb, lsb])
-                        read = i2c_msg.read(addr, 1)
-                        
-                        with SMBus(1) as bus:
-                            bus.i2c_rdwr(write, read)
-                        time.sleep(0.001)
-                        read_value = list(read)[0]
+                            self.register_write(register_address, write_value)
+                        case _:
+                            logging.warning(f'Unknown number of bytes [{num_bytes}] to process.')
 
-                except IndexError:  # ignore blank lines
-                    pass
-                except ValueError:  # ignore comments
-                    pass
-
-    def _convert_16bit(self, register_address):
-        """This function converts a 16-bit register address into two 8-bit
-        values representing the MSB and LSB.
-
-        :param register_address: the 16-bit GMSL register address
-        :param type: int
-        :return: the MSB and LSB of the 16-bit address in 8 bit notation
-        :rtype: list
-        """
-        register_msb = register_address >> 8
-        register_lsb = register_address & 0xff
-        return [register_msb, register_lsb]
-        
     def is_locked(self):
         """Checks to see if the GMSL link is locked.
 
@@ -185,6 +149,34 @@ class GMSL2:
             f'Silicon Rev:\t0x{self.device_revision:02x}\n'
             f'------------------------------\n'
         )
+
+    def _check_connection(self):
+        """Checks to see if there is any GMSL device connected
+        """
+        try:
+            self.register_read(self.registers['REG0'])
+            self.device_id = self.register_read(self.registers['REG13'])
+            self.device_revision = self.register_read(self.registers['REG14'])
+            try:
+                logger.info(f'Device {self.device_ids[self.device_id]} detected at 0x{self.device_address:02x}')
+            except:
+                logger.info(f'Unknown device detected at 0x{self.device_address:02x}')
+        except:
+            logger.error('No GMSL device detected. Exiting...')
+            sys.exit(1)
+
+    def _convert_16bit(self, register_address):
+        """This function converts a 16-bit register address into two 8-bit
+        values representing the MSB and LSB.
+
+        :param register_address: the 16-bit GMSL register address
+        :param type: int
+        :return: the MSB and LSB of the 16-bit address in 8 bit notation
+        :rtype: list
+        """
+        register_msb = register_address >> 8
+        register_lsb = register_address & 0xff
+        return [register_msb, register_lsb]
 
     def _smbus_read_handler(self, write, read):
         """Handles performing a read with the SMBus protocol and manages errors.
@@ -223,20 +215,27 @@ class GMSL2:
         time.sleep(0.001)
 
 def main():
-    gmsl2 = GMSL2(0x80, 1)  # create GMSL object
-    gmsl2.device_info()  # get info on GMSL device
+    # create GMSL object
+    gmsl2 = GMSL2(0x80, 1)
 
-    # register_value = gmsl2.register_read(0x0000)  # read register, return value
-    # print(f'Register value is: 0x{register_value:2X}')
+    # get info on GMSL device
+    gmsl2.device_info()
 
-    # register_value = gmsl2.register_read(0x0019)
-    # print(f'Register value is: 0x{register_value:2X}')
-    # gmsl2.register_write(0x0019, 0x55)  # write to register with value
-    # register_value = gmsl2.register_read(0x0019)
-    # print(f'Register value is: 0x{register_value:2X}')
+    # read register, return value
+    register_value = gmsl2.register_read(0x0043)
+    print(f'Register value is: 0x{register_value:02x}')
 
-    # cpp_file = 'AD-GMSLCAMRPI-ADP_717_724.cpp'
-    # gmsl2.cpp_register_write(cpp_file)  # read in cpp file
+    # write to register with value
+    new_register_value_to_write = 0xaa
+    gmsl2.register_write(0x0043, new_register_value_to_write)
+
+    # read register, return newly written value
+    new_register_value_read = gmsl2.register_read(0x0043)
+    print(f'Register value is: 0x{new_register_value_read:02x}')
+
+    # write a GUI generated cpp file to the devices
+    cpp_file = 'test.cpp'
+    gmsl2.cpp_register_write(cpp_file)  # read in cpp file
 
 if __name__ == "__main__":
     main()

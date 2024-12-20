@@ -1,0 +1,19 @@
+[project]
+name = "gmsl2"
+version = "0.0.1"
+authors = [
+    {name="Tom Brady", email="bradyte@gmail.com"},
+]
+dependencies = [
+    "smbus2>=0.5.0",
+]
+description = "A simple tool to communicate with GMSL devices"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
