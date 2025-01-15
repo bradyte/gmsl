@@ -51,7 +51,7 @@ class GMSLSpellCheck:
             return {rows[0]:rows[1] for rows in csvreader}
 
     def parse_vtt(self):
-        with open(self.vtt_file, 'r') as inp:  # read in the VTT file
+        with open(self.vtt_file, 'r', encoding='utf-8',errors='ignore') as inp:  # read in the VTT file
             self.vtt_lines = inp.readlines()
             for vtt_line_index, line in enumerate(self.vtt_lines):  # grab line number and line string   
                 # start of text block after \n and check for consecutive \n           
@@ -160,10 +160,7 @@ def main():
 
     for file in os.listdir(vtt_dir):
         input_file_path = os.path.join(vtt_dir, file)
-        encoded = input_file_path.encode()
-        print(encoded)
-        print(encoded.decode())
-        GMSLSpellCheck(encoded.decode())
+        GMSLSpellCheck(input_file_path) 
 
 if __name__ == "__main__":
     main()
