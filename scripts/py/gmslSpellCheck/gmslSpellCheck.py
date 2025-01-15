@@ -53,8 +53,9 @@ class GMSLSpellCheck:
     def parse_vtt(self):
         with open(self.vtt_file, 'r') as inp:  # read in the VTT file
             self.vtt_lines = inp.readlines()
-            for vtt_line_index, line in enumerate(self.vtt_lines):  # grab line number and line string              
-                if line == '\n':  # start of text block after \n
+            for vtt_line_index, line in enumerate(self.vtt_lines):  # grab line number and line string   
+                # start of text block after \n and check for consecutive \n           
+                if line == '\n' and self.vtt_lines[vtt_line_index+1] != '\n':  
                     buf = []
                     idx = vtt_line_index + 1
                     buf.append(self.vtt_lines[idx + self.CUE_ID])  # grab the cue information
@@ -159,7 +160,10 @@ def main():
 
     for file in os.listdir(vtt_dir):
         input_file_path = os.path.join(vtt_dir, file)
-        GMSLSpellCheck(input_file_path)
+        encoded = input_file_path.encode()
+        print(encoded)
+        print(encoded.decode())
+        GMSLSpellCheck(encoded.decode())
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,821 @@
+WEBVTT
+
+defe095c-16fe-496e-a526-f432ed5081dc-0
+00:00:08.120 --> 00:00:11.330
+Many of today's applications
+which utilize GMSL have more
+
+defe095c-16fe-496e-a526-f432ed5081dc-1
+00:00:11.330 --> 00:00:14.320
+camera streams than there are
+video processing ports.
+
+ec8522ec-2396-4470-a557-272904cd599d-0
+00:00:15.000 --> 00:00:18.856
+In this course, we'll cover how
+multi port GMSL deserializers
+
+ec8522ec-2396-4470-a557-272904cd599d-1
+00:00:18.856 --> 00:00:22.080
+aggregate video data to a single
+MIPI CSI-2 port.
+
+eabb732a-38f6-4408-b20f-703625997fda-0
+00:00:23.160 --> 00:00:26.361
+To help understand line
+aggregation, we'll use a quad
+
+eabb732a-38f6-4408-b20f-703625997fda-1
+00:00:26.361 --> 00:00:30.036
+Deserializer with four camera
+inputs as an example, with each
+
+eabb732a-38f6-4408-b20f-703625997fda-2
+00:00:30.036 --> 00:00:33.890
+of the four sensor inputs routed
+to a single deserializers might
+
+eabb732a-38f6-4408-b20f-703625997fda-3
+00:00:33.890 --> 00:00:34.720
+be CSI-2 port.
+
+b0bbb5c8-c11a-4476-81f1-f9e6c0e37b87-0
+00:00:35.120 --> 00:00:37.899
+We'll dive into the line
+concatenation modes GMSL
+
+b0bbb5c8-c11a-4476-81f1-f9e6c0e37b87-1
+00:00:37.899 --> 00:00:38.400
+supports.
+
+6a0cea24-c005-47f3-902a-e1d25d96d0cb-0
+00:00:40.160 --> 00:00:41.880
+We'll address the following
+questions.
+
+704ecfd6-af5c-4b3e-aded-77fd6ced4997-0
+00:00:42.400 --> 00:00:43.760
+What is first come first serve?
+
+8c68651d-d937-4109-a756-1b04740e71ae-0
+00:00:44.360 --> 00:00:48.200
+What are modes 4W x H and W x 4H?
+
+bb7c12b5-c065-4774-8296-a1e612ee0fd2-0
+00:00:48.880 --> 00:00:52.018
+How does the SoC know which
+camera the video data is coming
+
+bb7c12b5-c065-4774-8296-a1e612ee0fd2-1
+00:00:52.018 --> 00:00:52.280
+from?
+
+3958339c-c566-43e2-968c-e7023b2b7a86-0
+00:00:52.960 --> 00:00:55.760
+What happens to the CRC when a
+super line is created?
+
+9157f020-acdd-450f-a661-bd01010c3226-0
+00:00:56.360 --> 00:00:58.320
+What use 4W x H?
+
+f3ccfbef-d094-4d6b-8cd4-b496d21bc820-0
+00:01:00.600 --> 00:01:03.692
+Going back to our quad setup,
+these 4 camera streams are routed
+
+f3ccfbef-d094-4d6b-8cd4-b496d21bc820-1
+00:01:03.692 --> 00:01:05.320
+to the same MIPI port.
+
+d7cf111b-ca93-4317-ab00-9010969623ba-0
+00:01:05.840 --> 00:01:09.535
+To organize these video streams,
+GMSL utilizes a few built in
+
+d7cf111b-ca93-4317-ab00-9010969623ba-1
+00:01:09.535 --> 00:01:11.800
+modes to assist in this
+organization.
+
+d52a0ebe-0899-47dc-93fc-c2fb7c5ec6c0-0
+00:01:12.880 --> 00:01:14.960
+To begin, we'll look at first
+come first serve.
+
+69d01559-7bdf-4b74-8f7b-e5aea27f3eeb-0
+00:01:15.360 --> 00:01:17.851
+In this mode, the MIPI controller
+sends the video data to the
+
+69d01559-7bdf-4b74-8f7b-e5aea27f3eeb-1
+00:01:17.851 --> 00:01:20.120
+output port in the order they are
+received.
+
+1edd0353-c8cb-40d9-a134-742a37b55af3-0
+00:01:20.800 --> 00:01:24.315
+For this mode the user will need
+to update each sensors CSI-2
+
+1edd0353-c8cb-40d9-a134-742a37b55af3-1
+00:01:24.315 --> 00:01:25.960
+virtual channel to be unique.
+
+e2746d98-07ca-411d-8ece-769f748e6524-0
+00:01:26.920 --> 00:01:28.680
+Next is 4W x H.
+
+5114b743-0582-48dc-94f8-b9f388ae41da-0
+00:01:29.120 --> 00:01:32.633
+In this mode each sensors line
+of data is combined into what
+
+5114b743-0582-48dc-94f8-b9f388ae41da-1
+00:01:32.633 --> 00:01:35.916
+ADI calls a super line and
+output is a single MIPI long
+
+5114b743-0582-48dc-94f8-b9f388ae41da-2
+00:01:35.916 --> 00:01:36.320
+packet.
+
+281f4215-37db-4d88-8d34-982cb70b07a2-0
+00:01:37.480 --> 00:01:39.680
+Last is W x 4H.
+
+9766e4e1-66ef-4718-8ee9-7c67a45ddc9a-0
+00:01:40.240 --> 00:01:43.810
+In this mode each incoming packet
+is maintained just output in a
+
+9766e4e1-66ef-4718-8ee9-7c67a45ddc9a-1
+00:01:43.810 --> 00:01:45.120
+designated order.
+
+0d5e7ff0-0ccc-4a3b-a6b5-53db05cfef61-0
+00:01:46.000 --> 00:01:49.216
+For our first deeper dive we'll
+look at one of the easier modes
+
+0d5e7ff0-0ccc-4a3b-a6b5-53db05cfef61-1
+00:01:49.216 --> 00:01:49.920
+to understand.
+
+4733a75d-9b1f-4eac-81f8-de076850d503-0
+00:01:50.160 --> 00:01:52.360
+First come first serve, or FCFS.
+
+c592d126-40df-429d-9360-a8ea1016df08-0
+00:01:52.680 --> 00:01:56.107
+In this mode, both synchronized
+or unsynchronized, can be passed
+
+c592d126-40df-429d-9360-a8ea1016df08-1
+00:01:56.107 --> 00:01:57.320
+to a single MIPI port.
+
+d2f220e9-d53c-4650-b027-aee37b31b83a-0
+00:01:58.560 --> 00:02:01.875
+The user just needs to ensure
+each camera's feed has its own
+
+d2f220e9-d53c-4650-b027-aee37b31b83a-1
+00:02:01.875 --> 00:02:05.300
+unique virtual channel or data
+type for the SoC to distinguish
+
+d2f220e9-d53c-4650-b027-aee37b31b83a-2
+00:02:05.300 --> 00:02:07.040
+between the MIPI video packets.
+
+c903fe86-4626-48b8-8871-28a459063bdb-0
+00:02:07.600 --> 00:02:10.776
+This mode is only available on
+GMSL2 or later deserializers,
+
+c903fe86-4626-48b8-8871-28a459063bdb-1
+00:02:10.776 --> 00:02:13.901
+but let's take a step back here
+for a second to get a better
+
+c903fe86-4626-48b8-8871-28a459063bdb-2
+00:02:13.901 --> 00:02:16.924
+understanding of the MIPI
+packets by replacing the arrows
+
+c903fe86-4626-48b8-8871-28a459063bdb-3
+00:02:16.924 --> 00:02:19.281
+with something more
+representative of a MIPI
+
+c903fe86-4626-48b8-8871-28a459063bdb-4
+00:02:19.281 --> 00:02:19.640
+packet.
+
+98687d49-f660-4ebf-8b4c-90833e8d716f-0
+00:02:20.280 --> 00:02:23.480
+Here we have a graphic
+representing a frame of video in
+
+98687d49-f660-4ebf-8b4c-90833e8d716f-1
+00:02:23.480 --> 00:02:24.680
+a MIPI video stream.
+
+9a6d832c-d474-48f8-99a6-60a38cd2510d-0
+00:02:24.680 --> 00:02:28.520
+There are two types of packets,
+short and long.
+
+cb4545f2-3953-4489-b345-09b0fbf7342d-0
+00:02:29.320 --> 00:02:32.336
+Short packets are used for the
+start of a frame and the end of a
+
+cb4545f2-3953-4489-b345-09b0fbf7342d-1
+00:02:32.336 --> 00:02:32.720
+frame.
+
+ce6a2ea7-acdf-4aa3-92bc-674e00f195e9-0
+00:02:33.280 --> 00:02:35.280
+Long packets are used for valid
+data.
+
+c46c97df-bd7d-4929-8574-34650a4261a9-0
+00:02:35.840 --> 00:02:39.048
+For both short and long packets,
+there is the Data ID field
+
+c46c97df-bd7d-4929-8574-34650a4261a9-1
+00:02:39.048 --> 00:02:40.920
+located in the MIPI packet
+header.
+
+5ce68f3a-5978-414b-b1f9-774ecfda39ca-0
+00:02:41.400 --> 00:02:44.169
+Within this field there is the
+virtual channel and the data
+
+5ce68f3a-5978-414b-b1f9-774ecfda39ca-1
+00:02:44.169 --> 00:02:44.400
+type.
+
+23c19a77-e05c-45f8-8e08-9059359e82db-0
+00:02:44.760 --> 00:02:48.068
+In the data type of field, code
+zero through 3 indicate the MIPI
+
+23c19a77-e05c-45f8-8e08-9059359e82db-1
+00:02:48.068 --> 00:02:51.653
+packet type, where a value of 0
+indicates a start of frame and a
+
+23c19a77-e05c-45f8-8e08-9059359e82db-2
+00:02:51.653 --> 00:02:54.080
+value of 1 indicates an end of
+frame.
+
+7cbdaba2-0e66-4478-98c5-1b919ca0b701-0
+00:02:54.600 --> 00:02:58.692
+Data type Codes from  0x18 to
+0x37 represent a long packet and
+
+7cbdaba2-0e66-4478-98c5-1b919ca0b701-1
+00:02:58.692 --> 00:02:59.880
+its data type.
+
+7d34accf-9c4a-4e01-8b8e-c884958b9b13-0
+00:03:00.840 --> 00:03:03.835
+The last two fields of importance
+in our topic today are Word count
+
+7d34accf-9c4a-4e01-8b8e-c884958b9b13-1
+00:03:03.835 --> 00:03:06.886
+and Cyclic Redundancy Check or
+CRC for short, which can be found
+
+7d34accf-9c4a-4e01-8b8e-c884958b9b13-2
+00:03:06.886 --> 00:03:10.560
+in the long packets header and
+footer.
+
+0816cbb6-a739-4155-bece-3fe4da4744b1-0
+00:03:11.840 --> 00:03:15.070
+The word count tells the
+receiver how many 8-bit words to
+
+0816cbb6-a739-4155-bece-3fe4da4744b1-1
+00:03:15.070 --> 00:03:18.690
+expect and the CRC performs the
+checksum at the end of each long
+
+0816cbb6-a739-4155-bece-3fe4da4744b1-2
+00:03:18.690 --> 00:03:19.080
+packet.
+
+21a1ed53-70c9-43c0-b3e1-51df2d04908e-0
+00:03:19.920 --> 00:03:23.560
+If there is an error, the error
+code correction or ECC field can
+
+21a1ed53-70c9-43c0-b3e1-51df2d04908e-1
+00:03:23.560 --> 00:03:25.240
+correct up to a 1-bit error.
+
+9907560c-3e05-4643-9ea1-3022d6c2f068-0
+00:03:26.800 --> 00:03:30.388
+Now let's take a look at a quad
+GMSL system with four camera
+
+9907560c-3e05-4643-9ea1-3022d6c2f068-1
+00:03:30.388 --> 00:03:31.800
+inputs and four outputs.
+
+3f4e5bec-02fe-49af-8347-12c9b1145c6b-0
+00:03:32.360 --> 00:03:35.516
+By porting each camera's MIPI
+stream to their own port, the SoC
+
+3f4e5bec-02fe-49af-8347-12c9b1145c6b-1
+00:03:35.516 --> 00:03:38.000
+can distinguish which camera feed
+is which.
+
+08a0afa9-12a1-44e8-a33e-872e9b73d72c-0
+00:03:38.400 --> 00:03:41.142
+But what about if we want to
+point all the camera feeds to one
+
+08a0afa9-12a1-44e8-a33e-872e9b73d72c-1
+00:03:41.142 --> 00:03:41.840
+MIPI port?
+
+efc822a2-c8e4-4736-a6b0-398a02ee44bd-0
+00:03:42.720 --> 00:03:46.238
+Well, circling back to FCFS mode
+and pointing all the camera feeds
+
+efc822a2-c8e4-4736-a6b0-398a02ee44bd-1
+00:03:46.238 --> 00:03:49.930
+to a single MIPI port, we can see
+it appears to be going very
+
+efc822a2-c8e4-4736-a6b0-398a02ee44bd-2
+00:03:49.930 --> 00:03:50.680
+quickly.
+
+5420c293-b446-44b8-93e1-72a2cc58bbbc-0
+00:03:51.280 --> 00:03:55.100
+That quickness is proportional to
+the number of cameras because
+
+5420c293-b446-44b8-93e1-72a2cc58bbbc-1
+00:03:55.100 --> 00:03:58.920
+GMSL deserializers only have line
+buffers and not frame buffers.
+
+bc4bf4d2-d1ae-43c3-8bcd-06c40544c794-0
+00:03:59.360 --> 00:04:02.157
+The output MIPI port's data rate
+needs to be the sum data rate of
+
+bc4bf4d2-d1ae-43c3-8bcd-06c40544c794-1
+00:04:02.157 --> 00:04:03.960
+the inputs on the Serializer.
+
+e95eff76-3385-4a74-98e4-bfb9f4b25082-0
+00:04:04.840 --> 00:04:07.370
+By slowing the port and
+expanding, we can see all the
+
+e95eff76-3385-4a74-98e4-bfb9f4b25082-1
+00:04:07.370 --> 00:04:10.330
+input MIPI packets are there in
+the order in which they were
+
+e95eff76-3385-4a74-98e4-bfb9f4b25082-2
+00:04:10.330 --> 00:04:10.760
+received.
+
+0a889a80-5cf1-4ad9-a009-0cccfde1da58-0
+00:04:11.560 --> 00:04:16.477
+At this point, if we enable frame
+sync, you will see all of the
+
+0a889a80-5cf1-4ad9-a009-0cccfde1da58-1
+00:04:16.477 --> 00:04:21.640
+cameras align along with the
+Deserializer's output stream.
+
+6bbb1069-19db-478c-8eee-16144a34839e-0
+00:04:22.200 --> 00:04:25.140
+We now see the Deserializer's
+output stream of four consecutive
+
+6bbb1069-19db-478c-8eee-16144a34839e-1
+00:04:25.140 --> 00:04:28.420
+start of frame short packets
+followed by long packets, one for
+
+6bbb1069-19db-478c-8eee-16144a34839e-2
+00:04:28.420 --> 00:04:30.400
+each camera feed.
+
+adb6afd9-96ab-4e1c-ad74-81615c31ba13-0
+00:04:30.920 --> 00:04:33.360
+Note these packets are still
+arranged in the order they were
+
+adb6afd9-96ab-4e1c-ad74-81615c31ba13-1
+00:04:33.360 --> 00:04:33.720
+received.
+
+e89757d3-8a47-42c3-931f-4f1f39448f50-0
+00:04:34.840 --> 00:04:37.615
+Stopping on one of the long
+packets, we can zoom into one of
+
+e89757d3-8a47-42c3-931f-4f1f39448f50-1
+00:04:37.615 --> 00:04:38.480
+the packet headers.
+
+5a776302-4f6c-418d-a564-5aa3b39c52ac-0
+00:04:39.000 --> 00:04:42.263
+Here we would see this MIPI
+packet has its own unique
+
+5a776302-4f6c-418d-a564-5aa3b39c52ac-1
+00:04:42.263 --> 00:04:46.060
+information which the SoC uses to
+decipher the virtual channel,
+
+5a776302-4f6c-418d-a564-5aa3b39c52ac-2
+00:04:46.060 --> 00:04:47.840
+data type, word count and ECC.
+
+5eddd9af-2df7-4980-a07b-c166ef61ba57-0
+00:04:48.480 --> 00:04:51.751
+Referencing the virtual channel
+or data type information, the SoC
+
+5eddd9af-2df7-4980-a07b-c166ef61ba57-1
+00:04:51.751 --> 00:04:54.760
+can point this video packet to
+where it needs to go.
+
+49f3dbe3-d2a5-4f45-8eee-cab7672f1f18-0
+00:04:55.840 --> 00:05:00.255
+Now let's take a look at 4W x H
+This mode was designed with early
+
+49f3dbe3-d2a5-4f45-8eee-cab7672f1f18-1
+00:05:00.255 --> 00:05:01.680
+GMSL1 Serdes.
+
+2c320d8a-3581-4169-aa3f-56fb64afaff2-0
+00:05:02.200 --> 00:05:05.822
+At the time some SoC's did not
+support virtual channels and
+
+2c320d8a-3581-4169-aa3f-56fb64afaff2-1
+00:05:05.822 --> 00:05:09.383
+therefore relied on the GMSL
+Deserializer to organize multi
+
+2c320d8a-3581-4169-aa3f-56fb64afaff2-2
+00:05:09.383 --> 00:05:12.040
+link camera feeds into a single
+video line.
+
+202f5ae3-181e-4cef-b050-3d54c4bcec85-0
+00:05:13.120 --> 00:05:15.935
+At the beginning of the frame
+there would be 4 short packets
+
+202f5ae3-181e-4cef-b050-3d54c4bcec85-1
+00:05:15.935 --> 00:05:16.720
+from each sensor.
+
+8da89ab9-b061-4fa0-b1d1-42cca4a0e53d-0
+00:05:17.240 --> 00:05:20.240
+This event will trigger a single
+start of frame short packet.
+
+8cee9baa-1927-46a4-8b71-8eecd278d212-0
+00:05:21.280 --> 00:05:24.801
+Next is all of the first lines of
+data from the sensors are
+
+8cee9baa-1927-46a4-8b71-8eecd278d212-1
+00:05:24.801 --> 00:05:27.560
+concatenated into what ADI calls
+a super line.
+
+9b79bd02-1d42-459d-b02d-5f21eb92437f-0
+00:05:28.680 --> 00:05:32.369
+Then the second lines are
+concatenated into another super
+
+9b79bd02-1d42-459d-b02d-5f21eb92437f-1
+00:05:32.369 --> 00:05:36.058
+line and the next and each
+subsequent line until we reach
+
+9b79bd02-1d42-459d-b02d-5f21eb92437f-2
+00:05:36.058 --> 00:05:39.938
+an end of frame where the same
+thing happens as the start of
+
+9b79bd02-1d42-459d-b02d-5f21eb92437f-3
+00:05:39.938 --> 00:05:40.319
+frame.
+
+f3fbd862-03b9-48e1-af3f-1582ed0420d5-0
+00:05:40.960 --> 00:05:43.080
+Only one end of frame packet is
+issued.
+
+64eb42b1-f47c-42f5-af5a-8a75226a6b17-0
+00:05:43.760 --> 00:05:47.027
+Going back to our full block
+diagram, we can now see we have
+
+64eb42b1-f47c-42f5-af5a-8a75226a6b17-1
+00:05:47.027 --> 00:05:50.347
+gone from 4 start of frames to
+one and all four camera lines
+
+64eb42b1-f47c-42f5-af5a-8a75226a6b17-2
+00:05:50.347 --> 00:05:53.240
+have been aggregated into a
+single MIPI long packet.
+
+2256f844-f624-4b14-9c14-ad2b9d0edd98-0
+00:05:53.440 --> 00:05:57.664
+When enabling 4W x H mode in the
+packet header for 4W x H mode,
+
+2256f844-f624-4b14-9c14-ad2b9d0edd98-1
+00:05:57.664 --> 00:06:01.687
+the virtual channel is register
+programmable and will then be
+
+2256f844-f624-4b14-9c14-ad2b9d0edd98-2
+00:06:01.687 --> 00:06:05.040
+applied to all of the MIPI
+packets.
+
+50b56c80-9808-408d-b962-f83361926433-0
+00:06:05.720 --> 00:06:08.892
+The next bit field of interest
+will be the word count register,
+
+50b56c80-9808-408d-b962-f83361926433-1
+00:06:08.892 --> 00:06:11.520
+which is now updated to the sum
+of the active lines.
+
+d3d32440-e28e-4e63-a8f0-e253c7c672b6-0
+00:06:12.360 --> 00:06:16.039
+Moving to the packet footer, we
+would see an updated CRC value
+
+d3d32440-e28e-4e63-a8f0-e253c7c672b6-1
+00:06:16.039 --> 00:06:19.719
+with the concatenation of each
+imager's MIPI long packet into a
+
+d3d32440-e28e-4e63-a8f0-e253c7c672b6-2
+00:06:19.719 --> 00:06:21.880
+super line of a MIPI long packet.
+
+6e039ed0-1319-4316-beff-64a4ba3d6905-0
+00:06:22.240 --> 00:06:24.680
+A newly calculated CRC is
+necessary.
+
+5bc27564-cbb3-413b-9391-ac2383360092-0
+00:06:25.240 --> 00:06:28.541
+It is important to note that to
+achieve this mode, all of the
+
+5bc27564-cbb3-413b-9391-ac2383360092-1
+00:06:28.541 --> 00:06:31.948
+imagers need to be synchronized
+and have the same resolution,
+
+5bc27564-cbb3-413b-9391-ac2383360092-2
+00:06:31.948 --> 00:06:33.120
+PCLK, and frame rate.
+
+92aa5190-94a1-4967-940e-bd0f71d29b5b-0
+00:06:34.280 --> 00:06:38.141
+The last mode is W x 4H, which
+supports virtual channels but
+
+92aa5190-94a1-4967-940e-bd0f71d29b5b-1
+00:06:38.141 --> 00:06:42.128
+still requires the Deserializer
+to organize the incoming sensor
+
+92aa5190-94a1-4967-940e-bd0f71d29b5b-2
+00:06:42.128 --> 00:06:42.440
+data.
+
+8f7cdfdb-7bc5-46b5-8e41-7579f157994a-0
+00:06:43.040 --> 00:06:46.678
+In this mode, the Deserializer
+does much of the same as 4H x W,
+
+8f7cdfdb-7bc5-46b5-8e41-7579f157994a-1
+00:06:46.678 --> 00:06:49.789
+but now with unique virtual
+channels per MIPI packet
+
+10ff1ba9-1d8c-4cdf-bf5d-25197b48904d-0
+00:06:50.720 --> 00:06:53.959
+Subsequently, there would be 4
+times the number of MIPI packets
+
+10ff1ba9-1d8c-4cdf-bf5d-25197b48904d-1
+00:06:53.959 --> 00:06:57.539
+as 4W x H, but still equal to the
+total sum of MIPI packets from
+
+10ff1ba9-1d8c-4cdf-bf5d-25197b48904d-2
+00:06:57.539 --> 00:06:58.960
+the imagers.
+
+0019ce7f-702a-4466-b348-25a21520a377-0
+00:06:59.480 --> 00:07:02.670
+This mode is similar to FCFS, but
+the camera order can be fixed and
+
+0019ce7f-702a-4466-b348-25a21520a377-1
+00:07:02.670 --> 00:07:06.245
+is typically used when the
+incoming data is not MIPI, but
+
+0019ce7f-702a-4466-b348-25a21520a377-2
+00:07:06.245 --> 00:07:06.960
+parallel.
+
+9dccd0b6-d13d-4dd5-8e80-10ee0e728eb6-0
+00:07:07.480 --> 00:07:11.015
+Note that this mode and 4W
+x H only work in pixel
+
+9dccd0b6-d13d-4dd5-8e80-10ee0e728eb6-1
+00:07:11.015 --> 00:07:11.320
+mode.
+
+99284109-b4e9-493e-90bf-a2bd098a61a3-0
+00:07:12.600 --> 00:07:14.800
+Let's recap what we covered in
+today's course.
+
+a65ef23d-f28b-4eb8-9701-a51c1adba869-0
+00:07:15.400 --> 00:07:16.760
+What is first come, first serve?
+
+b9c69681-91bd-4d16-bb59-cd74c4f73abd-0
+00:07:17.320 --> 00:07:20.760
+FCFS uses a scheduler to queue
+the incoming video packets.
+
+c96285aa-b55a-4fef-b649-db191aac0cbc-0
+00:07:21.320 --> 00:07:24.320
+The Deserializer then outputs one
+packet at a time.
+
+6f549222-b407-4564-9c4a-724326f65e83-0
+00:07:25.160 --> 00:07:26.720
+What is 4W x H?
+
+aff311b9-bb48-44ab-ba02-842f93d44d70-0
+00:07:27.320 --> 00:07:30.429
+4W x H is when the current line
+from each camera is combined into
+
+aff311b9-bb48-44ab-ba02-842f93d44d70-1
+00:07:30.429 --> 00:07:32.560
+one MIPI long packet.
+
+09b9f3aa-d43f-4b50-9c7a-feb3732c9353-0
+00:07:33.160 --> 00:07:36.156
+Each frame will have one start
+short packet, the number of lines
+
+09b9f3aa-d43f-4b50-9c7a-feb3732c9353-1
+00:07:36.156 --> 00:07:39.000
+per frame long packets, and one
+end short packet.
+
+70edd501-d92f-4a5a-a262-b074f6a83e2d-0
+00:07:39.840 --> 00:07:41.640
+What is W x 4H?
+
+fbe449be-3c64-44b4-a3b5-baf7ab79abe7-0
+00:07:42.200 --> 00:07:46.360
+W x 4H sets the output order
+based on the user's input.
+
+d2587b05-5638-4a61-a15f-46e3af2015bb-0
+00:07:46.960 --> 00:07:50.110
+Each frame will start with four
+start short packets, then four
+
+d2587b05-5638-4a61-a15f-46e3af2015bb-1
+00:07:50.110 --> 00:07:53.210
+times the number lines per frame
+long packets, finishing with four
+
+d2587b05-5638-4a61-a15f-46e3af2015bb-2
+00:07:53.210 --> 00:07:54.360
+end short packets.
+
+8dd4070f-79d5-4aec-a7b0-ea0934c1a4c8-0
+00:07:56.280 --> 00:07:59.492
+How does the SoC know which
+camera the video data is coming
+
+8dd4070f-79d5-4aec-a7b0-ea0934c1a4c8-1
+00:07:59.492 --> 00:07:59.760
+from?
+
+802961b0-5467-4b4c-9b7d-ac2c0d810a92-0
+00:08:00.480 --> 00:08:03.946
+The SoC uses the virtual channel
+or data type information in the
+
+802961b0-5467-4b4c-9b7d-ac2c0d810a92-1
+00:08:03.946 --> 00:08:07.253
+MIPI packet header to decipher
+which source the packets came
+
+802961b0-5467-4b4c-9b7d-ac2c0d810a92-2
+00:08:07.253 --> 00:08:07.520
+from.
+
+a56071f0-34d1-4437-b0ad-6000125febde-0
+00:08:08.280 --> 00:08:10.880
+What happens to the CRC during
+line aggregation?
+
+65a54a3a-30e4-4c95-8f23-e8d4b79bf0b6-0
+00:08:11.560 --> 00:08:14.560
+In tunnelling mode, the received
+bits on the Serializer are
+
+65a54a3a-30e4-4c95-8f23-e8d4b79bf0b6-1
+00:08:14.560 --> 00:08:17.160
+encapsulated and ported to the
+Deserializer output.
+
+82c420b7-7f7e-4cf0-9d40-eed65bd0f952-0
+00:08:17.800 --> 00:08:21.453
+In pixel mode, the Deserializer
+recalculates the CRC per packet
+
+82c420b7-7f7e-4cf0-9d40-eed65bd0f952-1
+00:08:21.453 --> 00:08:23.280
+based on the data it's received.
+
+16ce3a23-37a3-4176-886e-717c21c70bcd-0
+00:08:25.640 --> 00:08:27.320
+Why use 4 W x H?
+
+f380a80b-5c41-4cf9-99df-ab8bbf2d3258-0
+00:08:28.040 --> 00:08:31.282
+SoC's that don't support virtual
+channels need a way to receive
+
+f380a80b-5c41-4cf9-99df-ab8bbf2d3258-1
+00:08:31.282 --> 00:08:33.360
+multiple camera inputs on a
+single port.
+
+b60e9836-a3fc-49fb-b42f-526fff7d1c5f-0
+00:08:33.960 --> 00:08:37.052
+4W x H organizes and aggregates
+the incoming video into a super
+
+b60e9836-a3fc-49fb-b42f-526fff7d1c5f-1
+00:08:37.052 --> 00:08:40.320
+line in which the processor can
+partition.
+
+59449518-7ae7-41bb-a6bd-b832cf0a0ac2-0
+00:08:41.040 --> 00:08:44.408
+This concludes our course for
+today, covering how GMSL
+
+59449518-7ae7-41bb-a6bd-b832cf0a0ac2-1
+00:08:44.408 --> 00:08:47.656
+deserializers provide the
+flexibility to meet different SoC
+
+59449518-7ae7-41bb-a6bd-b832cf0a0ac2-2
+00:08:47.656 --> 00:08:48.920
+input parameters.
+
