@@ -1,6 +1,5 @@
 import cv2
 import os
-import sys
 import re
 import img2pdf
 
@@ -44,32 +43,32 @@ class VIDEO2PDF:
 
     def process_vtt(self):
         with open(self.vtt_file, 'r') as inp:  # read in the VTT file
-            with open(self.script_file, 'w') as outp:  # create a script file
-                lines = inp.readlines()
-                for idx, line in enumerate(lines):  # grab line number and line string  
-                    buf = []               
-                    if line == '\n':  # end of previous text block
-                        idx += 1  # move idx to line beneath '\n'
-                        buf.append(lines[idx + self.CUE_ID].strip())
-                        timestamp_string = lines[idx + self.TS_START].strip()  # remove \n
-                        timestamps = timestamp_string.split(' --> ')  # split by the arrow
-                        buf.append(timestamps[0])  # grab the first timestamp of the scene
+            # with open(self.script_file, 'w') as outp:  # create a script file
+            lines = inp.readlines()
+            for idx, line in enumerate(lines):  # grab line number and line string  
+                buf = []               
+                if line == '\n':  # end of previous text block
+                    idx += 1  # move idx to line beneath '\n'
+                    buf.append(lines[idx + self.CUE_ID].strip())
+                    timestamp_string = lines[idx + self.TS_START].strip()  # remove \n
+                    timestamps = timestamp_string.split(' --> ')  # split by the arrow
+                    buf.append(timestamps[0])  # grab the first timestamp of the scene
 
-                        try:
-                            i = 0
-                            while(lines[idx + self.TEXT1 + i] != '\n'): # keep going until you hit the next \n
-                                buf.append(lines[idx + self.TEXT1 + i].strip())  # remove \n
-                                i += 1  # continue to see if the next line has text
-                        except IndexError:  # if there is not a second line of text
-                            pass  
+                    try:
+                        i = 0
+                        while(lines[idx + self.TEXT1 + i] != '\n'): # keep going until you hit the next \n
+                            buf.append(lines[idx + self.TEXT1 + i].strip())  # remove \n
+                            i += 1  # continue to see if the next line has text
+                    except IndexError:  # if there is not a second line of text
+                        pass  
 
-                        if len(buf) == self.VTT_ITEMS:
-                            buf[self.TEXT1] = ' '.join(buf[self.TEXT1:])  # join the two strings of text
-                            buf.pop()  # remove the redundant line of text after joining
-                        self.processed_vtt.append(buf)
-                        outp.write(f'{buf[self.TS_START][3:8]}\t{buf[self.TEXT1]}\n')  # write to the script file
+                    if len(buf) == self.VTT_ITEMS:
+                        buf[self.TEXT1] = ' '.join(buf[self.TEXT1:])  # join the two strings of text
+                        buf.pop()  # remove the redundant line of text after joining
+                    self.processed_vtt.append(buf)
+                        # outp.write(f'{buf[self.TS_START][3:8]}\t{buf[self.TEXT1]}\n')  # write to the script file
         print(f'{self.vtt_file} processed.')
-        print(f'{self.script_file} generated.')
+        # print(f'{self.script_file} generated.')
 
     def grab_frame(self, frame_index, frame_tuning=0):
         frame_number = self._process_timestamp(self.processed_vtt[frame_index][1]) + frame_tuning
@@ -130,8 +129,8 @@ class VIDEO2PDF:
         return frame_number
 
 def main():
-    video_file, vtt_file = 'GMSL200D - GPIO rev a.mp4', 'GMSL200D - GPIO rev a-en-US.vtt'
-    # video_file, vtt_file = sys.argv[1], sys.argv[2]
+    video_file = 'GMSL200D - GPIO rev a.mp4'
+    vtt_file = 'GMSL200D - GPIO rev a-en-US.vtt'
     v2p = VIDEO2PDF(video_file, vtt_file)
     # v2p.grab_frame(frame_index=4, frame_tuning=-15)
     v2p.create_pdf(create_frames=True, clean_frames_folder=True)
