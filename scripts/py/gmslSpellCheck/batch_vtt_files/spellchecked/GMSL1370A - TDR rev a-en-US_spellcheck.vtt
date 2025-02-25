@@ -1,0 +1,295 @@
+WEBVTT
+
+047d11bc-676f-438c-8b67-fc0048d9e58c-0
+00:00:08.480 --> 00:00:12.240
+Welcome to Time Domain Reflectometry or
+TDR training.
+
+805b00f7-a5ef-49b4-8bbd-d3945b328422-0
+00:00:12.760 --> 00:00:17.538
+I am Chad Nelson and Applications
+Engineer for the GMSL business unit at
+
+805b00f7-a5ef-49b4-8bbd-d3945b328422-1
+00:00:17.538 --> 00:00:17.800
+ADI.
+
+1f3d3187-6a7c-4d3e-952d-cedf1cfbc9de-0
+00:00:19.680 --> 00:00:21.720
+We start with the most basic question.
+
+cd7d302f-1698-4b60-81e9-73c18556bb72-0
+00:00:21.920 --> 00:00:24.320
+What is a TDR? A TDR
+
+fe83d645-ffb5-4854-8749-ce87a4052872-0
+00:00:24.320 --> 00:00:28.568
+is a low voltage or low current
+pulse sent through a transmission
+
+fe83d645-ffb5-4854-8749-ce87a4052872-1
+00:00:28.568 --> 00:00:32.994
+line, with the reflections measured
+over time to determine the
+
+fe83d645-ffb5-4854-8749-ce87a4052872-2
+00:00:32.994 --> 00:00:36.062
+properties of the channel under
+test, On the right side you can see
+
+fe83d645-ffb5-4854-8749-ce87a4052872-3
+00:00:36.062 --> 00:00:40.664
+a representation of a transmission
+line with a couple of disturbances
+
+fe83d645-ffb5-4854-8749-ce87a4052872-4
+00:00:40.664 --> 00:00:40.960
+along its path.
+
+6f32cca8-705f-46c2-8756-b08ddb500589-0
+00:00:41.280 --> 00:00:44.820
+A narrow spot in the T line would
+correspond to a bump up in the
+
+6f32cca8-705f-46c2-8756-b08ddb500589-1
+00:00:44.820 --> 00:00:48.415
+characteristic impedance, while a
+wide spot would correspond to a bump
+
+6f32cca8-705f-46c2-8756-b08ddb500589-2
+00:00:48.415 --> 00:00:48.960
+down.
+
+a919853f-1eb5-4493-8c2f-26fe68e52a7c-0
+00:00:49.480 --> 00:00:53.861
+When the TDR pulse is sent down the trace,
+these discontinuities will cause
+
+a919853f-1eb5-4493-8c2f-26fe68e52a7c-1
+00:00:53.861 --> 00:00:55.360
+reflections in the signal.
+
+f4f17a8c-3500-4c6e-88a9-06314abac568-0
+00:00:55.800 --> 00:00:59.645
+The voltage is converted to
+characteristic impedance and shown in
+
+f4f17a8c-3500-4c6e-88a9-06314abac568-1
+00:00:59.645 --> 00:01:01.160
+time on the TDR equipment.
+
+5409e99c-6b01-4771-9552-382a5ef41215-0
+00:01:02.960 --> 00:01:04.720
+What are TDRS used for?
+
+94651a1c-a089-4f0f-886b-59340dc0e861-0
+00:01:05.200 --> 00:01:08.680
+Wireless parameters show you the
+frequency domain response of a channel.
+
+0bdb0821-a3cf-4552-ac6e-00cbe949654c-0
+00:01:08.720 --> 00:01:11.840
+A TDR shows you the time domain response
+of a channel.
+
+358a6e28-914c-403c-9ab8-6af4d9863170-0
+00:01:12.720 --> 00:01:17.386
+Because TDR's are in the time domain, we
+can pinpoint the physical locations of
+
+358a6e28-914c-403c-9ab8-6af4d9863170-1
+00:01:17.386 --> 00:01:18.320
+discontinuities.
+
+941c7eaf-1c5a-478e-878f-9c37598ee0dd-0
+00:01:18.640 --> 00:01:23.162
+We can do this by using the propagation
+velocity of the signal and the time delay
+
+941c7eaf-1c5a-478e-878f-9c37598ee0dd-1
+00:01:23.162 --> 00:01:27.520
+of the disturbance to locate its location
+relative to the signal launch point.
+
+7aded093-8743-4657-8315-8c0cd2b6f134-0
+00:01:28.040 --> 00:01:32.270
+An even easier way to locate the
+disturbance is to use your finger pressed
+
+7aded093-8743-4657-8315-8c0cd2b6f134-1
+00:01:32.270 --> 00:01:33.680
+on the transmission line.
+
+a4e71aef-932e-480e-8bcc-399b855dc80e-0
+00:01:34.000 --> 00:01:37.936
+Your finger adds capacitance increases
+the relative dielectric constant,
+
+a4e71aef-932e-480e-8bcc-399b855dc80e-1
+00:01:37.936 --> 00:01:41.280
+causing the impedance to drop wherever
+your finger is placed.
+
+6d9149b4-9459-4448-8b69-6cfef87963f9-0
+00:01:44.320 --> 00:01:47.640
+So what does a good trace look like on a
+TDR?
+
+86781fc7-1a60-4884-9041-46070894c986-0
+00:01:48.280 --> 00:01:53.770
+Here we see the launch onto the PCB with
+a small bump up then down as the signal
+
+86781fc7-1a60-4884-9041-46070894c986-1
+00:01:53.770 --> 00:01:57.160
+transitions to the PCB through the SMA
+connector.
+
+b7f52e02-58ac-49c4-b204-e194eb5888f0-0
+00:01:57.920 --> 00:02:02.983
+These are likely due to the ground layer
+being pulled slightly away from the edge
+
+b7f52e02-58ac-49c4-b204-e194eb5888f0-1
+00:02:02.983 --> 00:02:07.800
+of the PCB resulting in the bump up
+because the large landing pad of the pin.
+
+7daa3374-3cb1-4053-a16e-7296dc75ae4b-0
+00:02:08.040 --> 00:02:12.360
+We do a ground cut out under the pad to
+reduce the excess capacitance.
+
+f7e689b1-30c7-4351-bb55-c7a8f45c15f4-0
+00:02:12.880 --> 00:02:18.014
+In this case we may need to make the cut
+out a little larger to push the impedance
+
+f7e689b1-30c7-4351-bb55-c7a8f45c15f4-1
+00:02:18.014 --> 00:02:18.200
+up.
+
+815b2780-5b72-429f-bfc3-ee69dd93e7da-0
+00:02:18.720 --> 00:02:23.067
+In the case of the AC capacitor, our
+ground cut out is about perfect and
+
+815b2780-5b72-429f-bfc3-ee69dd93e7da-1
+00:02:23.067 --> 00:02:26.640
+creates just a small bump relative to the
+T line impedance.
+
+ef0f78c4-9545-4e24-a17a-9ac368ef2f6a-0
+00:02:27.200 --> 00:02:31.680
+The rest of the T line is slightly low
+but definitely within the good range.
+
+14212af6-dcb8-4c9b-91b0-caae084bd234-0
+00:02:32.400 --> 00:02:36.793
+We then get to the Fakra connector and
+there is a little bump up then down due
+
+14212af6-dcb8-4c9b-91b0-caae084bd234-1
+00:02:36.793 --> 00:02:40.520
+to the transition into the pin landing
+pad and the ground cut out.
+
+5d4f7f36-415c-4dd1-8708-7b0556a400c9-0
+00:02:41.600 --> 00:02:45.320
+Then there is a bump up, likely due to
+the larger gap between the edge of the
+
+5d4f7f36-415c-4dd1-8708-7b0556a400c9-1
+00:02:45.320 --> 00:02:47.800
+PCB and the Fakra metal shield.
+
+0dbbcb30-ed95-4e8f-9042-667da81e03c3-0
+00:02:48.480 --> 00:02:52.163
+There was no cable plugged in, so the
+impedance shoots up at the end of the
+
+0dbbcb30-ed95-4e8f-9042-667da81e03c3-1
+00:02:52.163 --> 00:02:52.880
+connector.
+
+5ab28507-b112-4363-ac15-73a75c50cdb9-0
+00:02:53.440 --> 00:02:58.798
+The resulting S parameters with the long
+cable and a 50 ohm load is a respectable
+
+5ab28507-b112-4363-ac15-73a75c50cdb9-1
+00:02:58.798 --> 00:03:00.040
+return loss result.
+
+6da147e6-5974-4eaa-a131-e8021315d4b6-0
+00:03:01.880 --> 00:03:05.280
+So now we take a look at what a bad trace
+looks like on a TDR.
+
+2f1f2ef6-049a-4d4f-9d41-a8ceb69b29c7-0
+00:03:05.760 --> 00:03:12.166
+In this case we see a pretty significant
+mismatch in the PCB impedance as well as
+
+2f1f2ef6-049a-4d4f-9d41-a8ceb69b29c7-1
+00:03:12.166 --> 00:03:15.760
+a pretty ugly launch onto the HMTD
+connector.
+
+29fd7834-0f6c-43e5-876d-c1fc2c8d11f9-0
+00:03:16.240 --> 00:03:21.720
+This results in a failing return loss
+result for GMSL3 operation.
+
+7f76a493-9815-4cff-b889-c6cb6d552e7c-0
+00:03:23.440 --> 00:03:26.840
+So when to use a TDR and when to use S
+parameters?
+
+be214d06-b67e-42bb-a79f-9339507dc899-0
+00:03:27.600 --> 00:03:31.800
+TDR's are best used to physically locate
+problem areas on a channel.
+
+3a470b39-6700-40a6-9a70-a7559a0f41ce-0
+00:03:32.400 --> 00:03:37.813
+DDR's cannot determine whether a GMSL
+channel is compliant but are a great
+
+3a470b39-6700-40a6-9a70-a7559a0f41ce-1
+00:03:37.813 --> 00:03:39.040
+diagnostics tool.
+
+38dfdf82-6d2c-4446-ae38-bf838fceea6d-0
+00:03:39.480 --> 00:03:43.360
+S parameters are required to determine
+channel compliance.
+
+b631300f-85c6-4754-a023-46ac6ae28b2f-0
+00:03:43.920 --> 00:03:48.551
+The S parameters give a more complete
+picture of the channel performance and
+
+b631300f-85c6-4754-a023-46ac6ae28b2f-1
+00:03:48.551 --> 00:03:51.920
+must be part of every new hardware design
+verification.
+
+4610b5a9-25d3-4c86-8337-7f4defb6ca99-0
+00:03:53.400 --> 00:03:57.000
+Thank you for your time and listening to
+this TDR presentation.
+
+50e8bd54-ffe7-42a6-ae7c-baddad5c2c81-0
+00:03:57.520 --> 00:04:01.154
+Please, if you have any questions about
+TDR and its use for GMSL, please don't
+
+50e8bd54-ffe7-42a6-ae7c-baddad5c2c81-1
+00:04:01.154 --> 00:04:05.320
+hesitate to contact me.
+
+18dc083f-0d8c-40e6-8994-06759fe26cee-0
+00:04:05.320 --> 00:04:07.400
+Chad Nelson here at ADI.
+

@@ -1,0 +1,504 @@
+WEBVTT
+
+10eaf76e-8003-4623-92a1-4b5588c7ea0a-0
+00:00:08.200 --> 00:00:11.247
+Hi,
+this is Chad Nelson from Analog Devices
+
+10eaf76e-8003-4623-92a1-4b5588c7ea0a-1
+00:00:11.247 --> 00:00:12.840
+GMSL Applications team.
+
+fc3e5546-2230-4b66-8078-3fcf91b499dc-0
+00:00:13.360 --> 00:00:18.240
+I'm going to be presenting on cables and
+connectors for automotive video links.
+
+95908694-92d6-4b61-ab6b-6dd26a6af9de-0
+00:00:19.640 --> 00:00:23.929
+The cable and connector types used for
+automotive cert as links are listed here
+
+95908694-92d6-4b61-ab6b-6dd26a6af9de-1
+00:00:23.929 --> 00:00:24.680
+in this chart.
+
+dfe3f386-e6e0-422b-8c65-0a55b48488e7-0
+00:00:25.200 --> 00:00:30.834
+The left column shows the various cable
+types including coaxial shielded twisted
+
+dfe3f386-e6e0-422b-8c65-0a55b48488e7-1
+00:00:30.834 --> 00:00:33.894
+pair,
+twin axial or shielded parallel pair,
+
+dfe3f386-e6e0-422b-8c65-0a55b48488e7-2
+00:00:33.894 --> 00:00:38.346
+shielded twisted quad,
+and finally dual twin axe slash shielded
+
+dfe3f386-e6e0-422b-8c65-0a55b48488e7-3
+00:00:38.346 --> 00:00:39.320
+parallel pair.
+
+fd6c65b9-5fc3-45e2-bc59-5875b95cc72d-0
+00:00:39.880 --> 00:00:43.965
+The middle column lists the specific
+connectors associated with certain cable
+
+fd6c65b9-5fc3-45e2-bc59-5875b95cc72d-1
+00:00:43.965 --> 00:00:44.280
+types.
+
+18e5c634-ef29-4767-80cf-0af3a2b5febb-0
+00:00:44.800 --> 00:00:50.760
+These include HFM or mini Focra,
+mate AX and the standard Focra.
+
+90ec50b9-ca31-43c1-9c52-9dd5652e9d37-0
+00:00:51.080 --> 00:00:52.440
+For shielded parallel pair.
+
+716ef9fb-a766-4a70-84aa-b12f2745ad05-0
+00:00:52.440 --> 00:00:57.600
+We have the HMTD connector also used for
+twin axial SPP cables.
+
+b058fd6c-1a70-4b40-9b9e-3595445057b4-0
+00:00:58.280 --> 00:01:04.340
+The HSD connector is used for shielded
+twisted quad and dual twin axe whereas
+
+b058fd6c-1a70-4b40-9b9e-3595445057b4-1
+00:01:04.340 --> 00:01:07.760
+I've only seen HSAL 2 used with STQ
+cables.
+
+4adbd464-b07f-4876-a1d9-c84f4b1af091-0
+00:01:08.880 --> 00:01:15.017
+The connector performance in terms of low
+reflections is led by the HMTD connector
+
+4adbd464-b07f-4876-a1d9-c84f4b1af091-1
+00:01:15.017 --> 00:01:17.680
+followed by MATE, AXH, FM and FOCRA.
+
+0a91cd3a-1f45-4c50-904f-8a7a753c066a-0
+00:01:18.640 --> 00:01:24.431
+HSD performance falls below these and
+work is being done to determine if we can
+
+0a91cd3a-1f45-4c50-904f-8a7a753c066a-1
+00:01:24.431 --> 00:01:27.400
+recommend STQ cables for use with GMSL 3.
+
+69f837df-2df6-4544-b360-1e74e5c3b4b9-0
+00:01:29.600 --> 00:01:31.960
+Coaxial cables have a lot going for them.
+
+1483da46-2ba7-4be9-8ee8-8d6c235d3d64-0
+00:01:32.320 --> 00:01:36.982
+They typically have very good signal
+shielding and have lower insertion loss
+
+1483da46-2ba7-4be9-8ee8-8d6c235d3d64-1
+00:01:36.982 --> 00:01:38.920
+relative to differential cables.
+
+e528d70d-1f18-4b8f-9448-1fbaa3c85d89-0
+00:01:39.320 --> 00:01:44.712
+Coaxial cables have been thoroughly
+tested with GMSL 1-2 and three to great
+
+e528d70d-1f18-4b8f-9448-1fbaa3c85d89-1
+00:01:44.712 --> 00:01:45.280
+success.
+
+09ee69fe-7b2f-4ec3-b9eb-3e237569c0f7-0
+00:01:45.960 --> 00:01:48.600
+Sending power over these cables is common.
+
+b78e3d39-3460-46ff-9c49-57eac7903d93-0
+00:01:50.440 --> 00:01:55.592
+The negatives relate to the fact that a
+single ended signal is more susceptible
+
+b78e3d39-3460-46ff-9c49-57eac7903d93-1
+00:01:55.592 --> 00:01:58.040
+to things like bulk current injection.
+
+c3a16485-9a88-46dd-8d94-47267222fec3-0
+00:01:59.040 --> 00:02:02.615
+Also,
+the single ended trace on the PCB can be
+
+c3a16485-9a88-46dd-8d94-47267222fec3-1
+00:02:02.615 --> 00:02:06.800
+disrupted more easily by electromagnetic
+interference.
+
+6fa10c4b-abc2-43b0-90b3-1a2ff262a9e3-0
+00:02:08.960 --> 00:02:15.234
+Coaxial connectors include the ubiquitous
+FAKRA, the newer, more compact HFM,
+
+6fa10c4b-abc2-43b0-90b3-1a2ff262a9e3-1
+00:02:15.234 --> 00:02:16.200
+and MATE AX.
+
+de232754-f08b-4857-9a68-9929d7208a0c-0
+00:02:16.880 --> 00:02:22.000
+The compact nature of the HFM and Mate AX
+lend nicely to ganged connectors.
+
+33c7a992-8fc0-4831-b11b-767d5d7f3453-0
+00:02:23.040 --> 00:02:28.051
+Note that ganged connectors require extra
+design work to ensure low crosstalk
+
+33c7a992-8fc0-4831-b11b-767d5d7f3453-1
+00:02:28.051 --> 00:02:29.080
+between signals.
+
+30f06ad7-a52c-4529-b62e-1b73813ad88d-0
+00:02:31.280 --> 00:02:35.676
+Shielded twisted pair cables have an
+advantage over coax that arises from the
+
+30f06ad7-a52c-4529-b62e-1b73813ad88d-1
+00:02:35.676 --> 00:02:37.480
+nature of a differential signal.
+
+16402f8c-853e-41e7-b84a-26b49833d5aa-0
+00:02:38.240 --> 00:02:42.810
+Although the shielding on STP cables is
+not quite as effective as coax,
+
+16402f8c-853e-41e7-b84a-26b49833d5aa-1
+00:02:42.810 --> 00:02:47.952
+this is typically more than offset by the
+fact that signals induced on the cable
+
+16402f8c-853e-41e7-b84a-26b49833d5aa-2
+00:02:47.952 --> 00:02:51.000
+will generate a mostly common mode
+disturbance.
+
+e96227fe-1fea-438f-87b7-c3e0eb31fafe-0
+00:02:51.640 --> 00:02:54.697
+Differential receivers can reject common
+mode energy,
+
+e96227fe-1fea-438f-87b7-c3e0eb31fafe-1
+00:02:54.697 --> 00:02:56.680
+helping their performance with EMC.
+
+4d59e2b4-f173-420d-aeb5-85fe00d3a05c-0
+00:02:57.840 --> 00:03:01.993
+These cables are also less susceptible to
+bulk current injection due to
+
+4d59e2b4-f173-420d-aeb5-85fe00d3a05c-1
+00:03:01.993 --> 00:03:03.320
+differential signaling.
+
+12a98cdf-f552-4756-8fd5-b543493902cd-0
+00:03:04.160 --> 00:03:09.280
+These have been tested with great results
+for GMSL 1-2 and three.
+
+f99970c3-b13f-40d7-9801-787cd93ac2f8-0
+00:03:10.280 --> 00:03:14.613
+One disadvantage is that these cables can
+exhibit mode conversion if not
+
+f99970c3-b13f-40d7-9801-787cd93ac2f8-1
+00:03:14.613 --> 00:03:15.920
+manufactured properly.
+
+60496e60-df3c-431e-b163-17431b5a49dc-0
+00:03:16.360 --> 00:03:20.280
+This can lead to timing jitter and eye
+closure, reducing link margin.
+
+ac7e0a26-44db-4916-9b63-93b4c125060f-0
+00:03:21.040 --> 00:03:26.349
+Due to the need to maintain a small cable
+diameter in spite of the extra conductor,
+
+ac7e0a26-44db-4916-9b63-93b4c125060f-1
+00:03:26.349 --> 00:03:31.280
+the wire gauges are kept smaller and
+result in more loss per meter than coax.
+
+96f156af-95fd-486f-ad73-830be6e3534e-0
+00:03:33.360 --> 00:03:39.123
+Shielded parallel pair or twin axe cables
+are similar to STP cables except instead
+
+96f156af-95fd-486f-ad73-830be6e3534e-1
+00:03:39.123 --> 00:03:42.248
+of using A twist to hold the wires
+together,
+
+96f156af-95fd-486f-ad73-830be6e3534e-2
+00:03:42.248 --> 00:03:47.040
+a foil wrap or bonded installation keeps
+the wires properly aligned.
+
+aec0ae8d-596f-4374-baba-23e3bab68c9a-0
+00:03:48.400 --> 00:03:52.757
+When compared to STP cables,
+these have the benefit of improved or
+
+aec0ae8d-596f-4374-baba-23e3bab68c9a-1
+00:03:52.757 --> 00:03:55.880
+reduced differential to common mode
+conversion.
+
+8fc0e03e-5b64-4c48-9dde-6169b9c090ca-0
+00:03:56.800 --> 00:04:00.192
+Having said this,
+I've not noticed excessive mode
+
+8fc0e03e-5b64-4c48-9dde-6169b9c090ca-1
+00:04:00.192 --> 00:04:05.280
+conversion in any of the most recent STP
+or STQ cables that I've measured.
+
+4b6f8470-c30e-4e70-9ec4-e7018004deff-0
+00:04:06.480 --> 00:04:11.434
+The parallel nature of these cables make
+flexibility not as symmetric as the
+
+4b6f8470-c30e-4e70-9ec4-e7018004deff-1
+00:04:11.434 --> 00:04:12.400
+twisted cables.
+
+7511b64d-384e-4731-a1ec-ba206b34ab94-0
+00:04:13.320 --> 00:04:19.040
+These cables have historically been more
+expensive than standard STP cables.
+
+f59bd73f-db92-4d35-9f17-fed58791c5de-0
+00:04:21.200 --> 00:04:25.920
+HMTD is the standard connector for STP
+and SPP cables.
+
+3a11860f-6137-41c0-a9a6-68981509ad1c-0
+00:04:26.640 --> 00:04:31.418
+The connector has excellent return loss
+characteristics and exceptional inline
+
+3a11860f-6137-41c0-a9a6-68981509ad1c-1
+00:04:31.418 --> 00:04:35.228
+connector continuity,
+making Daisy chaining of multiple cables
+
+3a11860f-6137-41c0-a9a6-68981509ad1c-2
+00:04:35.228 --> 00:04:36.680
+practically a non issue.
+
+8581b449-3fb6-4ced-8421-12a9a7fd8090-0
+00:04:38.080 --> 00:04:41.346
+Because of the nature of differential
+signaling,
+
+8581b449-3fb6-4ced-8421-12a9a7fd8090-1
+00:04:41.346 --> 00:04:46.680
+AC coupling the ground connection on one
+side of the link to reduce ground loop
+
+8581b449-3fb6-4ced-8421-12a9a7fd8090-2
+00:04:46.680 --> 00:04:48.880
+issues is fairly straightforward.
+
+30c414db-b3ef-4c77-ac96-14746ce03542-0
+00:04:51.760 --> 00:04:55.130
+Shielded twisted quad cables are similar
+to STP cables,
+
+30c414db-b3ef-4c77-ac96-14746ce03542-1
+00:04:55.130 --> 00:04:58.440
+except that these contain 2 differential
+signal pairs.
+
+70cd7c84-fbe1-4f15-ac39-d2b545c9bb1b-0
+00:04:59.000 --> 00:05:03.120
+These pairs are oriented 90° from each
+other in a cross pattern.
+
+cb0a636b-6936-4814-b6a1-de849ea8c3d4-0
+00:05:03.640 --> 00:05:08.040
+This orientation helps reduce crosstalk
+and is surprisingly good at doing so.
+
+6f45bad7-c293-4710-ab21-f9e7e0a7db79-0
+00:05:09.240 --> 00:05:13.760
+Some advantages are that EMC performance
+is good due to differential signaling.
+
+87ae515b-162d-4c56-ad2b-c95205ef3768-0
+00:05:14.440 --> 00:05:18.981
+Another benefit is that 2 GMSL links can
+be carried across a single cable,
+
+87ae515b-162d-4c56-ad2b-c95205ef3768-1
+00:05:18.981 --> 00:05:23.280
+resulting in 12 gigabits per second
+downstream data in dual link mode.
+
+f83c92d7-d692-4f82-953d-e90382fe259f-0
+00:05:23.880 --> 00:05:29.113
+Another option is to use one pair for the
+GMSL link and the other for power,
+
+f83c92d7-d692-4f82-953d-e90382fe259f-1
+00:05:29.113 --> 00:05:32.240
+eliminating the need for POC filter
+networks.
+
+b50680dd-deca-4087-a8f0-8f7efbfd57a1-0
+00:05:32.840 --> 00:05:35.240
+These cables are very popular in China.
+
+af90e6d6-4266-4550-a7c6-ac00ebfd96d0-0
+00:05:36.200 --> 00:05:40.830
+The disadvantages are that there is
+crosstalk between the pairs that does
+
+af90e6d6-4266-4550-a7c6-ac00ebfd96d0-1
+00:05:40.830 --> 00:05:45.023
+limit the maximum reach,
+and the HSD connectors have higher return
+
+af90e6d6-4266-4550-a7c6-ac00ebfd96d0-2
+00:05:45.023 --> 00:05:46.399
+loss than other types.
+
+805743ba-408e-4a8c-bfab-903c47bcd1bf-0
+00:05:48.600 --> 00:05:54.680
+The connectors used for STQ cables are
+the HSD and the HSAL 2 connector.
+
+b1d67814-33b2-427b-88ed-ec759a36e632-0
+00:05:55.400 --> 00:06:01.148
+Rosenberger's HSD connector is much more
+popular than Molex's HSAL 2 connector,
+
+b1d67814-33b2-427b-88ed-ec759a36e632-1
+00:06:01.148 --> 00:06:03.520
+at least for Cerdez applications.
+
+2fc69f99-7998-4bd5-bd61-5e46a8c1448b-0
+00:06:04.280 --> 00:06:06.913
+These connectors struggle with return
+loss,
+
+2fc69f99-7998-4bd5-bd61-5e46a8c1448b-1
+00:06:06.913 --> 00:06:12.000
+so they do require extra consideration to
+achieve GMSL channel specification limits.
+
+60add089-b7b7-4941-a02b-5e31823fa709-0
+00:06:14.680 --> 00:06:18.311
+I've seen marketing materials showing
+this type of cable,
+
+60add089-b7b7-4941-a02b-5e31823fa709-1
+00:06:18.311 --> 00:06:20.440
+but have yet to see any in person.
+
+4aec75cc-d583-449c-a383-d87276208a50-0
+00:06:21.240 --> 00:06:25.339
+These cables should have good EMC
+performance due to being differential,
+
+4aec75cc-d583-449c-a383-d87276208a50-1
+00:06:25.339 --> 00:06:29.606
+and they should have improved mode
+conversion performance over standard STP
+
+4aec75cc-d583-449c-a383-d87276208a50-2
+00:06:29.606 --> 00:06:30.000
+cables.
+
+4ad83bb6-688b-411d-b87f-804433a59773-0
+00:06:31.320 --> 00:06:36.898
+The disadvantages are that they have not
+yet been tested by Analog Devices similar
+
+4ad83bb6-688b-411d-b87f-804433a59773-1
+00:06:36.898 --> 00:06:37.840
+to STQ cables.
+
+bb83265e-bd9d-4f6e-a7a8-e8164c4a1ed1-0
+00:06:37.840 --> 00:06:41.363
+There is a potential for crosstalk
+between the pairs,
+
+bb83265e-bd9d-4f6e-a7a8-e8164c4a1ed1-1
+00:06:41.363 --> 00:06:45.800
+and these cables are expected to be more
+expensive than STQ cables.
+
+8a2d7690-81bf-43bd-a7f6-e3fc0de344c4-0
+00:06:48.000 --> 00:06:50.200
+Here we have a cable information table.
+
+bee144d1-f22a-4a9b-ae06-cd847398d6da-0
+00:06:50.440 --> 00:06:54.800
+This is an incomplete list of cables,
+but these are some of the popular ones.
+
+a094154e-4628-4adf-9d03-e7e0ee11cfd6-0
+00:06:54.920 --> 00:06:59.343
+These include Leone of Germany,
+Shikoku of Japan,
+
+a094154e-4628-4adf-9d03-e7e0ee11cfd6-1
+00:06:59.343 --> 00:07:02.440
+and Gabauer and Griller of Austria.
+
+cd30f15b-3731-4ba8-8742-d6a08bc776b5-0
+00:07:03.520 --> 00:07:08.036
+For each of these models,
+we show the loss per meter and the
+
+cd30f15b-3731-4ba8-8742-d6a08bc776b5-1
+00:07:08.036 --> 00:07:10.480
+maximum reach per GMSL data rate.
+
+726e83ed-27d4-497d-9001-a3b3579a1646-0
+00:07:11.920 --> 00:07:15.480
+The three O2 coax gets the crown for the
+longest reach achievable.
+
+67259204-2a94-4eb4-85da-1037bb95dc98-0
+00:07:16.080 --> 00:07:21.117
+The STQ cables have asterisks by the Max
+length numbers because we are still
+
+67259204-2a94-4eb4-85da-1037bb95dc98-1
+00:07:21.117 --> 00:07:24.520
+working on a full characterization of
+these cables.
+
+0a6fce4f-39a4-4a64-b462-0bf7c108fdc2-0
+00:07:24.960 --> 00:07:28.615
+In the meantime,
+we have these estimated numbers based on
+
+0a6fce4f-39a4-4a64-b462-0bf7c108fdc2-1
+00:07:28.615 --> 00:07:31.200
+our limited data testing that we've done.
+
+140d6d65-b941-48ec-b49e-3fcc02d3df26-0
+00:07:33.560 --> 00:07:37.830
+Thanks for your time and please get in
+contact with me, Chad Nelson,
+
+140d6d65-b941-48ec-b49e-3fcc02d3df26-1
+00:07:37.830 --> 00:07:39.440
+if you have any questions.

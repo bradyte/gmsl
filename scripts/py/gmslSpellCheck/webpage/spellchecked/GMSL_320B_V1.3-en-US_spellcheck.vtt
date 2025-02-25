@@ -1,0 +1,1128 @@
+WEBVTT
+
+889b0710-5bc3-4e52-a176-112690a548be-0
+00:00:08.080 --> 00:00:11.560
+Many of today's applications
+which utilize GMSL have more
+
+889b0710-5bc3-4e52-a176-112690a548be-1
+00:00:11.560 --> 00:00:14.800
+camera streams than there are
+video processing ports.
+
+46f3c09c-0dfe-45e6-9a9a-64e49be08d26-0
+00:00:15.120 --> 00:00:18.053
+The objective of this course is
+to give the listener an
+
+46f3c09c-0dfe-45e6-9a9a-64e49be08d26-1
+00:00:18.053 --> 00:00:20.934
+understanding of the internal
+architecture of the MIPI
+
+46f3c09c-0dfe-45e6-9a9a-64e49be08d26-2
+00:00:20.934 --> 00:00:23.920
+transmitter and receiver blocks
+in the GMSL CSI SerDes.
+
+40bb2369-4b77-4739-acca-f0f2fc15ed1b-0
+00:00:23.920 --> 00:00:28.880
+In this episode the following
+questions will be answered.
+
+5a86c17d-3592-453d-bfe9-388050d584ff-0
+00:00:29.400 --> 00:00:34.065
+My sensor uses a 1x2 D-PHY
+interface, but the GMSL2 parts
+
+5a86c17d-3592-453d-bfe9-388050d584ff-1
+00:00:34.065 --> 00:00:36.320
+lists a 1x4 D-PHY interface.
+
+ce684fc8-f57c-4e8b-9eca-d3f062c09e29-0
+00:00:36.800 --> 00:00:37.680
+Will it still work?
+
+b01ef5ae-2f6e-4a1e-8b84-49bb374f0c6c-0
+00:00:38.160 --> 00:00:42.320
+How can the MAX96724 have 6 MIPI
+ports even though it only can be
+
+b01ef5ae-2f6e-4a1e-8b84-49bb374f0c6c-1
+00:00:42.320 --> 00:00:46.688
+configured to output from at most
+4 separate ports at a single
+
+b01ef5ae-2f6e-4a1e-8b84-49bb374f0c6c-2
+00:00:46.688 --> 00:00:47.520
+time?
+
+4dc3f3b3-05f4-4ecd-b74e-c88a278bc118-0
+00:00:47.880 --> 00:00:51.367
+What is the reason for
+designating secondary versus
+
+4dc3f3b3-05f4-4ecd-b74e-c88a278bc118-1
+00:00:51.367 --> 00:00:54.520
+primary PHYs in a 1x4 MIPI port
+interface?
+
+b7c6266c-40aa-4115-bede-c038c5a32d1b-0
+00:00:55.920 --> 00:01:00.325
+In this episode, we will discuss
+how the GMSL Serializer receives
+
+b7c6266c-40aa-4115-bede-c038c5a32d1b-1
+00:01:00.325 --> 00:01:04.129
+and acts upon incoming CSI data
+and how in the case of a
+
+b7c6266c-40aa-4115-bede-c038c5a32d1b-2
+00:01:04.129 --> 00:01:07.200
+Deserializer, the device
+transmits that data.
+
+bbab8457-5733-49f9-8e75-9d5c028cb537-0
+00:01:07.800 --> 00:01:11.412
+We will do this by diving into
+the CSI to transmit and receive
+
+bbab8457-5733-49f9-8e75-9d5c028cb537-1
+00:01:11.412 --> 00:01:12.960
+blocks of the GMSL devices.
+
+052d4c40-b5df-4e43-a0b2-9dd72213e1a9-0
+00:01:13.600 --> 00:01:17.350
+Let's briefly recall the purpose
+of the GMSL SerDes by examining a
+
+052d4c40-b5df-4e43-a0b2-9dd72213e1a9-1
+00:01:17.350 --> 00:01:19.680
+common use case like the one
+shown here.
+
+5a39fb09-f498-4a22-99b8-8b4d0306e303-0
+00:01:22.520 --> 00:01:25.040
+In the case of CSI Serializer
+devices.
+
+7a428ac3-295c-41d9-bfc3-1f3166548260-0
+00:01:25.440 --> 00:01:30.993
+CSI-2 data is converted to GMSL
+packets before it is sent to a
+
+7a428ac3-295c-41d9-bfc3-1f3166548260-1
+00:01:30.993 --> 00:01:33.400
+Deserializer, GMSL2.
+
+495a4549-ff3a-42f8-82f2-a047de350df6-0
+00:01:33.400 --> 00:01:39.274
+CSI Deserializers receive that
+GMSL protocol data and output
+
+495a4549-ff3a-42f8-82f2-a047de350df6-1
+00:01:39.274 --> 00:01:41.200
+that data via CSI-2.
+
+a69a4664-1bb0-46bc-a70e-9d297b67a01a-0
+00:01:43.200 --> 00:01:46.456
+Now that we understand the data
+path, let's open the data sheet
+
+a69a4664-1bb0-46bc-a70e-9d297b67a01a-1
+00:01:46.456 --> 00:01:49.560
+of the Serializer and flip to the
+page of the block diagram.
+
+730afedf-0ded-4ce5-9b4b-09cca0760bf9-0
+00:01:52.560 --> 00:01:56.520
+In this case, I will be speaking
+to the MAX96717.
+
+5c09983b-c32d-4298-ab2b-60f346b09f3e-0
+00:01:56.520 --> 00:02:00.650
+Specifically, the Serializer
+takes video data in, sends that
+
+5c09983b-c32d-4298-ab2b-60f346b09f3e-1
+00:02:00.650 --> 00:02:04.442
+data through a series of internal
+circuitry blocks, and outputs a
+
+5c09983b-c32d-4298-ab2b-60f346b09f3e-2
+00:02:04.442 --> 00:02:06.880
+serialized GMSL2 signal.
+
+9fc1fcf4-9225-42a9-bda9-7735ca45b707-0
+00:02:08.520 --> 00:02:12.560
+This course focuses on the CSI-2
+interface block shown here.
+
+93c59f24-a855-40d3-8544-2c66bf4eed2b-0
+00:02:13.320 --> 00:02:16.718
+The purpose of this CSI-2
+receiver is to take the incoming
+
+93c59f24-a855-40d3-8544-2c66bf4eed2b-1
+00:02:16.718 --> 00:02:20.289
+video data and turn it into an
+internal parallel video format
+
+93c59f24-a855-40d3-8544-2c66bf4eed2b-2
+00:02:20.289 --> 00:02:23.400
+that the digital blocks of the
+Serializer can act on.
+
+0bcdafd9-145d-43fc-9d1e-5d130b4e30d7-0
+00:02:26.960 --> 00:02:30.657
+In the case of the CSI 2D
+Serializer, the opposite is
+
+0bcdafd9-145d-43fc-9d1e-5d130b4e30d7-1
+00:02:30.657 --> 00:02:31.000
+true.
+
+9edd69c5-6903-432c-b56a-c1c28c4cec2e-0
+00:02:31.480 --> 00:02:35.530
+The Deserializer takes the
+incoming parallel data sent from
+
+9edd69c5-6903-432c-b56a-c1c28c4cec2e-1
+00:02:35.530 --> 00:02:39.647
+its own internal circuitry and
+outputs the data as CSI-2 via
+
+9edd69c5-6903-432c-b56a-c1c28c4cec2e-2
+00:02:39.647 --> 00:02:41.200
+MIPI transmitter block.
+
+932e3071-5390-4414-bdcc-3e263556a94c-0
+00:02:41.880 --> 00:02:45.585
+If we were to zoom in and expand
+on that CSI-2 interface block of
+
+932e3071-5390-4414-bdcc-3e263556a94c-1
+00:02:45.585 --> 00:02:48.280
+a Serializer, we would see
+something like this.
+
+79839054-baf8-4da3-ad99-dd73dad552b0-0
+00:02:49.000 --> 00:02:53.018
+We can break the CSI-2 receiver
+into three main logic blocks, the
+
+79839054-baf8-4da3-ad99-dd73dad552b0-1
+00:02:53.018 --> 00:02:56.453
+MIPI PHY, the MIPI controller,
+and the MIPI port, which is
+
+79839054-baf8-4da3-ad99-dd73dad552b0-2
+00:02:56.453 --> 00:03:00.018
+comprised of one or more MIPI
+PHY's and a lane management
+
+79839054-baf8-4da3-ad99-dd73dad552b0-3
+00:03:00.018 --> 00:03:01.120
+block.
+
+d14ecc82-0fbd-41a1-aa34-be9ff33123b0-0
+00:03:01.760 --> 00:03:04.600
+This course is going to dig more
+into each of these topics.
+
+409ef952-fdc3-4f30-a8a4-20b5d861fcc3-0
+00:03:04.960 --> 00:03:06.320
+Let's begin with the PHY block.
+
+7f7ce711-c8dc-462a-8420-33ee5ca35b97-0
+00:03:06.680 --> 00:03:09.778
+The PHY block is the lowest level
+building block of a MIPI
+
+7f7ce711-c8dc-462a-8420-33ee5ca35b97-1
+00:03:09.778 --> 00:03:12.929
+receiver, which happens to also
+be the lowest level building
+
+7f7ce711-c8dc-462a-8420-33ee5ca35b97-2
+00:03:12.929 --> 00:03:14.840
+block of a MIPI transmitter as
+well.
+
+c26502e3-a663-4830-8599-8cbba03cbcd4-0
+00:03:15.400 --> 00:03:19.327
+The MIPI PHY is comprised of two
+differential data lanes and one
+
+c26502e3-a663-4830-8599-8cbba03cbcd4-1
+00:03:19.327 --> 00:03:20.800
+differential clock lane.
+
+54bcfa97-7de4-4c5a-89d8-ec8e7eb77e1a-0
+00:03:22.440 --> 00:03:24.960
+This is the case when we're
+talking about D-PHY.
+
+64eb2d0f-846d-4010-b39b-3c06fe7a3319-0
+00:03:26.320 --> 00:03:30.102
+However, in the case of C-PHY,
+instead of two data lanes and one
+
+64eb2d0f-846d-4010-b39b-3c06fe7a3319-1
+00:03:30.102 --> 00:03:33.574
+clock lane, there are only two
+data lanes which are operated as
+
+64eb2d0f-846d-4010-b39b-3c06fe7a3319-2
+00:03:33.574 --> 00:03:37.480
+trios and have the clock embedded
+within the data.
+
+23a5e703-6e3e-4fe1-9768-6875a886d7e9-0
+00:03:38.120 --> 00:03:41.944
+Ultimately, the number of inputs
+to the PHY is the same, only the
+
+23a5e703-6e3e-4fe1-9768-6875a886d7e9-1
+00:03:41.944 --> 00:03:45.420
+functionality of the inputs in
+these two separate modes are
+
+23a5e703-6e3e-4fe1-9768-6875a886d7e9-2
+00:03:45.420 --> 00:03:46.000
+different.
+
+cdca9b0e-a59c-4f59-b08f-2e05c5aa7557-0
+00:03:46.760 --> 00:03:50.407
+The purpose of the MIPI PHY,
+regardless of D-PHY or C-PHY, is
+
+cdca9b0e-a59c-4f59-b08f-2e05c5aa7557-1
+00:03:50.407 --> 00:03:53.465
+to be the physical layer
+interface between two MIPI
+
+cdca9b0e-a59c-4f59-b08f-2e05c5aa7557-2
+00:03:53.465 --> 00:03:55.759
+devices, a transmitter and a
+receiver.
+
+be798df5-c2fa-4ae6-8e53-e5653e06df6c-0
+00:03:56.360 --> 00:03:58.998
+Recall from previous lessons that
+MIPI signals will transition
+
+be798df5-c2fa-4ae6-8e53-e5653e06df6c-1
+00:03:58.998 --> 00:04:01.840
+between high impedance and high
+speed modes.
+
+b6f3505f-65af-407f-b4cb-118927fe958f-0
+00:04:02.320 --> 00:04:05.689
+It is the job of the MIPI PHY
+blocks to in the case of the
+
+b6f3505f-65af-407f-b4cb-118927fe958f-1
+00:04:05.689 --> 00:04:09.402
+transmitter, enact those changes
+of impedance and in the case of
+
+b6f3505f-65af-407f-b4cb-118927fe958f-2
+00:04:09.402 --> 00:04:13.057
+the receiver to expect and vary
+its own internal impedance when
+
+b6f3505f-65af-407f-b4cb-118927fe958f-3
+00:04:13.057 --> 00:04:14.200
+those changes occur.
+
+6069c243-eabf-46e0-93dd-c7c71f90f072-0
+00:04:15.160 --> 00:04:19.961
+More specifically, as discussed
+in the course GMSL 220B, the
+
+6069c243-eabf-46e0-93dd-c7c71f90f072-1
+00:04:19.961 --> 00:04:24.763
+PHYs will transition between
+high impedance termination and
+
+6069c243-eabf-46e0-93dd-c7c71f90f072-2
+00:04:24.763 --> 00:04:29.407
+100 Ohm differential or in the
+case of C-PHY 50 Ohm single
+
+6069c243-eabf-46e0-93dd-c7c71f90f072-3
+00:04:29.407 --> 00:04:29.880
+ended.
+
+69bb3d40-9099-4246-8d63-51aa7008052a-0
+00:04:33.000 --> 00:04:37.051
+A couple of additional facts that
+will assist you when using the
+
+69bb3d40-9099-4246-8d63-51aa7008052a-1
+00:04:37.051 --> 00:04:41.302
+GMSL SerDes is that in the
+documentation for the SerDes the
+
+69bb3d40-9099-4246-8d63-51aa7008052a-2
+00:04:41.302 --> 00:04:43.760
+MIPI PHYs are termed 0 1 2 and 3.
+
+47f92083-8392-4aab-83f7-2c1d30039842-0
+00:04:44.680 --> 00:04:47.331
+So when you're searching for
+registers or information you
+
+47f92083-8392-4aab-83f7-2c1d30039842-1
+00:04:47.331 --> 00:04:49.160
+always search for PHY one for
+example.
+
+a1788970-2799-4058-9a2a-0c4f381c36eb-0
+00:04:49.640 --> 00:04:52.928
+Finally, depending on the SerDes
+part number, the device can
+
+a1788970-2799-4058-9a2a-0c4f381c36eb-1
+00:04:52.928 --> 00:04:54.600
+contain either 2 or 4 PHY blocks.
+
+646c45db-56e9-49d0-ba7c-baed6c42a84c-0
+00:04:55.080 --> 00:05:00.950
+For example, the MAX96717
+contains 2, PHY blocks and the
+
+646c45db-56e9-49d0-ba7c-baed6c42a84c-1
+00:05:00.950 --> 00:05:03.040
+MAX96724 contains 4.
+
+911a90ea-fc2a-4d4e-88d1-b34ef07e52ae-0
+00:05:03.600 --> 00:05:06.414
+Now that we have a working
+knowledge of the MIPI PHY, let's
+
+911a90ea-fc2a-4d4e-88d1-b34ef07e52ae-1
+00:05:06.414 --> 00:05:07.600
+move on to the MIPI port.
+
+8724f162-9b0c-49f8-9355-d0c329776c5a-0
+00:05:07.600 --> 00:05:10.813
+The MIPI port is the video
+interface between a MIPI
+
+8724f162-9b0c-49f8-9355-d0c329776c5a-1
+00:05:10.813 --> 00:05:12.640
+transmitter and MIPI receiver.
+
+09a90769-1562-43b7-a83f-ea252c47721f-0
+00:05:13.240 --> 00:05:16.790
+It is comprised of either one or
+two mid B PHYs, the block we were
+
+09a90769-1562-43b7-a83f-ea252c47721f-1
+00:05:16.790 --> 00:05:20.116
+just speaking about, and some
+additional lane mapping
+
+09a90769-1562-43b7-a83f-ea252c47721f-2
+00:05:20.116 --> 00:05:20.680
+circuitry.
+
+07f887cb-444f-4e19-8508-d23c769f26bf-0
+00:05:21.320 --> 00:05:24.866
+From that information you can
+glean that in the case of D-PHY,
+
+07f887cb-444f-4e19-8508-d23c769f26bf-1
+00:05:24.866 --> 00:05:28.589
+the port contains a single clock
+lane and between one and four
+
+07f887cb-444f-4e19-8508-d23c769f26bf-2
+00:05:28.589 --> 00:05:29.240
+data lanes.
+
+ac1d8436-1d28-4e1d-b7d8-91b0e91a8f4b-0
+00:05:29.800 --> 00:05:33.310
+This is true for C5 as well,
+except that there's no clock lane
+
+ac1d8436-1d28-4e1d-b7d8-91b0e91a8f4b-1
+00:05:33.310 --> 00:05:36.640
+and instead only between one and
+four data lanes.
+
+5ca5f2a8-c960-404e-9e24-690cdf5ecfd3-0
+00:05:37.160 --> 00:05:39.280
+The clock signal is embedded
+within the data.
+
+fdc60c81-75fd-4ffd-983c-54e21ec7238c-0
+00:05:39.960 --> 00:05:41.840
+Let's talk about that lane
+mapping block.
+
+5fe8825d-741a-466f-a019-b54e11030432-0
+00:05:42.440 --> 00:05:44.730
+This is a little bit of
+additional circuitry that is
+
+5fe8825d-741a-466f-a019-b54e11030432-1
+00:05:44.730 --> 00:05:46.200
+added to complete the MIPI port.
+
+2b53b739-b627-45c2-9cec-47cb8f8d5eb2-0
+00:05:46.800 --> 00:05:50.237
+The lane mapping and polarity
+inversion circuitry, as the name
+
+2b53b739-b627-45c2-9cec-47cb8f8d5eb2-1
+00:05:50.237 --> 00:05:53.565
+suggests, allows lane swapping
+and polarity inversion on the
+
+2b53b739-b627-45c2-9cec-47cb8f8d5eb2-2
+00:05:53.565 --> 00:05:57.057
+input to the MIPI receiver or in
+the case of the Deserializer, on
+
+2b53b739-b627-45c2-9cec-47cb8f8d5eb2-3
+00:05:57.057 --> 00:05:59.239
+the output of the MIPI
+transmitter.
+
+6aca364d-0f91-4aec-89ec-21eed81afb0d-0
+00:05:59.840 --> 00:06:02.697
+Lanes within the port can be
+swapped around and polarity of
+
+6aca364d-0f91-4aec-89ec-21eed81afb0d-1
+00:06:02.697 --> 00:06:04.840
+the differential data lanes can
+be inverted.
+
+aa517151-fa43-45a8-b4df-8d871118754b-0
+00:06:05.360 --> 00:06:08.407
+These capabilities are typically
+used to overcome hardware routing
+
+aa517151-fa43-45a8-b4df-8d871118754b-1
+00:06:08.407 --> 00:06:09.440
+limitations.
+
+216b6eb0-d744-40a0-b75b-5c837cb183b7-0
+00:06:09.920 --> 00:06:13.066
+Now, in the GMSL SerDes, the
+MIPI transmitter or receiver
+
+216b6eb0-d744-40a0-b75b-5c837cb183b7-1
+00:06:13.066 --> 00:06:16.000
+blocks can be configured in a
+number of different port
+
+216b6eb0-d744-40a0-b75b-5c837cb183b7-2
+00:06:16.000 --> 00:06:16.800
+configurations.
+
+32db6382-1943-4c15-93ad-1c21a7533596-0
+00:06:17.320 --> 00:06:19.627
+Let's go through each of those
+different possible
+
+32db6382-1943-4c15-93ad-1c21a7533596-1
+00:06:19.627 --> 00:06:20.320
+configurations.
+
+c6f4ca3e-a89e-40cc-bb18-3ed9c3974b6a-0
+00:06:20.760 --> 00:06:24.520
+First, they can be configured in
+a 1x4 mode, as shown here.
+
+888fe9b4-4580-440f-bfc9-2ca79576bd18-0
+00:06:25.080 --> 00:06:28.571
+In 1x4 mode, 1 clock lane and
+four data lanes are sent to a
+
+888fe9b4-4580-440f-bfc9-2ca79576bd18-1
+00:06:28.571 --> 00:06:31.160
+single port spread over 2 PHYs.
+
+7d872bcd-a42d-41ab-a522-86fae4e6b242-0
+00:06:31.800 --> 00:06:35.924
+This is the only configuration
+that the MAX96717 can be
+
+7d872bcd-a42d-41ab-a522-86fae4e6b242-1
+00:06:35.924 --> 00:06:36.720
+configured.
+
+955a1eca-b268-4dfd-9c0b-051eac74f520-0
+00:06:37.240 --> 00:06:42.319
+Let's talk about something a
+little more interesting like the
+
+955a1eca-b268-4dfd-9c0b-051eac74f520-1
+00:06:42.319 --> 00:06:47.070
+MAX96724 GMSL2 CSI quad
+Deserializer including a 1x4
+
+955a1eca-b268-4dfd-9c0b-051eac74f520-2
+00:06:47.070 --> 00:06:47.480
+mode.
+
+ac625f2c-d348-4241-9d5d-7dd76cc3a60f-0
+00:06:47.480 --> 00:06:52.040
+The MAX96724 can also be
+configured in a 2x4 mode.
+
+8fdd0f9e-415e-4a5d-bd0e-19626973d9dd-0
+00:06:52.600 --> 00:06:57.674
+In this mode it is easier to
+think of it as 2 by 1x4, so 2
+
+8fdd0f9e-415e-4a5d-bd0e-19626973d9dd-1
+00:06:57.674 --> 00:06:59.720
+independent 1x4 ports.
+
+3fa18fef-e304-4f00-9252-851ff6cd64cd-0
+00:07:00.280 --> 00:07:03.967
+Note that because we are talking
+about a Deserializer now and not
+
+3fa18fef-e304-4f00-9252-851ff6cd64cd-1
+00:07:03.967 --> 00:07:07.320
+a Serializer, the order of the
+separate blocks is reversed.
+
+5c270e7e-1844-416a-8ce4-a2bc761cf12d-0
+00:07:07.880 --> 00:07:10.760
+With that said, let's talk about
+the 4x2 mode.
+
+9484e7f3-60d3-4956-8d32-7445b3ffd589-0
+00:07:12.000 --> 00:07:17.470
+For this mode, think four 1x2
+or four independent 1x2
+
+9484e7f3-60d3-4956-8d32-7445b3ffd589-1
+00:07:17.470 --> 00:07:18.000
+ports.
+
+cadbe3f3-dbc6-49c2-a290-7a8de87ee802-0
+00:07:18.560 --> 00:07:23.101
+The final mode the MAX96724 can
+be configured in is a mix of
+
+cadbe3f3-dbc6-49c2-a290-7a8de87ee802-1
+00:07:23.101 --> 00:07:27.299
+the prior configurations a 1x4
+and 2x2 mode as shown here, a
+
+cadbe3f3-dbc6-49c2-a290-7a8de87ee802-2
+00:07:27.299 --> 00:07:31.290
+1x4 port and two 1x2 ports
+which are all independent of
+
+cadbe3f3-dbc6-49c2-a290-7a8de87ee802-3
+00:07:31.290 --> 00:07:33.079
+each other.
+
+d95de699-6d8f-477c-905e-570f3e10d6b5-0
+00:07:34.360 --> 00:07:36.986
+You may have noticed that some of
+these clock lanes leaving some of
+
+d95de699-6d8f-477c-905e-570f3e10d6b5-1
+00:07:36.986 --> 00:07:39.000
+the ports have the clock crossed
+out.
+
+c98b156a-6dd4-4ca1-9fa0-a703f5c93c0e-0
+00:07:39.640 --> 00:07:40.840
+Let's talk about that now.
+
+e5d5bef7-d748-453f-bce1-0f8b75cc9ce3-0
+00:07:41.320 --> 00:07:45.065
+When a port is comprised of two
+PHYs, one of the clock lanes is
+
+e5d5bef7-d748-453f-bce1-0f8b75cc9ce3-1
+00:07:45.065 --> 00:07:46.160
+always left unused.
+
+1e008439-1f87-4eea-a9e5-375ce4a72b9d-0
+00:07:46.680 --> 00:07:50.626
+If we looked at the diagram, we
+can see that port A here is a 1x4
+
+1e008439-1f87-4eea-a9e5-375ce4a72b9d-1
+00:07:50.626 --> 00:07:54.635
+port where 2 MIPI PHYs are
+working together to collect data
+
+1e008439-1f87-4eea-a9e5-375ce4a72b9d-2
+00:07:54.635 --> 00:07:55.560
+across 4 lanes.
+
+13c370a0-80d6-46ef-bc82-d373aedbdfdb-0
+00:07:56.200 --> 00:07:59.887
+For them to be standard, each
+port can only accept 1 clock
+
+13c370a0-80d6-46ef-bc82-d373aedbdfdb-1
+00:07:59.887 --> 00:08:00.200
+lane.
+
+954a855f-3b56-431a-b42f-1709753b06dd-0
+00:08:00.720 --> 00:08:04.182
+Therefore, in this case, one of
+these clock lanes is left
+
+954a855f-3b56-431a-b42f-1709753b06dd-1
+00:08:04.182 --> 00:08:04.600
+unused.
+
+2c5ec44d-222d-4cf0-8a19-52637f430c52-0
+00:08:05.080 --> 00:08:09.312
+That single clock lane in use is
+going to go to what is termed
+
+2c5ec44d-222d-4cf0-8a19-52637f430c52-1
+00:08:09.312 --> 00:08:13.544
+the primary or master PHY in a
+MAX96724 operating in a 2x4
+
+2c5ec44d-222d-4cf0-8a19-52637f430c52-2
+00:08:13.544 --> 00:08:13.880
+mode.
+
+d6d20a91-5fed-4ba4-9503-b38815a3fc48-0
+00:08:14.200 --> 00:08:17.440
+Port A has its primary PHY
+outlined as PHY 1.
+
+b994a3e1-860f-4a37-8aef-b2cf54d9feeb-0
+00:08:18.040 --> 00:08:21.440
+PHY 0 in this case is termed
+secondary, in which case PHY zero
+
+b994a3e1-860f-4a37-8aef-b2cf54d9feeb-1
+00:08:21.440 --> 00:08:25.017
+will borrow the clock lane that's
+replicated from PHY 1 internally
+
+b994a3e1-860f-4a37-8aef-b2cf54d9feeb-2
+00:08:25.017 --> 00:08:28.360
+and not output any clock from its
+clock pins.
+
+163f9c2b-714d-4811-88c5-50d1f8c90d48-0
+00:08:29.000 --> 00:08:32.301
+One other note to mention while
+we are here, it is not required
+
+163f9c2b-714d-4811-88c5-50d1f8c90d48-1
+00:08:32.301 --> 00:08:34.880
+that all data lanes on a MIPI
+port are utilized.
+
+77eb4c7d-d839-488b-977b-f5129a326486-0
+00:08:35.400 --> 00:08:38.655
+For instance, a four lane port
+like the one shown above can be
+
+77eb4c7d-d839-488b-977b-f5129a326486-1
+00:08:38.655 --> 00:08:41.800
+operated with any number of lanes
+between 1 and 4.
+
+3182a40c-d971-4bc3-9b23-f4426e736134-0
+00:08:42.280 --> 00:08:45.970
+Therefore, when interfacing with
+another MIPI device, it is OK to
+
+3182a40c-d971-4bc3-9b23-f4426e736134-1
+00:08:45.970 --> 00:08:48.680
+connect a 1x2 port to a 1x4 port.
+
+8ec99689-14a0-4c81-88f4-e0afdcaa4a8f-0
+00:08:49.280 --> 00:08:52.990
+It is however important that the
+1x4 port is configured to operate
+
+8ec99689-14a0-4c81-88f4-e0afdcaa4a8f-1
+00:08:52.990 --> 00:08:54.440
+in two lane mode.
+
+deb9c25c-25df-4041-8be8-5cdc66a9e0cd-0
+00:08:55.840 --> 00:08:59.192
+One other note to mention, while
+we are here, it is not required
+
+deb9c25c-25df-4041-8be8-5cdc66a9e0cd-1
+00:08:59.192 --> 00:09:01.720
+that all data lanes on a MIPI
+port are utilized.
+
+8be7a8b5-6203-4260-ad29-969f138b78de-0
+00:09:02.280 --> 00:09:05.528
+For instance, a four lane port
+like the one shown here can be
+
+8be7a8b5-6203-4260-ad29-969f138b78de-1
+00:09:05.528 --> 00:09:08.720
+operated with any number of lanes
+between 1 and 4.
+
+2b88a263-c443-43c2-95cd-bfaf5fe19d9c-0
+00:09:09.280 --> 00:09:13.240
+Therefore, when interfacing with
+another MIPI device, it is OK to
+
+2b88a263-c443-43c2-95cd-bfaf5fe19d9c-1
+00:09:13.240 --> 00:09:15.880
+connect a 1x2 port to a 1x4 port.
+
+98173f61-fb3d-4663-81d3-301b94fa5d90-0
+00:09:16.480 --> 00:09:20.363
+It is however important that the
+1x4 port is configured to operate
+
+98173f61-fb3d-4663-81d3-301b94fa5d90-1
+00:09:20.363 --> 00:09:21.880
+in two lane mode.
+
+4751481a-93f5-47f8-a165-5d019add0f11-0
+00:09:23.680 --> 00:09:28.899
+Now that we know the possible
+port configurations, we can see
+
+4751481a-93f5-47f8-a165-5d019add0f11-1
+00:09:28.899 --> 00:09:34.287
+that the MAX96724 actually has
+six different ports ABCDE and F
+
+4751481a-93f5-47f8-a165-5d019add0f11-2
+00:09:34.287 --> 00:09:38.160
+despite the fact that it only has
+four PHYs.
+
+34da1e49-dcde-41be-a8ba-24d781222b50-0
+00:09:38.840 --> 00:09:42.977
+This is because ports A and B are
+the interface nomenclatures when
+
+34da1e49-dcde-41be-a8ba-24d781222b50-1
+00:09:42.977 --> 00:09:46.580
+speaking about combining  2 MIPI
+PHYs into a single interface or
+
+34da1e49-dcde-41be-a8ba-24d781222b50-2
+00:09:46.580 --> 00:09:50.450
+port and then the next 4 ports
+are the ports comprised of just a
+
+34da1e49-dcde-41be-a8ba-24d781222b50-3
+00:09:50.450 --> 00:09:53.320
+single PHY, CDE and F.
+
+136d55d0-2be1-4237-b5b6-b45a0c9be794-0
+00:09:54.720 --> 00:09:58.488
+The final device which is used in
+the CSI-2 receiver is what we
+
+136d55d0-2be1-4237-b5b6-b45a0c9be794-1
+00:09:58.488 --> 00:09:59.960
+call the MIPI controller.
+
+26b74087-c29a-4b0f-b825-a79f2024f228-0
+00:10:00.440 --> 00:10:03.193
+The MIPI controller is the
+interfacing block between the
+
+26b74087-c29a-4b0f-b825-a79f2024f228-1
+00:10:03.193 --> 00:10:05.560
+CSI-2 port circuitry and the rest
+of the device.
+
+a52c7bd2-1038-48dc-9048-c250f10b02c8-0
+00:10:06.160 --> 00:10:09.912
+This block in the case of a CSI-2
+receiver takes parallel video
+
+a52c7bd2-1038-48dc-9048-c250f10b02c8-1
+00:10:09.912 --> 00:10:11.320
+data from the MIPI port.
+
+99d64ce7-244c-47f4-904a-d23f45ac4308-0
+00:10:11.920 --> 00:10:14.929
+In the case of a transmitter, it
+will send parallel data to the
+
+99d64ce7-244c-47f4-904a-d23f45ac4308-1
+00:10:14.929 --> 00:10:15.400
+MIPI port.
+
+34a638eb-e0e7-4b99-a7b1-6673e4155707-0
+00:10:16.000 --> 00:10:19.291
+Another function of the
+controller is to detect protocol
+
+34a638eb-e0e7-4b99-a7b1-6673e4155707-1
+00:10:19.291 --> 00:10:22.699
+level details of the incoming
+video data, for example data
+
+34a638eb-e0e7-4b99-a7b1-6673e4155707-2
+00:10:22.699 --> 00:10:26.280
+type, virtual channel and other
+things like MIPI, CRC errors.
+
+30b7f346-1a89-4832-b913-f5b9de4775fb-0
+00:10:26.760 --> 00:10:28.960
+Finally, the controller acts as a
+mux.
+
+859a73ff-ecd8-4dbb-a3ef-56c896c09faf-0
+00:10:29.280 --> 00:10:33.183
+It directs data to or from the
+GMSL SerDes internal FIFOs called
+
+859a73ff-ecd8-4dbb-a3ef-56c896c09faf-1
+00:10:33.183 --> 00:10:37.219
+video pipes, which you'll learn
+about in the separate GMSL U
+
+859a73ff-ecd8-4dbb-a3ef-56c896c09faf-2
+00:10:37.219 --> 00:10:38.080
+course.
+
+dbcf4c26-7be3-49dd-add7-b5520073b6c5-0
+00:10:38.520 --> 00:10:41.958
+Which video pipe the controller
+chooses to receive its data from
+
+dbcf4c26-7be3-49dd-add7-b5520073b6c5-1
+00:10:41.958 --> 00:10:45.080
+can be filtered based on virtual
+channel and or data type.
+
+87114d3b-d0c1-4d36-922e-542774e9b4c8-0
+00:10:46.040 --> 00:10:47.160
+Now up with PHYs.
+
+5f7dd97a-7d8c-4491-bbf8-75afe1e437ab-0
+00:10:47.160 --> 00:10:50.743
+When different ports are used or
+selected, different controllers
+
+5f7dd97a-7d8c-4491-bbf8-75afe1e437ab-1
+00:10:50.743 --> 00:10:51.240
+are used.
+
+70040d8a-d39f-4b78-a837-54caf4fa4fab-0
+00:10:51.800 --> 00:10:56.208
+In the case of a 96724
+Deserializer operating in 2x4
+
+70040d8a-d39f-4b78-a837-54caf4fa4fab-1
+00:10:56.208 --> 00:11:00.696
+mode, port A is using controller
+one and port B is using
+
+70040d8a-d39f-4b78-a837-54caf4fa4fab-2
+00:11:00.696 --> 00:11:01.720
+controller 2.
+
+35bef731-5da1-4492-9158-45aad06daedd-0
+00:11:03.240 --> 00:11:06.320
+Now with that same device, we're
+to operate in 4x2 mode.
+
+200e909b-6594-4c0f-85b2-656af863347f-0
+00:11:06.320 --> 00:11:13.168
+Instead, port CDE and F would be
+using controller 0 1 2 and 3
+
+200e909b-6594-4c0f-85b2-656af863347f-1
+00:11:13.168 --> 00:11:14.560
+respectively.
+
+040c438e-ec6b-4173-9970-985b7b6825b7-0
+00:11:16.440 --> 00:11:20.475
+One final function of the MIPI
+transmitter block in GMSL CSI-2
+
+040c438e-ec6b-4173-9970-985b7b6825b7-1
+00:11:20.475 --> 00:11:24.382
+serializers is the ability to
+copy data that is sent to 1 PHY
+
+040c438e-ec6b-4173-9970-985b7b6825b7-2
+00:11:24.382 --> 00:11:26.880
+and send it out to another PHY as
+well.
+
+c5eb4f1a-690d-4e8d-89f9-fd48205b52ef-0
+00:11:27.360 --> 00:11:28.840
+This is called PHY copy.
+
+cb05df38-8880-4d96-b2dc-af8fd6713475-0
+00:11:29.440 --> 00:11:33.186
+A user can specify the source
+PHY, in other words what data to
+
+cb05df38-8880-4d96-b2dc-af8fd6713475-1
+00:11:33.186 --> 00:11:36.872
+copy, and the destination PHY, in
+other words where that data
+
+cb05df38-8880-4d96-b2dc-af8fd6713475-2
+00:11:36.872 --> 00:11:37.960
+should be sent to.
+
+9816ffde-8ba4-44eb-adb1-1496480ebc61-0
+00:11:38.480 --> 00:11:42.686
+For instance, one could take the
+data that is normally exiting
+
+9816ffde-8ba4-44eb-adb1-1496480ebc61-1
+00:11:42.686 --> 00:11:46.158
+from PHY 0 and replicate that
+data to output from PHY 1
+
+9816ffde-8ba4-44eb-adb1-1496480ebc61-2
+00:11:46.158 --> 00:11:47.160
+simultaneously.
+
+cb16cf6c-7d5b-4965-86f1-dd14972d9810-0
+00:11:47.640 --> 00:11:50.624
+When using this feature, there is
+one thing that a user should keep
+
+cb16cf6c-7d5b-4965-86f1-dd14972d9810-1
+00:11:50.624 --> 00:11:51.240
+in mind.
+
+08908190-c438-4166-9c65-80b4161373ae-0
+00:11:51.880 --> 00:11:55.090
+All the PHY settings of the
+source and destination for
+
+08908190-c438-4166-9c65-80b4161373ae-1
+00:11:55.090 --> 00:11:58.644
+transmitters should be exactly
+the same, like clock speed for
+
+08908190-c438-4166-9c65-80b4161373ae-2
+00:11:58.644 --> 00:11:59.159
+instance.
+
+04906988-0978-45ee-9f33-149e35319e4c-0
+00:12:00.400 --> 00:12:02.906
+Let's answer the questions we
+introduced at the beginning of
+
+04906988-0978-45ee-9f33-149e35319e4c-1
+00:12:02.906 --> 00:12:03.400
+this course.
+
+796b6c86-c352-46a4-922f-118126b0a23c-0
+00:12:03.880 --> 00:12:09.032
+My sensor uses a 1x2 D-PHY
+interface, but the GMSL2 parts
+
+796b6c86-c352-46a4-922f-118126b0a23c-1
+00:12:09.032 --> 00:12:11.240
+lists one by four D-PHY
+interface.
+
+0a320dc2-bb35-48e8-b52c-70ffeb52beee-0
+00:12:11.720 --> 00:12:12.560
+Will it still work?
+
+024e9368-7190-4d00-8d63-e31b4a84f93b-0
+00:12:13.120 --> 00:12:13.640
+Yes.
+
+fb2abd6a-832e-4cc1-b1cf-6034328d6762-0
+00:12:13.800 --> 00:12:17.146
+The 1x4 MIPI 5 will need to be
+programmed to operate in a
+
+fb2abd6a-832e-4cc1-b1cf-6034328d6762-1
+00:12:17.146 --> 00:12:20.074
+reduced lane state where only
+two of the four lanes are
+
+fb2abd6a-832e-4cc1-b1cf-6034328d6762-2
+00:12:20.074 --> 00:12:20.440
+active.
+
+1ddf1f56-373b-426c-89f4-ab86316ca45c-0
+00:12:21.080 --> 00:12:25.376
+How can the MAX96724 have 6 MIPI
+ports even though it can only be
+
+1ddf1f56-373b-426c-89f4-ab86316ca45c-1
+00:12:25.376 --> 00:12:29.816
+configured of output from at
+most 4 separate ports at a
+
+1ddf1f56-373b-426c-89f4-ab86316ca45c-2
+00:12:29.816 --> 00:12:34.399
+single time While operating in
+the 2x4 mode, the two ports are
+
+1ddf1f56-373b-426c-89f4-ab86316ca45c-3
+00:12:34.399 --> 00:12:35.760
+termed A and B.
+
+abeb7bab-53d7-4656-bfd4-5dd6a610c7c1-0
+00:12:36.120 --> 00:12:41.120
+When operating as 1x2 ports, CDE
+and F are used.
+
+5f05692c-171d-43de-b87e-7b7a86550ccf-0
+00:12:41.880 --> 00:12:45.283
+What is the reason for
+designating secondary versus
+
+5f05692c-171d-43de-b87e-7b7a86550ccf-1
+00:12:45.283 --> 00:12:48.360
+primary PHYs in a 1x4 NIPI port
+interface?
+
+cec88848-d112-4d69-8457-5dd5eeddc25b-0
+00:12:48.920 --> 00:12:52.475
+In the Deserializer, the
+secondary PHY will internally
+
+cec88848-d112-4d69-8457-5dd5eeddc25b-1
+00:12:52.475 --> 00:12:55.320
+borrow the clock lane from the
+primary PHY.
+
+b93c94d5-ccd7-4f8b-8f5d-9ee2e7ff33a2-0
+00:12:56.000 --> 00:12:59.321
+In the Serializer, no clock lane
+is sent from the sensor to the
+
+b93c94d5-ccd7-4f8b-8f5d-9ee2e7ff33a2-1
+00:12:59.321 --> 00:13:00.360
+secondary PHY input.
+
+26828108-13ae-4326-8317-a5b44f5c94f8-0
+00:13:01.080 --> 00:13:04.422
+And with that, we can conclude
+our lesson on the internal NIPI
+
+26828108-13ae-4326-8317-a5b44f5c94f8-1
+00:13:04.422 --> 00:13:06.120
+architecture of the GMSL SerDes.
+
+1335993d-4a26-4595-afe3-f8f8ed319b04-0
+00:13:06.440 --> 00:13:07.240
+Thanks for watching.
+

@@ -1,0 +1,1302 @@
+WEBVTT
+
+a3acc574-9955-407f-8716-df6303bcf9c5-0
+00:00:10.610 --> 00:00:12.410
+Hi everyone, welcome to today's demo.
+
+4946dfe0-7bcd-4d63-9cb8-f2857eae65a1-0
+00:00:12.410 --> 00:00:16.825
+My name is Katie Wong and I'm part of the
+display Applications team for GMSL in the
+
+4946dfe0-7bcd-4d63-9cb8-f2857eae65a1-1
+00:00:16.825 --> 00:00:18.770
+Automotive in Cabin Experience group.
+
+08c38721-138b-469c-bac2-73a34aca1319-0
+00:00:19.370 --> 00:00:24.013
+Today I'm going to be showing you how to
+get video set up on a GMSL2 link using
+
+08c38721-138b-469c-bac2-73a34aca1319-1
+00:00:24.013 --> 00:00:26.650
+our HDMI Serializer and our OLDID
+Serializer.
+
+76b9ce09-3f87-40b3-ad1d-47e9b37c37a3-0
+00:00:27.880 --> 00:00:30.880
+GMSL2 is a packet based bi directional
+architecture.
+
+a5181e95-491f-45d7-a7d0-6c04be73f1ce-0
+00:00:31.240 --> 00:00:35.780
+That means that in a display application
+we're sending video data from our
+
+a5181e95-491f-45d7-a7d0-6c04be73f1ce-1
+00:00:35.780 --> 00:00:40.745
+Serializer across to our Deserializer and
+then we're sending reverse channel data
+
+a5181e95-491f-45d7-a7d0-6c04be73f1ce-2
+00:00:40.745 --> 00:00:44.560
+on our Deserializer through our GMSL2
+link to our Serializer.
+
+91791ae3-3f28-481a-8a9f-6aa97ad1c526-0
+00:00:46.480 --> 00:00:50.000
+So let's take a closer look at the
+hardware and see what we have going on.
+
+0ac74b34-023e-4917-8cc6-a5d26c55d9c3-0
+00:00:50.520 --> 00:00:54.176
+So on the left hand side, we have
+our HDMI input, at the top left we
+
+0ac74b34-023e-4917-8cc6-a5d26c55d9c3-1
+00:00:54.176 --> 00:00:57.760
+have our 12 Volt barrel Jack.
+
+81f64351-fe63-40c2-9437-cb50e142c9a2-0
+00:00:58.880 --> 00:01:02.480
+Right next to that we have our red on and
+off switch for the EV kit.
+
+d184174b-de9b-4a57-855f-6bae65546a86-0
+00:01:03.920 --> 00:01:07.320
+And then right next to that we have
+switch 3, which is a set of DIP switches.
+
+4d075f8a-6cd0-4531-9495-3f4b56120032-0
+00:01:07.720 --> 00:01:10.552
+So this configures the device address for
+the device, which today we'll be using
+
+4d075f8a-6cd0-4531-9495-3f4b56120032-1
+00:01:10.552 --> 00:01:13.280
+0X80 for the Serializer.
+
+12abb613-baf0-49c2-83fc-c0bb062be580-0
+00:01:13.960 --> 00:01:16.920
+And we're also setting it for I to C mode
+in coax.
+
+13460ad9-449f-4dfe-b4e7-5b1fea6d053b-0
+00:01:18.400 --> 00:01:21.640
+And then right next to this DIP switch,
+we have these 3 headers.
+
+c009485a-10b6-4d23-86a0-fe6015fcb152-0
+00:01:22.000 --> 00:01:25.800
+The first one here is setting our BDDIO
+voltage of 3.3 volts.
+
+ad54e8b2-1785-40d2-b8ab-67ddf3de7cf5-0
+00:01:26.400 --> 00:01:29.960
+And then right next to that, we're
+configuring our EV kit for I2C mode.
+
+e6a54b11-2ef5-412a-b507-95361b3e9a8d-0
+00:01:31.360 --> 00:01:35.156
+And then here you'll see I have a
+micro USB connected to talk to our
+
+e6a54b11-2ef5-412a-b507-95361b3e9a8d-1
+00:01:35.156 --> 00:01:37.753
+Team C microcontroller, which we'll
+be able to use to send commands
+
+e6a54b11-2ef5-412a-b507-95361b3e9a8d-2
+00:01:37.753 --> 00:01:41.200
+across the Gmas L2 link to
+configure our control registers.
+
+9714e538-47cf-4c84-ab0e-cb79e5a0af6f-0
+00:01:42.680 --> 00:01:46.222
+Right next to that, at the very right
+hand side of the board, we have our Gmas
+
+9714e538-47cf-4c84-ab0e-cb79e5a0af6f-1
+00:01:46.222 --> 00:01:48.280
+L2 output on PHY A.
+
+6717e68e-ff80-4a91-a0f9-4e1fcea5921a-0
+00:01:49.200 --> 00:01:51.606
+So this is going through our coax
+connector, through a coax cable and
+
+6717e68e-ff80-4a91-a0f9-4e1fcea5921a-1
+00:01:51.606 --> 00:01:54.440
+then onto our Deserializer.
+
+2fc4bda1-370d-4b11-96ac-b30fd3ca5148-0
+00:01:55.360 --> 00:02:00.170
+So now focusing on our Deserializer,
+we have our coax input on PHY A on the
+
+2fc4bda1-370d-4b11-96ac-b30fd3ca5148-1
+00:02:00.170 --> 00:02:01.120
+left hand side.
+
+9c57108f-0b19-4957-8e11-efca09892177-0
+00:02:02.280 --> 00:02:06.076
+At the top here we have our 12 Volt
+barrel Jack again, and then right next
+
+9c57108f-0b19-4957-8e11-efca09892177-1
+00:02:06.076 --> 00:02:10.840
+to that we have our red on and off
+switch again.
+
+c98a3fe6-ac5f-43c2-a2e6-cdf63b011867-0
+00:02:10.840 --> 00:02:18.000
+We have the same jumpers on the top here
+for VDDDIO of 3.3 volts and also I2C.
+
+e2e0a90e-8afe-40dd-a1b8-872287241dd1-0
+00:02:19.720 --> 00:02:23.600
+Right next to that we have our DIP
+switches again to set our configuration.
+
+3d70193d-347f-4cde-9502-9496ee585513-0
+00:02:23.960 --> 00:02:29.920
+So today for our Deserializer, we'll be
+using 0X90I2C and coax mode On the
+
+3d70193d-347f-4cde-9502-9496ee585513-1
+00:02:29.920 --> 00:02:31.600
+right hand side.
+
+85cdcbce-7a82-4dfd-b2aa-5b002f4997b0-0
+00:02:31.600 --> 00:02:36.880
+Here we have our GMSL oLDI adaptor,
+so that is separate from our EV kit.
+
+2ab4f977-c55a-4dd6-bb4d-f1b933e5b84c-0
+00:02:37.960 --> 00:02:41.042
+And then this is connected through a Sam
+tech connector, which is then connected
+
+2ab4f977-c55a-4dd6-bb4d-f1b933e5b84c-1
+00:02:41.042 --> 00:02:43.800
+to our oLDI display panel.
+
+2fb61a40-1c45-4c21-bc91-a0d1db6e7953-0
+00:02:45.880 --> 00:02:49.452
+So now that we have our equipment,
+let's take a look at the EV kit data
+
+2fb61a40-1c45-4c21-bc91-a0d1db6e7953-1
+00:02:49.452 --> 00:02:49.800
+sheets.
+
+5ad0927c-c6ce-45bf-bd3d-dad734372776-0
+00:02:50.520 --> 00:02:52.450
+So if you don't have the EV Kit data
+sheets, you can find that on our
+
+5ad0927c-c6ce-45bf-bd3d-dad734372776-1
+00:02:52.450 --> 00:02:54.080
+product page.
+
+6f8937a0-fd47-42d3-8736-9cb7383d2916-0
+00:02:55.160 --> 00:02:57.302
+You should already have the worksheet
+downloaded, so please go ahead and
+
+6f8937a0-fd47-42d3-8736-9cb7383d2916-1
+00:02:57.302 --> 00:02:59.960
+download that if you have not already.
+
+528c94cb-dfc5-4625-bb54-0e0a7516d395-0
+00:03:00.640 --> 00:03:04.306
+So for the first step of the
+worksheet, check the configuration of
+
+528c94cb-dfc5-4625-bb54-0e0a7516d395-1
+00:03:04.306 --> 00:03:07.663
+the DIF switch, Switch 3 on the
+Serializer board and indicate whether
+
+528c94cb-dfc5-4625-bb54-0e0a7516d395-2
+00:03:07.663 --> 00:03:07.840
+the switch is high or low.
+
+70986507-6b03-4a2b-83c9-a81173d9a78a-0
+00:03:08.480 --> 00:03:11.400
+Also note the silk screen name for each
+switch in the section shown.
+
+aacc7a79-dc4c-4d3f-9f24-8519bb24c25e-0
+00:03:14.960 --> 00:03:18.538
+Moving on to the Deserializer board,
+again check the configuration of the DIF
+
+aacc7a79-dc4c-4d3f-9f24-8519bb24c25e-1
+00:03:18.538 --> 00:03:21.520
+switch switch to and indicate whether the
+switch is high or low.
+
+466fee7e-658a-454d-9c62-9ad4c0129b5e-0
+00:03:22.080 --> 00:03:25.120
+Also note the silk screen name for each
+switch in the section shown.
+
+618ec852-a632-4f03-a7ee-4551013ee98d-0
+00:03:29.240 --> 00:03:32.300
+In my default setup, the
+VDDIO header is set to 3. 3
+
+618ec852-a632-4f03-a7ee-4551013ee98d-1
+00:03:32.300 --> 00:03:33.680
+volts on both boards.
+
+c9401f14-3c6d-4320-bfe7-ff387a0d6e63-0
+00:03:34.040 --> 00:03:37.960
+That means the high is 3. 3
+volts and low is 0 volts.
+
+e59a0d66-fc55-4b0d-9089-ce3ce01c540c-0
+00:03:43.120 --> 00:03:46.432
+In this next section, you will want to
+indicate whether you are using I to C or
+
+e59a0d66-fc55-4b0d-9089-ce3ce01c540c-1
+00:03:46.432 --> 00:03:49.280
+coax mode and also the device address.
+
+6b63f33f-ddc3-4180-aca6-2733c7f13de3-0
+00:03:49.440 --> 00:03:51.960
+These are all configured by the DIF
+switches mentioned before.
+
+9e4e3fc9-cf9a-4e07-805d-58666db6a18d-0
+00:03:56.520 --> 00:03:59.778
+Now that all of our hardware is
+configured properly and we've had a good
+
+9e4e3fc9-cf9a-4e07-805d-58666db6a18d-1
+00:03:59.778 --> 00:04:02.144
+look at the EV kit data sheet and device
+data sheet, let's power on our boards and
+
+9e4e3fc9-cf9a-4e07-805d-58666db6a18d-2
+00:04:02.144 --> 00:04:05.760
+see what we see on the boards as we power
+them up.
+
+da894e8a-719b-45df-89fe-ac8d7a166e13-0
+00:04:07.640 --> 00:04:11.000
+So just turning that red switch at the
+top to the on position, you'll see
+
+da894e8a-719b-45df-89fe-ac8d7a166e13-1
+00:04:11.000 --> 00:04:14.040
+that the Teen C light is flashing five
+times.
+
+3ed6a360-0540-4082-bec3-dc13fb95f41a-0
+00:04:14.480 --> 00:04:18.963
+So we do not want to activate any
+commands at this point until we see a
+
+3ed6a360-0540-4082-bec3-dc13fb95f41a-1
+00:04:18.963 --> 00:04:19.960
+solid red light.
+
+312e3740-a78d-4a64-8450-f90affd5b52e-0
+00:04:20.960 --> 00:04:24.101
+We'll also see a blue LED for the
+Teen C power, a green LED to show
+
+312e3740-a78d-4a64-8450-f90affd5b52e-1
+00:04:24.101 --> 00:04:27.569
+that our GMSL2 link has locked, And
+then we'll also see this red error
+
+312e3740-a78d-4a64-8450-f90affd5b52e-2
+00:04:27.569 --> 00:04:32.805
+bar LED on our Serializer that is due
+to a difference in the default
+
+312e3740-a78d-4a64-8450-f90affd5b52e-3
+00:04:32.805 --> 00:04:38.236
+configuration of our Serializer
+device and the default hardware
+
+312e3740-a78d-4a64-8450-f90affd5b52e-4
+00:04:38.236 --> 00:04:40.200
+that's on this board.
+
+771792fd-9df9-4fe5-a7c1-9edb5e41443f-0
+00:04:40.600 --> 00:04:43.900
+So later on in the GUI, I'll show you
+how to remove this error from the
+
+771792fd-9df9-4fe5-a7c1-9edb5e41443f-1
+00:04:43.900 --> 00:04:48.040
+Serializer because this is not so
+relevant to our demo at the moment.
+
+ce5d599d-76a8-474c-afee-b9d4e1123ca6-0
+00:04:50.320 --> 00:04:54.673
+OK, Once you powered on these boards,
+you'll also see the backlight on your
+
+ce5d599d-76a8-474c-afee-b9d4e1123ca6-1
+00:04:54.673 --> 00:04:59.199
+oLDI panel show up and there is no video
+going through to this display at this
+
+ce5d599d-76a8-474c-afee-b9d4e1123ca6-2
+00:04:59.199 --> 00:04:59.600
+moment.
+
+4226af90-cc08-465c-9a35-c193b6e021aa-0
+00:05:01.320 --> 00:05:02.800
+So now we're going to fire up the GUI.
+
+767167f6-23ab-4296-a75b-9eebf56d8623-0
+00:05:02.800 --> 00:05:06.444
+If you do not already have the GUI,
+please check out the product page to
+
+767167f6-23ab-4296-a75b-9eebf56d8623-1
+00:05:06.444 --> 00:05:09.240
+download the GMSL GUI, or you can
+find it on Sharefile.
+
+af2bd930-8fd9-484a-aae0-121ee69a9d2d-0
+00:05:09.680 --> 00:05:12.040
+So now we have our GMSL GUI up and
+running.
+
+19891903-51ce-439e-b4c6-e9ab4199f4b3-0
+00:05:12.240 --> 00:05:16.194
+You'll see that it has identified our two
+parts here with the Serializer on the
+
+19891903-51ce-439e-b4c6-e9ab4199f4b3-1
+00:05:16.194 --> 00:05:19.160
+left hand side and the Deserializer on
+the right hand side.
+
+f38caf52-5de1-40ca-a635-ec2c4bdd9e5e-0
+00:05:19.760 --> 00:05:24.680
+You'll also see the device addresses
+showing as 0X80 on the Serializer and
+
+f38caf52-5de1-40ca-a635-ec2c4bdd9e5e-1
+00:05:24.680 --> 00:05:26.320
+0X90 on the Deserializer.
+
+f96149bf-e6dd-439d-9dd6-e1360dd64e12-0
+00:05:27.840 --> 00:05:32.538
+Right under that on the 1st 2 tabs,
+you'll also see the names of the OLDID
+
+f96149bf-e6dd-439d-9dd6-e1360dd64e12-1
+00:05:32.538 --> 00:05:34.480
+Serializer and HDMI Serializer.
+
+7efbfd2d-10a2-482e-a108-34c5b00a3ad1-0
+00:05:35.920 --> 00:05:40.866
+Looking at these tabs you can see all of
+the registers related to these tabs and
+
+7efbfd2d-10a2-482e-a108-34c5b00a3ad1-1
+00:05:40.866 --> 00:05:45.080
+we will now look at the air bar light
+that we took a look at before.
+
+f97d6091-cb07-4e3f-926a-d17b8da15eb7-0
+00:05:45.480 --> 00:05:52.560
+So in our GUI we are going to navigate 2
+tools status and air bar status.
+
+8c72c46e-7a32-4c6f-8ce4-3f6acd53368a-0
+00:05:54.200 --> 00:05:58.150
+So once this page is loaded and the
+registers have refreshed for all of
+
+8c72c46e-7a32-4c6f-8ce4-3f6acd53368a-1
+00:05:58.150 --> 00:06:00.489
+our error bars, you'll see that these
+line fault interrupt output enable is
+
+8c72c46e-7a32-4c6f-8ce4-3f6acd53368a-2
+00:06:00.489 --> 00:06:04.440
+enabled by that check box on the left
+hand side.
+
+17a656c4-7e35-4b69-92f6-83c45a2be94a-0
+00:06:05.160 --> 00:06:08.739
+So this is what is causing our error bar
+light to turn on and we do not have our
+
+17a656c4-7e35-4b69-92f6-83c45a2be94a-1
+00:06:08.739 --> 00:06:11.480
+line fault registers installed on this EV
+kit at this moment.
+
+2f7bed0c-eb8c-47ff-964e-97c907f3ac25-0
+00:06:12.600 --> 00:06:18.593
+So once I uncheck this box and refresh
+the error status, you'll see that the
+
+2f7bed0c-eb8c-47ff-964e-97c907f3ac25-1
+00:06:18.593 --> 00:06:22.800
+red LED is now gone.
+
+01641aa1-53fb-4fc3-9f4e-bd4b82234a89-0
+00:06:23.360 --> 00:06:27.818
+So taking a look at our Serializer board,
+the error bar light was here before and
+
+01641aa1-53fb-4fc3-9f4e-bd4b82234a89-1
+00:06:27.818 --> 00:06:28.960
+now it is turned off.
+
+85c22d85-99d9-4f25-a3fc-0009f81ec1c0-0
+00:06:29.880 --> 00:06:32.200
+So now we have an active GMSL2 link.
+
+7bd12d2f-ce8f-4adb-8030-15365a90260e-0
+00:06:32.520 --> 00:06:35.775
+So I'm going to show you on the GUI how
+we can verify that this is an active
+
+7bd12d2f-ce8f-4adb-8030-15365a90260e-1
+00:06:35.775 --> 00:06:36.240
+connection.
+
+02bb4221-2d6f-40bf-aee1-645c0faa1642-0
+00:06:38.440 --> 00:06:42.052
+So taking a look at our Serializer
+register 00, we have our device
+
+02bb4221-2d6f-40bf-aee1-645c0faa1642-1
+00:06:42.052 --> 00:06:45.440
+address at the left here.
+
+f00d6abe-4663-48c9-a34d-67dd3bd392e5-0
+00:06:46.200 --> 00:06:50.609
+So we're going to do a simple read and on
+the right hand side you'll see that we
+
+f00d6abe-4663-48c9-a34d-67dd3bd392e5-1
+00:06:50.609 --> 00:06:53.440
+are reading device address 80 and the
+result is 80.
+
+c000d793-71ea-4bbf-bbf4-5a1ac69cff3a-0
+00:06:53.800 --> 00:06:56.749
+So that shows that we have our active
+connection on our Serializer, which
+
+c000d793-71ea-4bbf-bbf4-5a1ac69cff3a-1
+00:06:56.749 --> 00:06:57.400
+is great.
+
+62279c2e-b474-41d7-ad23-9dad5d3935ee-0
+00:06:58.320 --> 00:07:01.320
+Next step, we also want to check our
+Deserializer.
+
+e41f4ad3-3924-4c5c-936d-300b18c89851-0
+00:07:01.320 --> 00:07:03.320
+So this is going to be going across our
+link.
+
+5bacdc5b-b6ec-4014-834d-d49786e5a14b-0
+00:07:03.920 --> 00:07:06.954
+We're going to go to device register 00
+again, and we're going to read our
+
+5bacdc5b-b6ec-4014-834d-d49786e5a14b-1
+00:07:06.954 --> 00:07:10.440
+device address once more.
+
+9c7ea925-2ac9-442c-bdad-344252c47d10-0
+00:07:10.960 --> 00:07:14.729
+So just clicking read, we'll see that
+on the right hand side we're reading
+
+9c7ea925-2ac9-442c-bdad-344252c47d10-1
+00:07:14.729 --> 00:07:19.240
+device address 90, and the result is
+90, which is perfect.
+
+888ed9cc-f09d-48e8-bef2-00bd2364403b-0
+00:07:19.960 --> 00:07:22.513
+Now that we've verified our active
+connection, we can now go ahead and load
+
+888ed9cc-f09d-48e8-bef2-00bd2364403b-1
+00:07:22.513 --> 00:07:26.480
+our edit to get our display output
+running.
+
+e41ef382-3634-44a2-8698-78b918423859-0
+00:07:27.680 --> 00:07:32.799
+So I'm going to go very quickly to my low
+level commands and I'm going to clear my
+
+e41ef382-3634-44a2-8698-78b918423859-1
+00:07:32.799 --> 00:07:37.240
+history and I'm going to go to the top
+left to look for my script file.
+
+e7c20f29-8e59-4ba5-a4a2-56dad8a3d770-0
+00:07:37.680 --> 00:07:43.165
+So here I'm going to click load CSV
+16-bit register address, and you'll see
+
+e7c20f29-8e59-4ba5-a4a2-56dad8a3d770-1
+00:07:43.165 --> 00:07:49.640
+that I have this 90201920 by 1200 P 60
+edit ready to go.
+
+db0c0639-d803-49be-88fc-b5264761840a-0
+00:07:50.160 --> 00:07:51.640
+So I'm going to double click that.
+
+8dccd6b1-99d1-4d78-99aa-98115a879956-0
+00:07:51.880 --> 00:07:55.249
+And in my low level commands, you'll be
+able to see all of the register rights
+
+8dccd6b1-99d1-4d78-99aa-98115a879956-1
+00:07:55.249 --> 00:07:56.840
+going through in real time.
+
+e73b09f6-5c27-4157-843f-d600bfbc2186-0
+00:07:57.720 --> 00:07:59.240
+So this takes a little bit of time.
+
+c031c734-b196-4dd0-ac43-fbba7438125c-0
+00:07:59.240 --> 00:08:00.200
+So we're just going to wait.
+
+3e6ef5f3-1dad-4614-83ab-acf1bb4f2249-0
+00:08:02.040 --> 00:08:04.127
+All right, so while we're waiting for our
+edit to load, let's take a look at our
+
+3e6ef5f3-1dad-4614-83ab-acf1bb4f2249-1
+00:08:04.127 --> 00:08:05.840
+worksheet.
+
+959ee453-4f85-4002-a231-3cf3f6976219-0
+00:08:06.320 --> 00:08:10.600
+So we know that our edit is at 1920 by
+1200 P at 60 Hertz.
+
+5ecd0124-aee1-446f-933d-00f9162c8951-0
+00:08:11.400 --> 00:08:13.760
+So let's do a rough calculation of our P
+clock.
+
+cca6290c-be5b-4bf8-9e6e-14de6666bf54-0
+00:08:14.960 --> 00:08:17.686
+To do that, you need your
+active width by your active
+
+cca6290c-be5b-4bf8-9e6e-14de6666bf54-1
+00:08:17.686 --> 00:08:18.040
+height.
+
+e05f2b29-a44f-4a14-ac5b-f54c2e71c751-0
+00:08:18.920 --> 00:08:22.572
+We're going to use a rule of thumb
+blanking ratio of about 1.2, which
+
+e05f2b29-a44f-4a14-ac5b-f54c2e71c751-1
+00:08:22.572 --> 00:08:23.600
+is 20% plus.
+
+abdccf53-5f70-4492-98d9-88cff9369c61-0
+00:08:24.800 --> 00:08:27.575
+And we're going to have our frame rate
+value, which we're all going to
+
+abdccf53-5f70-4492-98d9-88cff9369c61-1
+00:08:27.575 --> 00:08:31.920
+multiply together to get our P clock
+in Hertz.
+
+0901cf48-b57f-47bb-9817-c4d9eea9db82-0
+00:08:33.800 --> 00:08:37.657
+So once your edit is loaded, you'll have
+noticed that my screen did blank a black
+
+0901cf48-b57f-47bb-9817-c4d9eea9db82-1
+00:08:37.657 --> 00:08:40.040
+screen for a couple seconds.
+
+349d1166-fba1-47d7-9a31-db7a9877608d-0
+00:08:40.680 --> 00:08:43.800
+And that means that our device has now
+seen our EDID.
+
+a75116be-9822-4f3d-8d25-473287994c38-0
+00:08:44.480 --> 00:08:48.958
+Looking at our oLDI display panel,
+you'll also see that there's still no
+
+a75116be-9822-4f3d-8d25-473287994c38-1
+00:08:48.958 --> 00:08:52.640
+video yet because this is not configured
+yet for our video.
+
+d5b4aaca-43bd-4272-ab7a-8a37cfb4eda5-0
+00:08:53.080 --> 00:08:56.245
+So now I'm going to show you some
+register rights that we can do to get our
+
+d5b4aaca-43bd-4272-ab7a-8a37cfb4eda5-1
+00:08:56.245 --> 00:08:57.120
+video output running.
+
+74e953de-6963-41eb-b0db-2206da45abb7-0
+00:08:58.360 --> 00:09:02.363
+So on our Deserializer, which is the
+second tab on the left, we're going to
+
+74e953de-6963-41eb-b0db-2206da45abb7-1
+00:09:02.363 --> 00:09:05.120
+search for register one CE.
+
+69003ce9-81c0-4671-a9f4-5df8bed9e800-0
+00:09:08.480 --> 00:09:14.033
+We're going to go ahead and read that,
+and we're going to configure our device
+
+69003ce9-81c0-4671-a9f4-5df8bed9e800-1
+00:09:14.033 --> 00:09:15.440
+for this Oldi panel.
+
+a0397d7c-49c3-4d1a-b2b3-75512ea052f6-0
+00:09:16.600 --> 00:09:23.360
+So I'm going to write the value 5 E and
+now our Deserializer is configured.
+
+803ca3a7-67b6-48f6-922a-a5bc6dce168b-0
+00:09:25.040 --> 00:09:27.859
+Next, I'm going to go to our
+Serializer tab and I'm going to go to
+
+803ca3a7-67b6-48f6-922a-a5bc6dce168b-1
+00:09:27.859 --> 00:09:29.680
+register 01.
+
+a0761ca0-717a-4f24-897f-2bc808953e5e-0
+00:09:30.880 --> 00:09:34.291
+Again, I'm going to read this register
+and I'm going to check on the box
+
+a0761ca0-717a-4f24-897f-2bc808953e5e-1
+00:09:34.291 --> 00:09:37.920
+beside HDMI auto start.
+
+fc080b87-f9e8-4f80-8b7a-b20b75d123ec-0
+00:09:39.040 --> 00:09:41.560
+This has changed the  0xvalue to a value
+of C8.
+
+67a07a01-92d3-4ed1-b7a1-d6e0bf5894ab-0
+00:09:41.880 --> 00:09:43.560
+I'm now going to click right register.
+
+e2219d09-c69a-4d31-80eb-fb34ae71e363-0
+00:09:45.880 --> 00:09:50.269
+Looking at our oLDI display, you'll now
+see that you'll have a replica of my
+
+e2219d09-c69a-4d31-80eb-fb34ae71e363-1
+00:09:50.269 --> 00:09:52.000
+monitor on the screen.
+
+39b1f5be-1832-456e-bbde-3ace1ece4a4c-0
+00:09:54.360 --> 00:09:58.167
+So now that our edit is loaded, we're
+going to check our HDMI timing to see
+
+39b1f5be-1832-456e-bbde-3ace1ece4a4c-1
+00:09:58.167 --> 00:10:00.600
+what the actual values of our timing
+are.
+
+4fa3e742-cc1f-40ca-813c-a098519b5695-0
+00:10:01.200 --> 00:10:07.720
+So let's look at tools status and then
+HDMI timing.
+
+debb42cf-b2d7-485a-9a45-7e8230318ed5-0
+00:10:11.000 --> 00:10:14.689
+So clicking Calculate total values,
+we'll be able to see what our HDMI
+
+debb42cf-b2d7-485a-9a45-7e8230318ed5-1
+00:10:14.689 --> 00:10:17.080
+Serializer is receiving from the HDMI
+source.
+
+c5bb9f1e-59c4-4f1b-81e7-f26a65ea5420-0
+00:10:18.000 --> 00:10:21.297
+So looking at your worksheet, let's fill
+in these values and calculate our new P
+
+c5bb9f1e-59c4-4f1b-81e7-f26a65ea5420-1
+00:10:21.297 --> 00:10:22.040
+clock.
+
+8fe623a2-f644-4117-8e95-28048599a36a-0
+00:10:24.000 --> 00:10:25.886
+All right, using the same method from
+before, we're going to calculate our P
+
+8fe623a2-f644-4117-8e95-28048599a36a-1
+00:10:25.886 --> 00:10:28.880
+clock with the active values that we saw.
+
+158df858-a40d-421c-8ebb-18e458979418-0
+00:10:28.880 --> 00:10:35.259
+All right, I'm going to go ahead
+and close the HDMI tool and
+
+158df858-a40d-421c-8ebb-18e458979418-1
+00:10:35.259 --> 00:10:44.583
+we're going to check a couple
+registers to see that we have
+
+158df858-a40d-421c-8ebb-18e458979418-2
+00:10:44.583 --> 00:10:45.320
+active video.
+
+5939f049-4e32-4640-b83e-7c664cc34571-0
+00:10:46.160 --> 00:10:49.944
+Obviously we have active video on the
+Oldi display panel right now, but if you
+
+5939f049-4e32-4640-b83e-7c664cc34571-1
+00:10:49.944 --> 00:10:54.340
+were not seeing any video and you wanted
+to see what was happening, we have a
+
+5939f049-4e32-4640-b83e-7c664cc34571-2
+00:10:54.340 --> 00:10:57.679
+couple registers you can check on our
+Serializer.
+
+2f18d8ce-17fd-4517-81a6-564dd7f1dbec-0
+00:10:58.320 --> 00:11:01.920
+We can search registers bit fields for P
+clock.
+
+ef7c4896-94c3-4576-b20e-74e2df25d86c-0
+00:11:03.800 --> 00:11:07.640
+You'll see this first Register here has P
+clock detect.
+
+64d47301-ae43-466b-af2f-d6840d6952a7-0
+00:11:08.600 --> 00:11:11.800
+So if I click read, we expect
+this value to be high.
+
+14e9516b-be22-48cc-a8aa-feba1ad146c6-0
+00:11:14.040 --> 00:11:17.760
+There's also another P clock detect
+register in pipe Y.
+
+06142a1b-433f-4a8f-8718-1e86e81c365f-0
+00:11:17.760 --> 00:11:21.505
+So if we click read on this, you'll see
+that there is no active video on pipe
+
+06142a1b-433f-4a8f-8718-1e86e81c365f-1
+00:11:21.505 --> 00:11:22.040
+Y.
+
+a66cc257-d063-4323-9681-3f3b135fbe2f-0
+00:11:22.880 --> 00:11:26.360
+We have not configured any video to go
+through pipe Y, so that's as expected.
+
+16586d30-920b-4fd9-b6de-bcfee59034c2-0
+00:11:30.840 --> 00:11:34.840
+Next, on our Deserializer, we can check
+our device for video lock.
+
+488e003b-6a22-48be-a2cb-9b6a4c0c1d33-0
+00:11:35.360 --> 00:11:37.991
+So very quickly, I'm going to scroll
+back to the top so that it searches
+
+488e003b-6a22-48be-a2cb-9b6a4c0c1d33-1
+00:11:37.991 --> 00:11:40.200
+through all of our registers.
+
+845b84c3-e482-40df-8d0f-59ff3117c717-0
+00:11:40.200 --> 00:11:43.760
+I'm going to search vid_lock.
+
+a5826da4-c824-4c95-a6d8-bbb53a515d25-0
+00:11:46.320 --> 00:11:50.481
+So now we're in a new register with video
+lock and we're going to click read and
+
+a5826da4-c824-4c95-a6d8-bbb53a515d25-1
+00:11:50.481 --> 00:11:52.946
+you'll see there that we have vid lock is
+high, which is as expected since we have
+
+a5826da4-c824-4c95-a6d8-bbb53a515d25-2
+00:11:52.946 --> 00:11:56.440
+video going to our Deserializer.
+
+68d4d6b6-b979-40d7-9401-3ef82ceb4a45-0
+00:11:59.280 --> 00:12:03.480
+Taking a look at our worksheet, you'll
+see that these registers can be
+
+68d4d6b6-b979-40d7-9401-3ef82ceb4a45-1
+00:12:03.480 --> 00:12:04.960
+indicated as high or low.
+
+44d9c24f-2e55-447e-b08f-82e1b504b8cc-0
+00:12:06.640 --> 00:12:08.160
+So we can go ahead and fill that out.
+
+b0a6260f-4517-439d-b917-e080c8e2b35a-0
+00:12:13.280 --> 00:12:16.187
+So now that we have video running,
+we can move on to our extra credit
+
+b0a6260f-4517-439d-b917-e080c8e2b35a-1
+00:12:16.187 --> 00:12:16.520
+section.
+
+84f23795-ef36-4188-a4c3-dc5d563b8a2e-0
+00:12:16.800 --> 00:12:19.000
+Great job in getting to the steps so far.
+
+5999e3a1-7ce8-4308-a205-3140b4336d3b-0
+00:12:19.680 --> 00:12:23.534
+So the first step on this that we're
+going to do is we're going to open up our
+
+5999e3a1-7ce8-4308-a205-3140b4336d3b-1
+00:12:23.534 --> 00:12:24.120
+edit script.
+
+279d1d3d-cc1f-416f-aaf6-26fe611024a0-0
+00:12:24.920 --> 00:12:27.920
+So from my home screen, I have my
+edit script ready to go.
+
+7acfa38d-aaf9-40fd-a782-93d8d77c344d-0
+00:12:27.920 --> 00:12:30.600
+I'm going to double click on that to open
+the file.
+
+fc445368-aaf5-480f-9dc2-141276ff740e-0
+00:12:38.120 --> 00:12:41.336
+All right, to understand how to
+write a script for our GMSL
+
+fc445368-aaf5-480f-9dc2-141276ff740e-1
+00:12:41.336 --> 00:12:44.995
+devices, let's take a look at the
+convention for typing our CSV
+
+fc445368-aaf5-480f-9dc2-141276ff740e-2
+00:12:44.995 --> 00:12:46.320
+files.
+
+2d90367d-0311-454e-8fae-0090272e44a3-0
+00:12:47.280 --> 00:12:54.840
+So in this first line, we have 0X80,
+0X25F5, 0X00.
+
+813add7e-2962-4d59-9e6f-bdd39749c8bf-0
+00:12:58.560 --> 00:13:03.040
+Taking a look at this that this means that
+we're writing to device address 0X80.
+
+9489fa6e-c741-4eef-93ec-623e73a6801a-0
+00:13:03.480 --> 00:13:09.720
+We're writing to register 0X20F5 and
+we're writing the value 0X00.
+
+7b2e362c-e630-4f20-86c3-06f381e32d7f-0
+00:13:11.440 --> 00:13:15.405
+So taking a look at the register rights
+that we did in the GUI beforehand,
+
+7b2e362c-e630-4f20-86c3-06f381e32d7f-1
+00:13:15.405 --> 00:13:19.000
+let's go to our worksheet and fill out
+the correct syntax for this.
+
+7f77e4be-9101-4e8c-937f-5d7a65cc698b-0
+00:13:26.910 --> 00:13:29.416
+All right, so now that we understand
+the syntax for writing a script for
+
+7f77e4be-9101-4e8c-937f-5d7a65cc698b-1
+00:13:29.416 --> 00:13:32.887
+our devices, let's go ahead and fill
+out those two commands that we had
+
+7f77e4be-9101-4e8c-937f-5d7a65cc698b-2
+00:13:32.887 --> 00:13:34.430
+previously.
+
+e766f695-f4ff-452a-ada7-685a5b5d65c3-0
+00:13:35.550 --> 00:13:40.799
+So for our first line, we're going to
+talk to device address 0X80, we're
+
+e766f695-f4ff-452a-ada7-685a5b5d65c3-1
+00:13:40.799 --> 00:13:44.585
+going to talk to register 0X01, and
+we're going to write the value 0 XC
+
+e766f695-f4ff-452a-ada7-685a5b5d65c3-2
+00:13:44.585 --> 00:13:48.200
+8.
+
+96af2edf-528b-4c52-aa3f-a8bcc3b8e117-0
+00:13:50.400 --> 00:13:53.080
+This configures the HDMI auto start on
+this device.
+
+029cd5a9-e0a2-468a-92be-02694a92964b-0
+00:13:54.280 --> 00:13:57.600
+Next we're going to enter the command for
+our Deserializer.
+
+fc891bb4-607a-4b6b-a720-4a2296cf11c3-0
+00:13:58.160 --> 00:14:09.680
+So this is 0X ninety 0X1CE0X5 5E.
+
+766e37ec-fb9c-4cd2-a544-60708757e49f-0
+00:14:11.680 --> 00:14:14.120
+All right, so now we can go ahead and save
+this file.
+
+c3b4b529-3657-4443-ba58-75afab63ee78-0
+00:14:16.920 --> 00:14:21.773
+So closing that, I'm now going to
+power cycle my devices on the
+
+c3b4b529-3657-4443-ba58-75afab63ee78-1
+00:14:21.773 --> 00:14:22.880
+bench.
+
+8647b80d-b9e4-463f-a3d0-b1ccd08f0fa7-0
+00:14:28.320 --> 00:14:32.484
+Once again, you'll see your screen
+flash, and you'll also notice that I
+
+8647b80d-b9e4-463f-a3d0-b1ccd08f0fa7-1
+00:14:32.484 --> 00:14:36.387
+have no video coming out on my display
+again, Now that we power cycle the
+
+8647b80d-b9e4-463f-a3d0-b1ccd08f0fa7-2
+00:14:36.387 --> 00:14:40.031
+devices, we have to reconfigure them, so
+I'm going to go ahead and power up my
+
+8647b80d-b9e4-463f-a3d0-b1ccd08f0fa7-3
+00:14:40.031 --> 00:14:40.759
+GUI once more.
+
+0532daaf-dfeb-4d1c-b53e-97bafa58e93c-0
+00:15:04.280 --> 00:15:09.272
+OK, now that we have our GUI fired up,
+we're going to go to our low level
+
+0532daaf-dfeb-4d1c-b53e-97bafa58e93c-1
+00:15:09.272 --> 00:15:09.880
+commands.
+
+225182e9-01c7-4998-8e99-c393429b29df-0
+00:15:09.880 --> 00:15:13.720
+Let's clear this window so that we can
+see the eeded running in real time.
+
+41604306-647e-4f3f-8133-6bce338fc202-0
+00:15:13.720 --> 00:15:17.000
+And let's go ahead and load our script
+that we saved off with this
+
+6ca9f010-372f-42bd-a92e-2de6450415f6-0
+00:15:18.640 --> 00:15:20.760
+Double clicking on this,
+let's see the eeded going.
+
+3dce8a6d-7360-4214-8f9a-10b2241cdbab-0
+00:15:34.360 --> 00:15:36.922
+All right, now that we included
+these two new lines to our script,
+
+3dce8a6d-7360-4214-8f9a-10b2241cdbab-1
+00:15:36.922 --> 00:15:39.682
+you can see that your display
+panel just powered up
+
+3dce8a6d-7360-4214-8f9a-10b2241cdbab-2
+00:15:39.682 --> 00:15:43.525
+automatically without us having to
+do any extra register rights in
+
+3dce8a6d-7360-4214-8f9a-10b2241cdbab-3
+00:15:43.525 --> 00:15:43.919
+the GUI.
+
+31c0cd0e-3f86-4820-a449-312fd153f749-0
+00:15:46.240 --> 00:15:48.976
+OK, now we can move on
+to Extra Credit 2 for
+
+31c0cd0e-3f86-4820-a449-312fd153f749-1
+00:15:48.976 --> 00:15:49.280
+this.
+
+fc78cdf3-7dc3-45ac-a264-e1ef8db5aecc-0
+00:15:49.280 --> 00:15:51.160
+We're going to fire up the GUI one last
+time.
+
+24526b76-0aa2-4568-8c26-8fec37a33ac7-0
+00:16:11.640 --> 00:16:15.355
+Great, Now with our GUI fired up, we're
+going to load our non modified edit
+
+24526b76-0aa2-4568-8c26-8fec37a33ac7-1
+00:16:15.355 --> 00:16:18.240
+script from the very first step of this
+lab one more time.
+
+3f40733c-b4b5-41b1-a4d6-30577f27aca5-0
+00:16:36.180 --> 00:16:39.801
+Now that our edit is loaded, you can see
+that the script ran error free with this
+
+3f40733c-b4b5-41b1-a4d6-30577f27aca5-1
+00:16:39.801 --> 00:16:44.180
+green LED status and that our screen
+blinked black one last time.
+
+46a4b733-939c-4032-a99e-64cd506733e9-0
+00:16:46.140 --> 00:16:51.220
+Going to our tools at the very top,
+we're going to go to video config,
+
+46a4b733-939c-4032-a99e-64cd506733e9-1
+00:16:51.220 --> 00:16:52.580
+oLDI configuration.
+
+10fa799d-a73a-44fa-a43a-a1e37c403b63-0
+00:16:54.680 --> 00:16:56.400
+We're going to choose dual oLDI.
+
+bfe00d4b-d4a5-4c07-ab8d-a519cd0b9920-0
+00:16:57.480 --> 00:16:59.640
+We're going to enable oLDI 4th lane.
+
+65a6b729-ab54-4fb3-b8f2-ef0080fbd88f-0
+00:17:00.400 --> 00:17:02.520
+We're going to change oLDI format to VESA.
+
+90d2d619-922c-4be2-8ff9-7ea4c30f6920-0
+00:17:03.840 --> 00:17:09.435
+We're going to disable spread spectrum,
+enable swap ports A&amp;B, and disable
+
+90d2d619-922c-4be2-8ff9-7ea4c30f6920-1
+00:17:09.435 --> 00:17:13.360
+lane mapping for GMSL stream ID 0.
+
+c084282e-3242-4930-b7a0-ccf0a98b746b-0
+00:17:14.840 --> 00:17:18.868
+Before we configure the Deserializer,
+let's save off the script so we can look
+
+c084282e-3242-4930-b7a0-ccf0a98b746b-1
+00:17:18.868 --> 00:17:19.480
+at it later.
+
+03e89423-875b-404a-a7a2-d3a23dfad18f-0
+00:17:29.280 --> 00:17:32.360
+Now that we have the script saved off,
+we can configure our Deserializer.
+
+2e5408cc-b02b-42fb-ae45-6a4b73e68749-0
+00:17:34.520 --> 00:17:37.760
+You'll see in the Command status window
+at the bottom that it says Configuration
+
+2e5408cc-b02b-42fb-ae45-6a4b73e68749-1
+00:17:37.760 --> 00:17:38.120
+complete.
+
+70bf7226-29f8-4696-9543-255c24447f9a-0
+00:17:39.000 --> 00:17:40.480
+We can now close this GUI tool.
+
+29fce26d-7ded-4f34-9122-7390134a1e81-0
+00:17:42.120 --> 00:17:47.680
+Now let's go again to tools at the top,
+Video Config and HDMI configuration.
+
+dde41db0-c1f7-4bb7-b601-83e5f89d9f8a-0
+00:17:49.440 --> 00:17:51.975
+Taking a look at the configuration
+parameters here, we're going to
+
+dde41db0-c1f7-4bb7-b601-83e5f89d9f8a-1
+00:17:51.975 --> 00:17:54.560
+keep HDMI enabled, Disabled,
+checked.
+
+f1f58960-9432-4951-b1eb-b8e1683f95da-0
+00:17:55.280 --> 00:17:58.726
+We're going to turn off the two audio
+check boxes because we are not using
+
+f1f58960-9432-4951-b1eb-b8e1683f95da-1
+00:17:58.726 --> 00:17:59.600
+audio in this demo.
+
+3ce675cb-68aa-475c-853c-052349bd2bdf-0
+00:18:00.720 --> 00:18:05.633
+For Edit table, we're going to choose No,
+toggle, HPD, Editable load, and this is
+
+3ce675cb-68aa-475c-853c-052349bd2bdf-1
+00:18:05.633 --> 00:18:07.880
+all for Stream ID 0.
+
+0066a309-05ae-42ef-8120-aa89ab919dd0-0
+00:18:09.120 --> 00:18:12.716
+Again, we're going to click File, and
+we're going to create our script once
+
+0066a309-05ae-42ef-8120-aa89ab919dd0-1
+00:18:12.716 --> 00:18:13.000
+again.
+
+4e3b98a0-821b-4615-9abb-9edef670cb68-0
+00:18:14.440 --> 00:18:22.035
+So now we'll name this file and click
+File one more time and click Configure
+
+4e3b98a0-821b-4615-9abb-9edef670cb68-1
+00:18:22.035 --> 00:18:23.120
+Serializer.
+
+cbab8491-e251-4037-8c57-5c0e21d5b723-0
+00:18:26.080 --> 00:18:29.520
+You'll see in the Command status window
+that it now says Configuration Complete.
+
+fae29b49-d1bf-40fb-a877-c71f67c0e9c3-0
+00:18:30.120 --> 00:18:31.680
+We can now also close this tool.
+
+60cefc1d-695e-48c6-8914-d305208c3b60-0
+00:18:33.080 --> 00:18:37.581
+So now that we've used the GUI tools
+to configure our Serializer and
+
+60cefc1d-695e-48c6-8914-d305208c3b60-1
+00:18:37.581 --> 00:18:41.150
+Deserializer and have our edit loaded,
+you'll see output on your oLDI display
+
+60cefc1d-695e-48c6-8914-d305208c3b60-2
+00:18:41.150 --> 00:18:41.480
+panel.
+
+92894bc4-450c-46f0-8472-98fdf9087403-0
+00:18:42.600 --> 00:18:47.110
+So let's open up those CSV scripts that
+we created through the GUI tools and take
+
+92894bc4-450c-46f0-8472-98fdf9087403-1
+00:18:47.110 --> 00:18:51.400
+a look at what changed now that you've
+located the scripts that you've found.
+
+6c14f626-5b0f-4d87-b2bf-66b971f7f016-0
+00:18:58.600 --> 00:19:01.173
+OK, taking a look at our device data
+sheet, you'll see that there is a Power
+
+6c14f626-5b0f-4d87-b2bf-66b971f7f016-1
+00:19:01.173 --> 00:19:04.040
+on Reset value.
+
+8c06bf7e-7cb7-4349-b4bc-d5ba7b8095dc-0
+00:19:05.360 --> 00:19:09.263
+Take a look and compare these values from
+the script to the power on Reset values
+
+8c06bf7e-7cb7-4349-b4bc-d5ba7b8095dc-1
+00:19:09.263 --> 00:19:10.120
+in the data sheet.
+
+2a6c6f42-54a9-44ea-80d8-ba88400bd1db-0
+00:19:11.120 --> 00:19:12.560
+Fill these out in your worksheet.
+
+262c2bb8-19a4-4603-861f-245fc6259f67-0
+00:19:16.040 --> 00:19:17.800
+Are there any differences in these values?
+
+40e0d8ae-e1bd-411c-be7e-dd057e077d0f-0
+00:19:28.120 --> 00:19:31.000
+Doing the same thing with our all DID
+Serializer script.
+
+86e88970-f564-4697-a08f-815f1b65fed9-0
+00:19:31.280 --> 00:19:35.033
+Let's compare these values that we are
+writing to to the registers power on
+
+86e88970-f564-4697-a08f-815f1b65fed9-1
+00:19:35.033 --> 00:19:36.960
+reset values in the device data sheets.
+
+19575738-7bdf-444e-8517-1db46215cb13-0
+00:19:38.720 --> 00:19:40.600
+Do you see any differences in these
+values?
+
+ce9dd85c-fca4-4f93-a052-f5b0be718bf8-0
+00:19:46.530 --> 00:19:50.305
+Now that we've compared those two
+scripts, you'll see that the same
+
+ce9dd85c-fca4-4f93-a052-f5b0be718bf8-1
+00:19:50.305 --> 00:19:53.945
+register rights that we did in the tools
+are the same as extra credit number one
+
+ce9dd85c-fca4-4f93-a052-f5b0be718bf8-2
+00:19:53.945 --> 00:19:54.170
+and the display demo.
+
+c304aaf4-d985-439c-ad9c-1c947a726c87-0
+00:19:55.250 --> 00:19:57.210
+So now we have working video output.
+
+74988cb2-c403-49a9-ab0a-1a7f154ccc04-0
+00:19:57.330 --> 00:20:00.010
+If you have any questions,
+please feel free to reach out.
+
