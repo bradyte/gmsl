@@ -5,3 +5,6 @@
 
 # avoid pdfs
 *.pdf
+
+# additional
+*.venv

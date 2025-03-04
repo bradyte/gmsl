@@ -1,0 +1,1466 @@
+WEBVTT
+
+06693ad4-d00f-408e-be7a-2d09bf08c42d-0
+00:00:08.100 --> 00:00:13.043
+Again, my name is Way Yousef cover the
+first portion of the GMSL data sheet
+
+06693ad4-d00f-408e-be7a-2d09bf08c42d-1
+00:00:13.043 --> 00:00:22.380
+review and I'll cover the second part of
+the session.
+
+ae79472d-1ed1-41ba-b114-c162823a152f-0
+00:00:23.700 --> 00:00:37.155
+OK this is MAX96724 GMSL2 quad
+Deserializer this part along with another
+
+ae79472d-1ed1-41ba-b114-c162823a152f-1
+00:00:37.155 --> 00:00:42.000
+GMSO 2 Serializer MAX96717.
+
+b9e9e96c-1834-46e5-9ceb-1ceb1e47b8e9-0
+00:00:42.560 --> 00:00:49.115
+Those two-part will be public intro part
+and that means the data sheet, EVK data
+
+b9e9e96c-1834-46e5-9ceb-1ceb1e47b8e9-1
+00:00:49.115 --> 00:00:56.673
+sheet, user guide, channel spec, all the
+collateral documents will put it on the
+
+b9e9e96c-1834-46e5-9ceb-1ceb1e47b8e9-2
+00:00:56.673 --> 00:01:00.680
+ADI website available to our public.
+
+77bf6a44-2198-44b9-a892-0fcedee857cf-0
+00:01:04.520 --> 00:01:09.622
+So picture worth 1000 words, so
+long just jump right into the
+
+77bf6a44-2198-44b9-a892-0fcedee857cf-1
+00:01:09.622 --> 00:01:11.680
+simplified block diagram.
+
+b22316e4-6449-4a8f-a80c-81990bad2a0d-0
+00:01:12.560 --> 00:01:17.004
+So this part has a three variance
+MAX96724, I'm just going to call it 724
+
+b22316e4-6449-4a8f-a80c-81990bad2a0d-1
+00:01:17.004 --> 00:01:22.240
+for short and F&amp;R.
+
+824cf78e-f521-4a22-9c53-0ba8e8e8fd7a-0
+00:01:22.640 --> 00:01:33.836
+So in GMSL2 mode is support 2 speed 6
+gig and a three gig 724 support both
+
+824cf78e-f521-4a22-9c53-0ba8e8e8fd7a-1
+00:01:33.836 --> 00:01:34.720
+speed.
+
+590aaa41-d826-4f31-a928-f97f2a69592d-0
+00:01:35.960 --> 00:01:38.640
+F&amp;R only support 3 gig.
+
+ab17567e-5dfe-4b02-a01e-fcb3750b04f7-0
+00:01:38.640 --> 00:01:43.080
+In GMSL2 mode it is the quad
+Deserializer.
+
+db6c8066-8753-421b-bb81-b4e72ab977dd-0
+00:01:43.120 --> 00:01:47.040
+That means you have 4 camera input.
+
+98cb06ba-5873-4aa8-8239-70b15ec8de73-0
+00:01:49.960 --> 00:01:57.663
+OK, you have 4 camera inputs, GMSL link coming into the 724
+
+98cb06ba-5873-4aa8-8239-70b15ec8de73-1
+00:01:57.663 --> 00:02:06.651
+Deserializer and R is the 724 and F has
+two MIT BCSI port port A and port B,
+
+98cb06ba-5873-4aa8-8239-70b15ec8de73-2
+00:02:06.651 --> 00:02:09.920
+but R only has the one port.
+
+89dc1e0b-df25-47cd-903b-933ed2b30eca-0
+00:02:10.760 --> 00:02:19.930
+OK, I'll skip the table of content.
+
+0ade829b-377c-4a40-9de5-a1459bd93d2e-0
+00:02:20.050 --> 00:02:27.450
+I'll just go straight into the pin
+configuration pin out.
+
+ce0e340f-5392-4d2c-bc0e-9eb53e027eb0-0
+00:02:29.330 --> 00:02:34.379
+Only time I look at these pin out is when
+I need to review the customer schematic
+
+ce0e340f-5392-4d2c-bc0e-9eb53e027eb0-1
+00:02:34.379 --> 00:02:37.520
+or when I draw the Semitic capture for
+the EB kit.
+
+0b704a38-598f-4305-9812-d0ca1d81a452-0
+00:02:37.800 --> 00:02:45.744
+That's when I check the Basically it's
+the tells you the physical pin 
+
+0b704a38-598f-4305-9812-d0ca1d81a452-1
+00:02:45.744 --> 00:02:48.560
+location and the function of the par.
+
+a92183bd-970b-4275-87db-bf39781409f3-0
+00:02:50.240 --> 00:02:55.449
+So I'll just make sure that pin number
+and the pin names, the functions are are
+
+a92183bd-970b-4275-87db-bf39781409f3-1
+00:02:55.449 --> 00:03:00.480
+correct in the data sheet review.
+
+caf93808-071b-4900-b8f7-a7421a9b32bc-0
+00:03:01.000 --> 00:03:06.003
+OK, so pin descriptions, it's a self
+explained, they normally group in the
+
+caf93808-071b-4900-b8f7-a7421a9b32bc-1
+00:03:06.003 --> 00:03:11.840
+same type of same interface.
+
+8f516abd-70e3-452b-97fb-c47500c132fa-0
+00:03:12.320 --> 00:03:14.000
+So this is the quad Deserializer.
+
+bb3f732c-f9c5-49b6-8178-f75b9ade5285-0
+00:03:14.000 --> 00:03:21.600
+So you'll see the four GMSL import inputs
+plus or minus and ABCD.
+
+6a85d81a-ec3e-4b5f-b09f-6fa0ab667c4c-0
+00:03:21.600 --> 00:03:22.720
+So in four inputs.
+
+c2b3e998-0ae5-4681-aa05-94f8ced5d045-0
+00:03:23.280 --> 00:03:28.200
+And next part of the pin description is
+CSI interface.
+
+c314f090-f752-4747-8bff-1c674d49fab2-0
+00:03:28.400 --> 00:03:32.215
+So as you see this part has 2 MIPI CSI port, port A and port B and not only
+
+c314f090-f752-4747-8bff-1c674d49fab2-1
+00:03:32.215 --> 00:03:38.520
+that this part support both C PHY and D
+PHY.
+
+0b0efb02-7537-4ce6-8b25-6ebf83e0d4dc-0
+00:03:39.040 --> 00:03:45.538
+So one thing I need to want to mention is
+since this part also support the GMSL1
+
+0b0efb02-7537-4ce6-8b25-6ebf83e0d4dc-1
+00:03:45.538 --> 00:03:47.520
+backward compatible mode.
+
+c9149016-f16d-42a5-afd1-b075baabab4f-0
+00:03:48.000 --> 00:03:53.622
+So you'll see the two column GMSL2
+column here, GMSL1 column and then R So
+
+c9149016-f16d-42a5-afd1-b075baabab4f-1
+00:03:53.622 --> 00:04:00.163
+that's why as you can see, R will have
+only MIPP port, so they're not
+
+c9149016-f16d-42a5-afd1-b075baabab4f-2
+00:04:00.163 --> 00:04:06.360
+connected.
+
+5764be4b-aa4c-4461-b1a1-42b3a0aa3d17-0
+00:04:08.360 --> 00:04:08.520
+OK.
+
+199ded49-7080-475a-a5d3-3304f8a96eeb-0
+00:04:08.920 --> 00:04:18.765
+So another thing I want to mention is
+since we have a less limited number of
+
+199ded49-7080-475a-a5d3-3304f8a96eeb-1
+00:04:18.765 --> 00:04:24.520
+GPI OS, we'll try to combine or serve
+1 pin.
+
+deb0c551-36b5-4133-8e6e-ab7f02f72720-0
+00:04:25.040 --> 00:04:26.360
+It's more effect as effective.
+
+10e522e8-90fd-434a-a137-64d2ae06c391-0
+00:04:26.360 --> 00:04:30.760
+So by putting more features on the the
+pin.
+
+6d35587f-2be8-4f25-9c08-b7642e7e534d-0
+00:04:31.120 --> 00:04:35.492
+So for example, if you see the one star*
+that's the default function and that
+
+6d35587f-2be8-4f25-9c08-b7642e7e534d-1
+00:04:35.492 --> 00:04:41.295
+pin, it can be used for multiple
+function, but only one, you can only use
+
+6d35587f-2be8-4f25-9c08-b7642e7e534d-2
+00:04:41.295 --> 00:04:45.920
+one function at a time.
+
+64e69848-d70e-43f0-ab99-7a4dcf8cc9bd-0
+00:04:46.640 --> 00:04:53.560
+So there's a table, it lists the
+priority of these function.
+
+8dfc137b-f1a6-4121-bd57-ff755a93823f-0
+00:04:53.720 --> 00:04:54.480
+Let me go through that.
+
+dd6c2983-660c-4eea-b5b0-6bd02b23b869-0
+00:04:56.520 --> 00:05:02.800
+So this is the MFPMFP standard multi
+function purpose pin.
+
+539aa2f1-5bb9-45b0-88e6-cb65eae787ce-0
+00:05:03.400 --> 00:05:17.451
+So as you can see default is the for
+example MFP 4 pin lock is the default and
+
+539aa2f1-5bb9-45b0-88e6-cb65eae787ce-1
+00:05:17.451 --> 00:05:28.480
+MFP six and seven The I ton I2C pass
+through are the default.
+
+9b49d5be-bc88-4646-886e-dfd32b551a9b-0
+00:05:31.560 --> 00:05:37.824
+But if you wanted to from the order of
+the highest priority being on the left
+
+9b49d5be-bc88-4646-886e-dfd32b551a9b-1
+00:05:37.824 --> 00:05:41.600
+and the lowest priority on the the right
+side.
+
+3d90461c-6dc5-4e9e-b761-207dab04c284-0
+00:05:41.960 --> 00:05:48.407
+So if you want to use the function of
+for this pin rather than default, you
+
+3d90461c-6dc5-4e9e-b761-207dab04c284-1
+00:05:48.407 --> 00:05:55.212
+have to program the register to enable
+that function for that GP IO MFP pin
+
+3d90461c-6dc5-4e9e-b761-207dab04c284-2
+00:05:55.212 --> 00:05:57.719
+and disable the default.
+
+8bae38dc-a0d4-42b5-9807-7b0a0f18202d-0
+00:06:00.280 --> 00:06:05.640
+So there's some pin has the two* 2 star.
+
+cadad4d4-537d-4aa6-92d9-8eed3bffbcc1-0
+00:06:06.000 --> 00:06:11.000
+Those are only available through register
+read and writes OK.
+
+2e39b828-4c5b-48e5-9fee-dda9b63a01d0-0
+00:06:17.760 --> 00:06:24.280
+So for example, this is GP IO1
+and it's limited.
+
+7aeced82-953d-4425-a210-dbef02113c2c-0
+00:06:24.280 --> 00:06:32.800
+It has a GMSL1 mode and has a limited GP
+I/O tunneling capability.
+
+fc16a30f-99da-4480-8414-e165699c40ac-0
+00:06:38.800 --> 00:06:45.760
+So another my favorite part of this pin
+description is a CFG configuration pin.
+
+c75979f0-e711-4f82-a562-5b875afd9729-0
+00:06:46.360 --> 00:06:50.240
+So I'll go into the configuration pin in
+mapping.
+
+f9286742-a9a7-4b53-af16-2649e99117b7-0
+00:06:50.880 --> 00:06:56.735
+So, so CFG pin has the pull up and pull
+down resistor depending on the IOBDD
+
+f9286742-a9a7-4b53-af16-2649e99117b7-1
+00:06:56.735 --> 00:07:01.680
+level.
+
+f4877051-ca8e-4a57-83db-5908e25bb4ba-0
+00:07:01.920 --> 00:07:09.466
+You need to set the the voltage divider
+value by selecting these resistor value
+
+f4877051-ca8e-4a57-83db-5908e25bb4ba-1
+00:07:09.466 --> 00:07:13.240
+that recommends suggested in this table.
+
+dc54f3de-bbdc-4478-9fd3-6c19838b7f91-0
+00:07:13.600 --> 00:07:14.880
+It's a it's a ratio.
+
+e63def93-1d82-495a-906a-0625cf8f960f-0
+00:07:16.000 --> 00:07:17.600
+But this is the recommended values.
+
+e5abf832-93f2-4cb4-acd7-ddddedfe712c-0
+00:07:17.600 --> 00:07:21.199
+But you can pretty much kind of choose
+any value that you want, but these are
+
+e5abf832-93f2-4cb4-acd7-ddddedfe712c-1
+00:07:21.199 --> 00:07:23.280
+the recommended values.
+
+d9650238-1a21-46d1-a20d-f9f4506afa6d-0
+00:07:23.560 --> 00:07:36.521
+So basically CFG 0 pin is set for I2C
+addresses and CFG 1 pin it's you can set
+
+d9650238-1a21-46d1-a20d-f9f4506afa6d-1
+00:07:36.521 --> 00:07:41.280
+it up for GMSL1 or GMSL2.
+
+7539009a-7b80-4a9f-a67b-4029d373cbd4-0
+00:07:41.600 --> 00:07:46.781
+If it's GMSL2, you can set up select
+for different speed and then whether
+
+7539009a-7b80-4a9f-a67b-4029d373cbd4-1
+00:07:46.781 --> 00:07:54.017
+you want to be enable or disable the
+HHIM mode in the GMSL link GMSL
+
+7539009a-7b80-4a9f-a67b-4029d373cbd4-2
+00:07:54.017 --> 00:07:55.000
+speed.
+
+86939007-8757-4f3b-a53d-f5ddc4348d8b-0
+00:07:57.400 --> 00:08:04.693
+So pretty much these are predefined state
+and it depends on the voltage divider
+
+86939007-8757-4f3b-a53d-f5ddc4348d8b-1
+00:08:04.693 --> 00:08:07.520
+values that you you you select.
+
+a698eb0b-8882-4389-8970-c4f51288ebb9-0
+00:08:08.200 --> 00:08:12.403
+For example, if you want to set
+it to express the address 0X4
+
+a698eb0b-8882-4389-8970-c4f51288ebb9-1
+00:08:12.403 --> 00:08:17.110
+E, then you can you can choose
+the R2 to be 10K and R1 to be
+
+a698eb0b-8882-4389-8970-c4f51288ebb9-2
+00:08:17.110 --> 00:08:18.960
+open.
+
+c7050c47-3e8d-4da0-9903-4a09a7df75a1-0
+00:08:19.640 --> 00:08:22.320
+Similarly, you can do the same thing for a
+C FG1 pin.
+
+f6755bea-2738-43b8-80ae-d6b87eaa8795-0
+00:08:24.200 --> 00:08:30.440
+So going down the pin description,
+these are the miscellaneous pin.
+
+e235f568-e802-4a80-835e-e5d889159c5b-0
+00:08:31.680 --> 00:08:35.000
+So you says Youssof cover it earlier.
+
+ea3e09b8-b916-4e76-bf9d-fe049d8a5c78-0
+00:08:35.920 --> 00:08:39.120
+So I'm not going to go in to spend too
+much time on it.
+
+362f86fc-8e70-4f7e-90ce-4eab7580e82d-0
+00:08:40.560 --> 00:08:46.664
+But so for example, ex res pin, you
+have to use the specific these are
+
+362f86fc-8e70-4f7e-90ce-4eab7580e82d-1
+00:08:46.664 --> 00:08:49.760
+requirement for this particular pin.
+
+ce54bd4a-d55e-4cb6-93c3-eda5525208f3-0
+00:08:50.440 --> 00:08:54.240
+You have to use a four two ohm resistor
+and tolerance of 1%.
+
+35d7f3d3-18c0-40ff-98f6-23dc25d8217f-0
+00:08:55.920 --> 00:09:00.358
+We call out all these requirement,
+external component requirement for a
+
+35d7f3d3-18c0-40ff-98f6-23dc25d8217f-1
+00:09:00.358 --> 00:09:01.160
+specific pin.
+
+4f954b9f-2ded-4ead-805d-769da7c81d29-0
+00:09:01.520 --> 00:09:08.200
+It's all spell out in this this table and ESD protection.
+
+5748d241-6ec4-444a-b5b0-7078a359cce8-0
+00:09:09.200 --> 00:09:15.400
+So these are the all part meet the ESD
+spec and for human body and machine model.
+
+a3f0d9a7-473c-42ac-98b9-8c36b73e5030-0
+00:09:16.000 --> 00:09:27.100
+So so for tunneling versus pixel mode.
+
+83308084-30e8-41e7-b2bd-357ba8ac997e-0
+00:09:27.100 --> 00:09:31.500
+So I see a lot of interest in people
+asking about tunneling.
+
+18f53959-698b-4804-9875-4a96605cf92d-0
+00:09:31.500 --> 00:09:43.260
+So basically pixel mode our part allows
+to translate between two formats.
+
+b6981206-1ccf-42c8-9d3c-c6c021b6cebc-0
+00:09:44.640 --> 00:09:52.335
+So what I mean by that is so for example
+in this block diagram image sensor is
+
+b6981206-1ccf-42c8-9d3c-c6c021b6cebc-1
+00:09:52.335 --> 00:09:59.543
+outputting the MIB CSI interface to CSI
+input Serializer and Deserializer
+
+b6981206-1ccf-42c8-9d3c-c6c021b6cebc-2
+00:09:59.543 --> 00:10:03.440
+connected to SoC with the MIB interface.
+
+09ff3051-1ad1-4a1b-8cfe-ef19ccfe6c35-0
+00:10:04.360 --> 00:10:13.060
+So what tunneling mode pixel mode does is
+it will check the CRC on the MIPP CSI
+
+09ff3051-1ad1-4a1b-8cfe-ef19ccfe6c35-1
+00:10:13.060 --> 00:10:18.498
+receiver, then it will regenerate the
+generic RGB888 or pixel format and then
+
+09ff3051-1ad1-4a1b-8cfe-ef19ccfe6c35-2
+00:10:18.498 --> 00:10:27.415
+it calculate the line CRC GMSL line CRC and then ship it across the the link and
+
+09ff3051-1ad1-4a1b-8cfe-ef19ccfe6c35-3
+00:10:27.415 --> 00:10:34.920
+DE Serializer checks the GMSL line CRC.
+
+3a24790d-e5ba-41e5-b05f-cb9b2d5fe938-0
+00:10:34.920 --> 00:10:40.488
+There's no, no errors then it regenerate
+or recombine or whatever interface that
+
+3a24790d-e5ba-41e5-b05f-cb9b2d5fe938-1
+00:10:40.488 --> 00:10:46.160
+is going to connect to SoC.
+
+77f20d01-7eba-4f91-98b3-68d8ad9c9fc5-0
+00:10:46.160 --> 00:10:54.599
+For example if it is HDMI or DP or oLDI,
+those GMs cell packet will be converted
+
+77f20d01-7eba-4f91-98b3-68d8ad9c9fc5-1
+00:10:54.599 --> 00:10:59.600
+into those interface that are available
+to SoC.
+
+76a0804a-16b7-4df3-ae8e-e71c57dfb40b-0
+00:11:00.280 --> 00:11:07.623
+Along with that we generated the HDMI and
+also we calculated the CRC for that
+
+76a0804a-16b7-4df3-ae8e-e71c57dfb40b-1
+00:11:07.623 --> 00:11:09.600
+particular interface.
+
+1ebc747e-550f-4e6f-acca-1b88cc152876-0
+00:11:09.880 --> 00:11:15.040
+So recollect calculating the CRC it's
+become, it's a concern for customer and
+
+1ebc747e-550f-4e6f-acca-1b88cc152876-1
+00:11:15.040 --> 00:11:19.640
+the OEMs.
+
+0c042461-735c-4bb5-8c2c-1c23639be793-0
+00:11:20.240 --> 00:11:24.501
+And in the, so basically we touch the
+original data that sent from image sensor
+
+0c042461-735c-4bb5-8c2c-1c23639be793-1
+00:11:24.501 --> 00:11:31.222
+and along the GMSL link and then we on
+the other side depending on what
+
+0c042461-735c-4bb5-8c2c-1c23639be793-2
+00:11:31.222 --> 00:11:35.320
+interface that we connected to.
+
+1a9d99f8-c583-4e2d-bcda-13b5e35286b1-0
+00:11:35.880 --> 00:11:42.628
+So the benefits is that it can assign a
+different data type and reassign the
+
+1a9d99f8-c583-4e2d-bcda-13b5e35286b1-1
+00:11:42.628 --> 00:11:49.640
+virtual channel and remap it to however
+you want to map it out on the CSI port.
+
+a6a3ced1-df41-4601-85fd-a43fcb2d2739-0
+00:11:50.000 --> 00:11:51.960
+That's the benefits of pixel mode.
+
+ef66aaac-f0c0-4a7a-96ce-59a60d955054-0
+00:11:52.280 --> 00:11:58.273
+But drawback is since we touched the
+original data that sent from image
+
+ef66aaac-f0c0-4a7a-96ce-59a60d955054-1
+00:11:58.273 --> 00:12:04.117
+sensor, some of the customers are
+concerned because for a safety critical
+
+ef66aaac-f0c0-4a7a-96ce-59a60d955054-2
+00:12:04.117 --> 00:12:06.440
+application original data has been
+touched.
+
+ca51526e-ea18-4082-b797-06445b0169c9-0
+00:12:06.920 --> 00:12:10.960
+So that led us to implement the tunneling
+mode.
+
+0fcb1e6b-1402-4445-9651-a381a204d34c-0
+00:12:11.160 --> 00:12:12.400
+So tunneling mode is.
+
+9a2ce818-ec69-47aa-8de9-514589b7825a-0
+00:12:16.360 --> 00:12:20.774
+So in tunneling mode we don't touch the
+original pixel data that's sent from
+
+9a2ce818-ec69-47aa-8de9-514589b7825a-1
+00:12:20.774 --> 00:12:21.520
+image sensor.
+
+5e61210e-e171-4a2d-ab37-6012c6f97dae-0
+00:12:22.240 --> 00:12:25.840
+We just patch the lines.
+
+cc253517-c9b6-4871-b849-b7fc98d59477-0
+00:12:25.840 --> 00:12:32.620
+We calculate the we check the CRC at the
+CSI input and then we calculated the
+
+cc253517-c9b6-4871-b849-b7fc98d59477-1
+00:12:32.620 --> 00:12:39.400
+pixel GMSL line CRC and combine together
+and ship it across the Deserializer.
+
+1acd833b-c12f-4794-9e15-7d0ad538ef25-0
+00:12:39.400 --> 00:12:42.665
+On the Deserializer we just check the GMs
+alliance CRC, make sure the data is valid
+
+1acd833b-c12f-4794-9e15-7d0ad538ef25-1
+00:12:42.665 --> 00:12:45.640
+or correct, no errors.
+
+9fe0f997-c34b-418e-a08b-f6006d5df078-0
+00:12:46.160 --> 00:12:53.080
+Then we ship that original data that's
+sent from maybe CSI pixel data to the SoC.
+
+f9c16fe3-71b3-4ba3-a2c2-43c7b98d00fb-0
+00:12:53.520 --> 00:12:58.373
+So in a way of benefits that when the
+SoC detects the some errors, it knows
+
+f9c16fe3-71b3-4ba3-a2c2-43c7b98d00fb-1
+00:12:58.373 --> 00:13:04.097
+that something wrong with the image
+sensor and it can directly access to
+
+f9c16fe3-71b3-4ba3-a2c2-43c7b98d00fb-2
+00:13:04.097 --> 00:13:09.530
+it and detect it because our part
+doesn't touch the modify the original
+
+f9c16fe3-71b3-4ba3-a2c2-43c7b98d00fb-3
+00:13:09.530 --> 00:13:10.400
+data at all.
+
+93caf848-656f-4434-86d9-dbb19d436a88-0
+00:13:14.880 --> 00:13:28.800
+You guys have questions so sorry this is
+not related to this.
+
+26f85d4c-9a9d-42ee-b598-d71f64b710b5-0
+00:13:28.800 --> 00:13:33.621
+This is related to the crystal frequency
+before on the 24, it's at 25 megahertz
+
+26f85d4c-9a9d-42ee-b598-d71f64b710b5-1
+00:13:33.621 --> 00:13:36.400
+with 200 PPM.
+
+c6f8e8de-913b-4a58-a428-881d34bf6617-0
+00:13:36.520 --> 00:13:43.200
+I think for you talking about RoR, yeah.
+
+c421d759-bbfd-469c-ad88-35b0aded09e6-0
+00:13:43.440 --> 00:13:43.800
+Oh, OK.
+
+f2e1b072-1444-4d1f-9ece-ade821cc7dd3-0
+00:13:44.080 --> 00:13:49.820
+So some of the other devices, are they
+able to accept the range of frequencies
+
+f2e1b072-1444-4d1f-9ece-ade821cc7dd3-1
+00:13:49.820 --> 00:13:56.760
+as opposed to some devices that only
+allow you to have 25 megahertz.
+
+c5f2d4a5-150e-40b1-a3bf-47aa1d77a854-0
+00:13:57.440 --> 00:14:03.144
+I don't know the PPM tolerance offset
+that we allow on top of my head, but
+
+c5f2d4a5-150e-40b1-a3bf-47aa1d77a854-1
+00:14:03.144 --> 00:14:08.285
+there's just some tolerance that we
+can we can talk accept, but can you
+
+c5f2d4a5-150e-40b1-a3bf-47aa1d77a854-2
+00:14:08.285 --> 00:14:14.150
+use a different frequency outside of
+25 megahertz or is that required to
+
+c5f2d4a5-150e-40b1-a3bf-47aa1d77a854-3
+00:14:14.150 --> 00:14:16.400
+be 25 megahertz?
+
+5a7763ae-9b20-465d-a653-95bba6760e00-0
+00:14:16.840 --> 00:14:18.560
+I have to double check, I'm not sure.
+
+943ea11c-48c0-4e67-a8e5-d172cfd4e452-0
+00:14:18.920 --> 00:14:20.880
+OK, OK, thank you.
+
+81a36b84-f0af-4b40-8938-a91bb3a50839-0
+00:14:24.120 --> 00:14:29.272
+OK, RoR because a lot of
+people interested in
+
+81a36b84-f0af-4b40-8938-a91bb3a50839-1
+00:14:29.272 --> 00:14:29.720
+RoR.
+
+77dc9f1c-3e86-4e33-976b-f4a1ffe5f1af-0
+00:14:29.760 --> 00:14:35.920
+So I'm just going through the some of the
+features highlight in this this part.
+
+00abdb9e-9ecc-418d-b462-6015bb89ad2d-0
+00:14:36.360 --> 00:14:43.360
+So basically RoR is reverse reference
+clock over reverse channel.
+
+dde17a86-a312-475b-9ab0-510449ca0d67-0
+00:14:43.360 --> 00:14:50.237
+So basically what it does is Deserializer
+take the 25 megahertz clock from the
+
+dde17a86-a312-475b-9ab0-510449ca0d67-1
+00:14:50.237 --> 00:14:57.289
+external clock source and embedded on the
+reverse channel and send it across the
+
+dde17a86-a312-475b-9ab0-510449ca0d67-2
+00:14:57.289 --> 00:15:01.120
+MSO reverse channel to the Serializer
+side.
+
+8e4fe9bb-90f1-4dc7-b3df-6cf4625e3893-0
+00:15:01.760 --> 00:15:10.534
+So Serializer extract it or recover it
+and synthesizes clean it up and it clock
+
+8e4fe9bb-90f1-4dc7-b3df-6cf4625e3893-1
+00:15:10.534 --> 00:15:11.960
+clock itself.
+
+e39b6710-8000-4190-8d5e-235372510415-0
+00:15:12.200 --> 00:15:18.489
+And also that 25 megahertz clock can be
+outputted on the our clock out pin to
+
+e39b6710-8000-4190-8d5e-235372510415-1
+00:15:18.489 --> 00:15:22.280
+provide the clock source for the image
+sensor.
+
+c17a40f6-3152-40e3-a760-4440e02d3157-0
+00:15:22.760 --> 00:15:30.240
+So basically RoR eliminates the need for
+crystal oscillator in the camera module.
+
+5eb0c084-5984-4761-8546-f14b9cd3a8bb-0
+00:15:30.720 --> 00:15:33.840
+So it reduce the bomb cost.
+
+87c4616c-cff4-44a5-a8b5-ec15cdb76d55-0
+00:15:34.600 --> 00:15:40.911
+It can make the board layout a lot more
+simpler and make the the board size
+
+87c4616c-cff4-44a5-a8b5-ec15cdb76d55-1
+00:15:40.911 --> 00:15:42.240
+smaller as well.
+
+35a311b1-bd2e-469e-82e6-e8f5143ad9e2-0
+00:15:42.400 --> 00:15:48.633
+So there are benefits and this is one of
+the feature that our competitors does not
+
+35a311b1-bd2e-469e-82e6-e8f5143ad9e2-1
+00:15:48.633 --> 00:15:49.760
+have today, so.
+
+f2d9b93c-4dcc-411b-9ddb-01d617946b24-0
+00:16:00.440 --> 00:16:05.350
+So another thing I want to feature that I
+want to highlight is highlight is the
+
+f2d9b93c-4dcc-411b-9ddb-01d617946b24-1
+00:16:05.350 --> 00:16:06.640
+error bar forwarding.
+
+fce6cbde-561d-4cd9-810f-0e8c80a01e1d-0
+00:16:07.240 --> 00:16:16.835
+So 96724 has the ability to collect all
+the datas that come in from different
+
+fce6cbde-561d-4cd9-810f-0e8c80a01e1d-1
+00:16:16.835 --> 00:16:26.553
+camera links and for each every frame in
+all checks and then it will it as the
+
+fce6cbde-561d-4cd9-810f-0e8c80a01e1d-2
+00:16:26.553 --> 00:16:33.320
+packetized as the embedded 8 or user
+define data type.
+
+354f6e77-a82c-4b94-9f68-7b6b6df9a4d2-0
+00:16:33.880 --> 00:16:42.488
+And then it will insert it before or
+start of the the the the frame and then
+
+354f6e77-a82c-4b94-9f68-7b6b6df9a4d2-1
+00:16:42.488 --> 00:16:47.520
+it ship it to the put out on the MIP
+output.
+
+e4bcaa18-8ae0-4e41-b9f5-64cc870b8d5e-0
+00:16:47.920 --> 00:16:53.004
+So basically it SoC doesn't need, if
+there's an error, typical case SoC need
+
+e4bcaa18-8ae0-4e41-b9f5-64cc870b8d5e-1
+00:16:53.004 --> 00:16:58.920
+to pull the device register all the
+time.
+
+719523e0-3d40-409f-a310-aca60db40ae7-0
+00:16:59.240 --> 00:17:03.840
+And I2C buses always busy tied up for
+having this feature.
+
+cc0e5e1e-7f61-451c-b62c-ad7da6ffcf14-0
+00:17:04.560 --> 00:17:05.920
+Our part does all the work.
+
+2b01f346-099c-486b-8c77-f8adc1adc57e-0
+00:17:06.480 --> 00:17:12.344
+They collect all the errors and then send
+them to the SoC and SoC can open it and
+
+2b01f346-099c-486b-8c77-f8adc1adc57e-1
+00:17:12.344 --> 00:17:17.280
+check it whenever it's, you know,
+available or ready to check those.
+
+4c54046b-b070-417c-83c3-bdb974d5a1f8-0
+00:17:17.800 --> 00:17:24.044
+So it's a lot of less burden on
+the SoC side and I swear the bus
+
+4c54046b-b070-417c-83c3-bdb974d5a1f8-1
+00:17:24.044 --> 00:17:28.290
+won't be, you know, busy for
+pulling the device register all
+
+4c54046b-b070-417c-83c3-bdb974d5a1f8-2
+00:17:28.290 --> 00:17:29.039
+the time.
+
+0f2dd2ba-2f84-4562-8d56-3a704af3e082-0
+00:17:43.960 --> 00:17:50.167
+Another thing is I won't go into two
+details about all the features because
+
+0f2dd2ba-2f84-4562-8d56-3a704af3e082-1
+00:17:50.167 --> 00:17:56.700
+we're going to have a camera session,
+camera day tomorrow and we will go into
+
+0f2dd2ba-2f84-4562-8d56-3a704af3e082-2
+00:17:56.700 --> 00:18:02.662
+C PHY, D PHY MIB, deep dive into MIB,
+CSI interface and all these advanced
+
+0f2dd2ba-2f84-4562-8d56-3a704af3e082-3
+00:18:02.662 --> 00:18:07.400
+features that camera parts offer GMSL2 and GMSL3 parts.
+
+87c85eef-86ac-4dee-a058-e6a2565b0ed8-0
+00:18:07.680 --> 00:18:10.040
+But what I want to mention is this is a
+quad digitalizer.
+
+a0ce1208-1fb3-4a11-b838-404b3ab68886-0
+00:18:10.400 --> 00:18:13.400
+It has the frame synchronization feature.
+
+ea1268ed-9436-4acb-8ee1-1a74b4359ddc-0
+00:18:13.760 --> 00:18:20.160
+Basically what it does is for the quad
+application all the companies to frames
+
+ea1268ed-9436-4acb-8ee1-1a74b4359ddc-1
+00:18:20.160 --> 00:18:26.480
+needs to start at the same time and with
+a little bit of window of tolerance.
+
+61fffe34-2a0e-482e-aabe-6b8bc654149d-0
+00:18:26.680 --> 00:18:31.680
+So what our part does is it has A2 mode
+master and a slave mode.
+
+06c71f0d-2218-4d7a-829d-00ba7377b2d0-0
+00:18:31.880 --> 00:18:36.335
+In the master mode, the quad
+Deserializer will generate the frame
+
+06c71f0d-2218-4d7a-829d-00ba7377b2d0-1
+00:18:36.335 --> 00:18:42.054
+sync function internally and ascend it
+through the reverse channel and
+
+06c71f0d-2218-4d7a-829d-00ba7377b2d0-2
+00:18:42.054 --> 00:18:47.549
+Serializer will GPO output will be
+connected to the image sensor to reset
+
+06c71f0d-2218-4d7a-829d-00ba7377b2d0-3
+00:18:47.549 --> 00:18:50.520
+the frame and that's in the master mode.
+
+09d29f2d-6205-45a6-837a-55cf21f17e87-0
+00:18:50.920 --> 00:18:57.577
+In the slave mode or Pop will take the
+input from either SoC or any FPGA and it
+
+09d29f2d-6205-45a6-837a-55cf21f17e87-1
+00:18:57.577 --> 00:19:03.318
+sent the tunnel the frame sync to the
+other end of the remote end to
+
+09d29f2d-6205-45a6-837a-55cf21f17e87-2
+00:19:03.318 --> 00:19:09.560
+synchronize the all the cameras to start
+the frame start at the same time.
+
+4e06add9-09dd-46dd-b69e-2d72f9297034-0
+00:19:11.360 --> 00:19:19.240
+One of the cool feature that this 724
+device offer is D5 to C5 conversion.
+
+8c9d156f-c8f7-4f30-91e9-ebff9ff0cb1a-0
+00:19:21.200 --> 00:19:29.874
+So basically as you move try to move
+more data to the ECU or SoC, some
+
+8c9d156f-c8f7-4f30-91e9-ebff9ff0cb1a-1
+00:19:29.874 --> 00:19:39.600
+customers try to switch over to C5 and
+C5 because C5 use a different
+
+8c9d156f-c8f7-4f30-91e9-ebff9ff0cb1a-2
+00:19:39.600 --> 00:19:42.360
+modulation technique.
+
+34be7d95-dcdc-42d4-9353-c0de7ebb3348-0
+00:19:42.720 --> 00:19:51.222
+So basically it uses 3 wires instead of
+two wires for the D Fi interface and it
+
+34be7d95-dcdc-42d4-9353-c0de7ebb3348-1
+00:19:51.222 --> 00:19:59.618
+can embed more more data on the C Fi
+interface and but this part supports C Fi
+
+34be7d95-dcdc-42d4-9353-c0de7ebb3348-2
+00:19:59.618 --> 00:20:04.720
+to D Fi conversion and even in the tunnel
+mode.
+
+72e79820-6ac0-4880-924f-259fcc0edf5e-0
+00:20:05.240 --> 00:20:10.326
+But for the tunnel tunneling mode, both
+Serializer and Deserializer has to be
+
+72e79820-6ac0-4880-924f-259fcc0edf5e-1
+00:20:10.326 --> 00:20:15.480
+support support that tunneling feature
+otherwise it won't it won't work.
+
+ef903682-eb4c-4477-921b-0e8603d7afda-0
+00:20:15.680 --> 00:20:20.920
+So any any questions?
+
+3aa5198f-fa67-43f1-b75e-59ab94b4faa1-0
+00:20:24.760 --> 00:20:28.120
+GMSL2 bandwidth calculation.
+
+5d4d41f7-bd2e-41f4-9950-9349f8e4e8b7-0
+00:20:29.560 --> 00:20:37.135
+Our GUI has the bandwidth calculator
+depending on the resolutions, frame
+
+5d4d41f7-bd2e-41f4-9950-9349f8e4e8b7-1
+00:20:37.135 --> 00:20:42.026
+rate, data type, and number of GPI O
+going to be used so it can calculate
+
+5d4d41f7-bd2e-41f4-9950-9349f8e4e8b7-2
+00:20:42.026 --> 00:20:49.602
+the how much bandwidth required for the
+data to transfer from Serializer to
+
+5d4d41f7-bd2e-41f4-9950-9349f8e4e8b7-3
+00:20:49.602 --> 00:20:51.999
+Serializer.
+
+61156f2e-e5e3-4dbf-99b2-9b7b4b338d5d-0
+00:20:52.360 --> 00:20:57.720
+So we'll go into a lot more details about
+these tools tomorrow.
+
+8df434c0-afa3-4ccf-8ffc-c94df0fcd42d-0
+00:20:59.680 --> 00:21:03.865
+For the register map, Yousef kind of
+touched on it, but I want to one thing
+
+8df434c0-afa3-4ccf-8ffc-c94df0fcd42d-1
+00:21:03.865 --> 00:21:10.223
+I want to point out is our GMSL2 device
+uses a 16-bit register address and
+
+8df434c0-afa3-4ccf-8ffc-c94df0fcd42d-2
+00:21:10.223 --> 00:21:12.880
+8-bit value.
+
+0b73efba-c2f6-4a70-81d6-baf88bb1d048-0
+00:21:12.880 --> 00:21:20.360
+And again, some of the bits are
+not defined.
+
+1963253b-2af2-43f5-9748-33e1cf8f9659-0
+00:21:21.240 --> 00:21:25.678
+And if it is not defined, we need to
+treat it as the reserve register and
+
+1963253b-2af2-43f5-9748-33e1cf8f9659-1
+00:21:25.678 --> 00:21:28.880
+user not allowed to change it.
+
+42fdda05-463c-44f2-a7f9-f410b6b52211-0
+00:21:29.200 --> 00:21:34.338
+But it's if you need to write a register
+and change the one bit in that register
+
+42fdda05-463c-44f2-a7f9-f410b6b52211-1
+00:21:34.338 --> 00:21:38.906
+that include the reserve bit, you just
+have to read and contain the the original
+
+42fdda05-463c-44f2-a7f9-f410b6b52211-2
+00:21:38.906 --> 00:21:41.000
+value and write it back.
+
+5ab0f32a-2d54-4250-a03b-9132dfae3382-0
+00:21:41.440 --> 00:21:45.760
+So you won't change the reserve bit value.
+
+e9c19d20-f404-4cf0-932a-d9a851782db4-0
+00:21:47.440 --> 00:21:56.597
+So normally I like to use a GMSL GUI
+and it's a lot easier to search for
+
+e9c19d20-f404-4cf0-932a-d9a851782db4-1
+00:21:56.597 --> 00:22:04.736
+the the register bid registers and
+also if connected to if I'm
+
+e9c19d20-f404-4cf0-932a-d9a851782db4-2
+00:22:04.736 --> 00:22:09.937
+connected to the device, I can also
+read the default values of that
+
+e9c19d20-f404-4cf0-932a-d9a851782db4-3
+00:22:09.937 --> 00:22:11.520
+register.
+
+c1d832dd-1b9a-4820-b94e-428006b95ec4-0
+00:22:11.880 --> 00:22:17.646
+So into the later on today, we'll we'll
+distribute the EVKit and then I will
+
+c1d832dd-1b9a-4820-b94e-428006b95ec4-1
+00:22:17.646 --> 00:22:24.200
+start doing the hands on let work with
+the EVKit and the GUI.
+
+f7947758-5731-4813-a793-7272df26ec36-0
+00:22:24.360 --> 00:22:29.320
+But I just want to show you like one of
+the frequently checked bit is locked.
+
+45535cc8-0970-4ccd-9957-1ffe594f9e23-0
+00:22:29.320 --> 00:22:33.160
+So I just type in the lock here and I
+search for the lock bit.
+
+09ab14a0-5b00-4417-878a-9c2b1576cd4a-0
+00:22:33.480 --> 00:22:39.032
+So it will list starting from the very
+first lock name that in that particular,
+
+09ab14a0-5b00-4417-878a-9c2b1576cd4a-1
+00:22:39.032 --> 00:22:42.572
+you know, register and that you can keep
+searching until you found the register
+
+09ab14a0-5b00-4417-878a-9c2b1576cd4a-2
+00:22:42.572 --> 00:22:46.320
+that you're looking for.
+
+6555160b-0579-48e8-ba08-d0a71d99a24f-0
+00:22:46.320 --> 00:22:48.520
+Do you guys have any questions?
+
+a6ece444-713c-47e7-8604-5555bb6a31b6-0
+00:22:48.520 --> 00:22:50.560
+Any feature that you guys interested in?
+
+97b53c72-c80d-4150-b9aa-2b0eb17f8148-0
+00:22:54.640 --> 00:23:00.525
+So there's a depending on the Serializer
+but all Serializer has the CFG pin
+
+97b53c72-c80d-4150-b9aa-2b0eb17f8148-1
+00:23:00.525 --> 00:23:01.920
+configuration pin.
+
+6552c598-5305-48e8-a8dd-49b93f4f4f28-0
+00:23:02.400 --> 00:23:11.114
+So you can either set the configuration
+pin so the Serializer will bootstrap in
+
+6552c598-5305-48e8-a8dd-49b93f4f4f28-1
+00:23:11.114 --> 00:23:19.720
+the settings isquest slate address or
+will come up in the all same address 80.
+
+6957130c-3450-4f0c-b2f8-d6c0e3a6b688-0
+00:23:20.040 --> 00:23:25.807
+But then you if you power on one at a
+time and you can change those Serializer
+
+6957130c-3450-4f0c-b2f8-d6c0e3a6b688-1
+00:23:25.807 --> 00:23:30.480
+slave address as you going going through
+the power of sequence.
+
+d4a9b8be-14c8-4ef7-9334-8ffe04cf386c-0
+00:23:30.920 --> 00:23:36.120
+Or you can set it bootstrap by different
+I squares the address.
+
+49949131-01ff-4b79-ba53-08c3a033be6f-0
+00:23:36.120 --> 00:23:41.760
+Or you can just power up at all the same
+I'm in settings that you want to apply to.
+
+cf3a5e0f-d001-4241-a128-e90d2219ac12-0
+00:23:41.760 --> 00:23:47.125
+You can just send it to all those forced
+Deserializer and later on you can just go
+
+cf3a5e0f-d001-4241-a128-e90d2219ac12-1
+00:23:47.125 --> 00:23:52.426
+in there and change these isquisi device
+address of the the particular Serializer
+
+cf3a5e0f-d001-4241-a128-e90d2219ac12-2
+00:23:52.426 --> 00:23:56.240
+in the camera module for the pixel versus
+tunnelling mode.
+
+f841d44f-5750-4d87-b0d5-c0f471c9ab36-0
+00:23:56.800 --> 00:24:00.520
+I see that we have 4 channels on our
+device.
+
+36942a1d-9ba0-4f0a-b1d6-d2177378337d-0
+00:24:00.800 --> 00:24:06.118
+Is it possible that on each channel I
+have different modes or if I enable
+
+36942a1d-9ba0-4f0a-b1d6-d2177378337d-1
+00:24:06.118 --> 00:24:10.000
+channel mode it will be enabled in all
+four channels?
+
+b0b13837-bbfb-414a-8593-fb4f9bdf1537-0
+00:24:10.320 --> 00:24:14.480
+Yes, this device can support that 4
+camera.
+
+b43ace9f-f011-4e38-be3a-db5f9009b021-0
+00:24:14.680 --> 00:24:25.800
+You can have a different data rate,
+different speed, mix and match support it.
+
+f022f4f4-5be8-4fd8-9437-22f14091ad06-0
+00:24:27.000 --> 00:24:30.880
+Just for example on channel A I'll be
+having a channel mode.
+
+ca2080cc-a76a-41da-a8f5-02ade328e052-0
+00:24:31.240 --> 00:24:33.920
+Is it possible for the channel B to have
+the pixel mode?
+
+00693c70-3df6-4733-9ea0-ea56f447cb32-0
+00:24:34.360 --> 00:24:34.600
+Yes.
+
+3f54d615-bb1f-4c07-8d03-7c0f311238ae-0
+00:24:37.640 --> 00:24:44.120
+How do I you're going to have a different
+speed too.
+
+ade2cffd-9c5d-4e61-8443-80c9dbb27de5-0
+00:24:44.600 --> 00:24:48.986
+OK, yeah, this Deserializer
+can you have to set up the
+
+ade2cffd-9c5d-4e61-8443-80c9dbb27de5-1
+00:24:48.986 --> 00:24:49.760
+mode.
+
+e45f5cb5-b8fd-4631-b2c6-5b8da740137c-0
+00:24:52.600 --> 00:24:57.602
+It will output it in the first come first
+serve and it will output in the one super
+
+e45f5cb5-b8fd-4631-b2c6-5b8da740137c-1
+00:24:57.602 --> 00:24:57.960
+frame.
+
+7529465c-77c0-41fd-bef1-420e610dcc7d-0
+00:24:59.440 --> 00:25:04.200
+So OK, thank you.
+
+66ddada8-dc7c-4f7a-b59d-220f69fe08b7-0
+00:25:04.200 --> 00:25:11.157
+You're talking about latency on the
+GMSL link, you can calculate it from
+
+66ddada8-dc7c-4f7a-b59d-220f69fe08b7-1
+00:25:11.157 --> 00:25:20.334
+you can calculate it from bit time,
+right six Gigabit and and I don't the
+
+66ddada8-dc7c-4f7a-b59d-220f69fe08b7-2
+00:25:20.334 --> 00:25:30.399
+cable delay is insignificant.
+
+d51bbb60-1f3c-461a-9be6-642a89f11b5b-0
+00:25:31.200 --> 00:25:33.080
+OK, OK.
+
+b4eecfab-c491-424b-80e2-8be005b37c68-0
+00:25:33.080 --> 00:25:37.760
+Maybe one question related today is that
+so we have a resent feature, right?
+
+f78a2d55-ec09-4b89-8ff8-89e17302adf0-0
+00:25:37.840 --> 00:25:43.560
+So we have a CRC, let's set the SoC,
+detect an error in the reset.
+
+666d6752-4b68-4833-9d88-c83fed7b3185-0
+00:25:44.600 --> 00:25:49.378
+And so what's the latency of that sort of
+detect the error, then they tell the
+
+666d6752-4b68-4833-9d88-c83fed7b3185-1
+00:25:49.378 --> 00:25:53.680
+camera somehow to resend the data.
+
+f7a0cbc6-52a1-4fbf-a2c1-0b029aae1d1c-0
+00:25:54.720 --> 00:26:00.422
+Is that part also including should be
+smaller than the 10 microsecond latency
+
+f7a0cbc6-52a1-4fbf-a2c1-0b029aae1d1c-1
+00:26:00.422 --> 00:26:03.200
+depending on how you set the priority.
+
+b005dabb-254a-4afa-92ab-8eabe0598ef8-0
+00:26:03.640 --> 00:26:09.203
+So all part can set the if for example if
+it's a packet error it will get the
+
+b005dabb-254a-4afa-92ab-8eabe0598ef8-1
+00:26:09.203 --> 00:26:13.840
+highest priority over control channel or
+GPIO or other features.
+
+376609fc-4476-4ac9-8e45-a9bb7be20bcf-0
+00:26:14.120 --> 00:26:18.480
+So pixel if there's an error it will be
+retransmitted.
+
+db563d02-de40-4b75-8a46-1fc895529d5e-0
+00:26:19.880 --> 00:26:23.579
+If it is other function like control
+channel, I2C or GPIO though you can
+
+db563d02-de40-4b75-8a46-1fc895529d5e-1
+00:26:23.579 --> 00:26:27.520
+set those priorities.
+
+bf6c10c1-9d70-4ed0-aab3-ab440c774de8-0
+00:26:27.520 --> 00:26:30.400
+OK thank you.
+
+e264f0da-f0ee-4fa2-b6ba-8ae5329d0084-0
+00:26:31.120 --> 00:26:35.112
+That's that's all I have, unless you have
+any questions, specific questions about
+
+e264f0da-f0ee-4fa2-b6ba-8ae5329d0084-1
+00:26:35.112 --> 00:26:40.646
+724 kind of a follow on to the earlier
+question about which port you're talking
+
+e264f0da-f0ee-4fa2-b6ba-8ae5329d0084-2
+00:26:40.646 --> 00:26:46.320
+to and which device you're trying to
+communicate with.
+
+3f25ce31-9c0f-40f0-9e7a-ba1456e5f435-0
+00:26:46.320 --> 00:26:51.420
+So it looks like there's a way to
+basically enable and disable control
+
+3f25ce31-9c0f-40f0-9e7a-ba1456e5f435-1
+00:26:51.420 --> 00:26:53.720
+channel connection to each port.
+
+9f68335d-1f8a-4c57-84fb-047b05d04082-0
+00:26:54.280 --> 00:26:59.720
+So then you when you're communicating to
+camera A, for example, you would enable
+
+9f68335d-1f8a-4c57-84fb-047b05d04082-1
+00:26:59.720 --> 00:27:04.480
+that port to talk to the I2C, correct?
+
+57c1d061-bbe6-49de-a843-8ce1df11d4c1-0
+00:27:04.640 --> 00:27:08.080
+And then all the others are disabled by
+default.
+
+ca98a161-9ff7-4524-b22c-3f6d7915166f-0
+00:27:08.200 --> 00:27:11.360
+The control channel communication from
+the Serializer.
+
+e140d17e-cdee-402a-9344-83fe07409191-0
+00:27:11.360 --> 00:27:16.554
+The Serializer is enabled, but you
+can disable it for each AB link
+
+e140d17e-cdee-402a-9344-83fe07409191-1
+00:27:16.554 --> 00:27:20.043
+1234, whichever link you want and
+disable it unless you know what
+
+e140d17e-cdee-402a-9344-83fe07409191-2
+00:27:20.043 --> 00:27:22.680
+you're doing.
+
+a817b9cf-1b0f-4b0a-9d01-781f2edd494c-0
+00:27:22.720 --> 00:27:26.784
+Otherwise you just, if you disable
+and enable it, there's a wait time
+
+a817b9cf-1b0f-4b0a-9d01-781f2edd494c-1
+00:27:26.784 --> 00:27:32.800
+you have to wait before you can tout
+turn it back on.
+
+3b28cb73-4ade-4ccd-937d-ee39394a3e98-0
+00:27:33.120 --> 00:27:36.922
+OK, You cannot access to ICRC
+right away when you enable
+
+3b28cb73-4ade-4ccd-937d-ee39394a3e98-1
+00:27:36.922 --> 00:27:38.080
+it.
+
+cd33fb2f-5389-4cd6-b143-1480ea1d8bc7-0
+00:27:38.120 --> 00:27:39.400
+So there's certain wait time.
+
+2a60e812-e0ee-466a-b8c6-33c1d505e426-0
+00:27:40.120 --> 00:27:40.480
+OK.
+
+d2c7acdf-4bf9-4db2-a5bd-11f1d7e16b9c-0
+00:27:41.000 --> 00:27:45.084
+So thinking about a typical use case, if
+this is a surround view system, for
+
+d2c7acdf-4bf9-4db2-a5bd-11f1d7e16b9c-1
+00:27:45.084 --> 00:27:49.784
+example, and every camera is the same,
+just because of complexity and hardware,
+
+d2c7acdf-4bf9-4db2-a5bd-11f1d7e16b9c-2
+00:27:49.784 --> 00:27:50.120
+right?
+
+1bbf25e1-0709-407e-9321-29a988e11dda-0
+00:27:50.120 --> 00:27:54.342
+So they make the same imager and it
+has the same I2C address, default
+
+1bbf25e1-0709-407e-9321-29a988e11dda-1
+00:27:54.342 --> 00:27:59.587
+strap for imager and whatever devices
+might be on the remote side of the
+
+1bbf25e1-0709-407e-9321-29a988e11dda-2
+00:27:59.587 --> 00:28:00.200
+link.
+
+e189f477-6aa9-4b79-abc8-26b3df2726d5-0
+00:28:00.800 --> 00:28:03.600
+So how do they individually talk to each
+one?
+
+0bb90f13-b80d-4cf7-beb9-063ead77460d-0
+00:28:03.640 --> 00:28:07.720
+It would be based on the I2C mapping to
+each port, right?
+
+6cb72908-76c5-4ad7-8395-eb83504cecb6-0
+00:28:07.720 --> 00:28:07.960
+How?
+
+3a565b5b-debd-4798-9a66-7ac3e6a11843-0
+00:28:08.160 --> 00:28:09.720
+How is that exactly done?
+
+c58172ea-15af-4b37-bd55-cece318855aa-0
+00:28:09.880 --> 00:28:14.360
+So our part has the I2C address
+translation.
+
+2070b59f-af4d-4867-8fb8-2b226b1c78a6-0
+00:28:14.800 --> 00:28:18.360
+We'll go over detail in the camera
+session tomorrow.
+
+7693efd3-05f5-4706-9126-a115221c60ba-0
+00:28:18.880 --> 00:28:25.299
+So there's a common address that you can
+talk to all four devices by default is
+
+7693efd3-05f5-4706-9126-a115221c60ba-1
+00:28:25.299 --> 00:28:31.397
+0x80 and you can assign to each
+particular camera address to be different
+
+7693efd3-05f5-4706-9126-a115221c60ba-2
+00:28:31.397 --> 00:28:32.280
+than those.
+
+6a794beb-b9e4-4d4d-b121-e2c7e9fabb57-0
+00:28:32.640 --> 00:28:35.156
+And if you want to talk to
+individual camera, so there's I2C
+
+6a794beb-b9e4-4d4d-b121-e2c7e9fabb57-1
+00:28:35.156 --> 00:28:39.423
+address translation table that
+you can set it up in the
+
+6a794beb-b9e4-4d4d-b121-e2c7e9fabb57-2
+00:28:39.423 --> 00:28:40.080
+Digitalizer.
+
+fd340d35-8a75-40dd-98c9-0e83788e99a0-0
+00:28:40.280 --> 00:28:41.360
+OK, thank you.
+
+7d89ba03-5c28-42b8-81ce-78e95ce1c3f5-0
+00:28:42.640 --> 00:28:43.600
+Well, thank you very much.
