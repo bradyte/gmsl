@@ -1,6 +1,4 @@
-
-
-#%%
+# %%
 
 import serdespy as sdp
 import numpy as np
@@ -35,10 +33,10 @@ dt = UI / samples_per_symbol
 sdp.simple_eye(signal, samples_per_symbol*3, 100, dt, f'{data_rate/1e9}Gbps NRZ Signal')
 
 
-#%% LPF
+# %% LPF
 
 # 500MHz cutoff frequency
-freq_bw = 500e6
+freq_bw = 300e6
 
 # max frequency for constructing discrete transfer function
 max_f = 1 / dt
@@ -65,7 +63,7 @@ plt.grid()
 plt.axvline(x=1e-9*freq_bw, color='grey')
 plt.show()
 
-#%%
+# %%
 # find impulse response of LPF
 h, t = sdp.freq2impulse(H, f)
 
