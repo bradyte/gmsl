@@ -1,0 +1,35 @@
+Forward channel testing on link A
+
+1. Check EOM
+
+    Wait for EOM_DONE=1 flag, poll register 0x1407 bit 7
+    Read EOM, read register 0x1407[6:0]
+        EOM UI% = (EOM * 2) / 127
+        Default EOM UI% limit = 25%
+
+2. Check decode error count
+
+    Read the decode error count to clear the register, read register 0x22
+    Wait for a time delta
+    Reread register 0x22 to determine if any decode errors occurred
+
+3. Check AEQ Coefficients
+
+    Read AGC register 0x1410[7:0] for gain value.
+    Read BST register 0x1411[6:0] for boost value.
+    Read OSN register 0x142E[5:0] for offset null value.
+    Read DFE1 register 0x140F[6:0] for DFE1 coefficient value.
+    Read DFE2 register 0x140E[6:0] for DFE2 coefficient value.
+    Read DFE3 register 0x140D[6:0] for DFE3 coefficient value.
+    Read DFE4 register 0x140C[6:0] for DFE4 coefficient value.
+    Read DFE5 register 0x1413[6:0] for DFE5 coefficient value.
+        Note for all DFE coefficients:
+            if the DFE value >= 0x40 (64)
+                DFE = 64 - DFE
+            else
+                DFE = DFE
+
+
+
+
+

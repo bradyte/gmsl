@@ -1,0 +1,20 @@
+{
+    "limitLines": [
+        {
+            "axis": "Primary",
+            "color": "#ff0000",
+            "name": "Name",
+            "passfail": "Dont Care",
+            "points": [
+                {
+                    "x": 500000000.0,
+                    "y": -9.11
+                },
+                {
+                    "x": 3500000000.0,
+                    "y": -23.0
+                }
+            ]
+        }
+    ]
+}
