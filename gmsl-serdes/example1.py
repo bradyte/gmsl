@@ -21,7 +21,7 @@ samples_per_symbol = 100
 signal = np.repeat(signal_BR, samples_per_symbol)
 
 # 1Gbps data rate
-data_rate = 1e9
+data_rate = 6e9
 
 # time per bit or unit interval
 UI = 1 / data_rate
@@ -30,13 +30,14 @@ UI = 1 / data_rate
 dt = UI / samples_per_symbol
 
 # generate eye diagram of ideal signal with 3 UI
-sdp.simple_eye(signal, samples_per_symbol*3, 100, dt, f'{data_rate/1e9}Gbps NRZ Signal')
+sdp.simple_eye(signal, samples_per_symbol*32, 1, dt, f'{data_rate/1e9}Gbps NRZ Signal', linewidth=2)
+plt.grid(True)
 
 
 # %% LPF
 
 # 500MHz cutoff frequency
-freq_bw = 300e6
+freq_bw = 1.5e9
 
 # max frequency for constructing discrete transfer function
 max_f = 1 / dt
@@ -79,5 +80,7 @@ plt.show()
 # filtered signal is convoltuion of the impulser response with the signal
 signal_filtered = sp.signal.fftconvolve(signal, h[:400])
 
-sdp.simple_eye(signal_filtered[samples_per_symbol*100:], samples_per_symbol*3, 100, UI/samples_per_symbol, f"{data_rate/1e9}Gbps NRZ Signal with {round(freq_bw * 1e-6)}MHz Cutoff Filter")
+# sdp.simple_eye(signal_filtered[samples_per_symbol*100:], samples_per_symbol*32, 1, UI/samples_per_symbol, f"{data_rate/1e9}Gbps NRZ Signal with {round(freq_bw * 1e-6)}MHz Cutoff Filter", linewidth=1)
+sdp.simple_eye(signal_filtered, samples_per_symbol*3, 100, UI/samples_per_symbol, f"{data_rate/1e9}Gbps NRZ Signal with {round(freq_bw * 1e-6)}MHz Cutoff Filter", linewidth=2)
+plt.grid(True)
 # %%
