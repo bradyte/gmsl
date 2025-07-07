@@ -1,10 +1,10 @@
 import csv
 
 # modify the following 4 variables as needed
-edid_file = 'edid.bin' # can be called whatever
+edid_file = 'lilliput_edid.bin' # can be called whatever
 outfile = 'output.csv' # can be called whatever
 dev_address = 0x80 # 8-bit address of the device you are trying to talk to
-starting_index = 0x2E00 # starting index of the EDID block for MAX96751
+starting_index = 0x6500 # starting index of the EDID block for MAX96751
 
 # do not modify below
 try:
