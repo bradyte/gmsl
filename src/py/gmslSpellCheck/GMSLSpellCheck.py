@@ -110,7 +110,7 @@ class GMSLSpellCheck:
         max_caption_length = int(sentence.get_max_caption_length() * 1.25)  # 25% buffer is arbitrary
         sentence_list = wrap(sentence.sentence_string , width=max_caption_length)
         # keep shortening the caption until it fits the the existing caption span
-        while not (len(sentence_list) == (2 * (sentence.caption_span + 1))):
+        while not (len(sentence_list) >= (2 * (sentence.caption_span + 1) - 1)):
             max_caption_length -= 1
             sentence_list = wrap(sentence.sentence_string, width=max_caption_length)
 
@@ -130,8 +130,8 @@ def main():
     The processed files will end up in the spellchecked folder for batch editting.
     '''
     try:
-        mode = sys.argv[1]
-        # mode = 'test'
+        # mode = sys.argv[1]
+        mode = 'test'
 
         if mode == 'batch':
             vtt_dir = batch_dir
